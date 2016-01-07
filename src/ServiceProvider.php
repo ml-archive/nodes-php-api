@@ -6,6 +6,7 @@ use Dingo\Api\Console\Command\Docs as DingoConsoleCommandDocs;
 use Dingo\Api\Dispatcher as DingoDispatcher;
 use Dingo\Api\Http\Parser\Accept as DingoHttpAcceptParser;
 use Dingo\Api\Http\RateLimit\Handler as DingoRateLimitHandler;
+use Dingo\Api\Http\Request as DingoHttpRequest;
 use Dingo\Api\Http\RequestValidator as DingoHttpRequestValidator;
 use Dingo\Api\Http\Validation\Accept as DingoHttpValidatorAccept;
 use Dingo\Api\Http\Validation\Domain as DingoHttpValidatorDomain;
@@ -49,6 +50,16 @@ class ServiceProvider extends DingoLaravelServiceProvider
         Response::setFormatters(prepare_config_instances(config('nodes.api.formats')));
         Response::setTransformer($this->app['api.transformer']);
         Response::setEventDispatcher($this->app['events']);
+
+        // Configure the "Accept"-header parser
+        DingoHttpRequest::setAcceptParser(
+            new DingoHttpAcceptParser(
+                config('nodes.api.standardsTree'),
+                config('nodes.api.subtype'),
+                config('nodes.api.version'),
+                config('nodes.api.defaultFormat')
+            )
+        );
 
         // Register middlewares with router
         $this->app['router']->middleware('api.auth', 'Nodes\Api\Http\Middleware\Auth');
@@ -183,7 +194,6 @@ class ServiceProvider extends DingoLaravelServiceProvider
         $this->app->singleton('api.router', function ($app) {
             $router = new Router(
                 $app['api.router.adapter'],
-                new DingoHttpAcceptParser(config('nodes.api.standardsTree'), config('nodes.api.subtype'), config('nodes.api.version'), config('nodes.api.defaultFormat')),
                 $app['api.exception'],
                 $app,
                 config('nodes.api.domain'),

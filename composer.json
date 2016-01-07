@@ -17,8 +17,8 @@
         }
     ],
     "require": {
-        "nodes/core": "^0.1",
         "laravel/framework": "5.1.*",
+        "nodes/core": "^0.1",
         "dingo/api": "1.0.*@dev"
     },
     "autoload": {
