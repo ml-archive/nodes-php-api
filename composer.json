@@ -1,0 +1,35 @@
+{
+    "name": "nodes/api",
+    "description": "Nodes wrapper for Dingo API",
+    "keywords": [
+        "nodes",
+        "api",
+        "laravel",
+        "dingo"
+    ],
+    "license": "MIT",
+    "homepage": "http://nodesagency.com",
+    "authors": [
+        {
+            "name": "Morten Rugaard",
+            "email": "moru@nodes.dk",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "nodes/core": "^0.1",
+        "laravel/framework": "5.1.*",
+        "dingo/api": "1.0.*@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nodes\\Api\\": "src"
+        },
+        "files": [
+            "src/Support/Helpers/Auth.php",
+            "src/Support/Helpers/Manipulation.php",
+            "src/Support/Helpers/Route.php"
+        ]
+    },
+    "minimum-stability": "dev"
+}
