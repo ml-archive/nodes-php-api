@@ -1,0 +1,49 @@
+<?php
+namespace DummyNamespace\Models\Users\Tokens;
+
+use Nodes\Database\Eloquent\Model as NodesModel;
+
+/**
+ * Class Token
+ *
+ * @package DummyNamespace\Models\Users\Tokens
+ */
+class Token extends NodesModel
+{
+    /**
+     * The table associated with the model
+     *
+     * @var string
+     */
+    protected $table = 'user_tokens';
+
+    /**
+     * The attributes that aren't mass assignable
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user_id',
+        'token',
+        'expire'
+    ];
+
+    /*
+    |-----------------------------------------------------------
+    | Relations
+    |-----------------------------------------------------------
+    */
+
+    /**
+     * Token belongs to user
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access public
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(\DummyNamespace\Models\Users\User::class, 'user_id', 'id');
+    }
+}

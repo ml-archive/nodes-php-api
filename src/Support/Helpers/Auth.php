@@ -9,7 +9,7 @@ if (!function_exists('api_auth')) {
      */
     function api_auth()
     {
-        return \API::auth();
+        return \NodesAPI::auth();
     }
 }
 
@@ -23,6 +23,6 @@ if (!function_exists('api_user')) {
      */
     function api_user()
     {
-        return \API::user();
+        return \NodesAPI::user();
     }
 }

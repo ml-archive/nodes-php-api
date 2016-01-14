@@ -1,0 +1,74 @@
+<?php
+namespace DummyNamespace\Models\Users;
+
+use Illuminate\Support\Facades\Hash;
+use Nodes\Database\Eloquent\Model as NodesModel;
+
+/**
+ * Class User
+ *
+ * @package DummyNamespace\Models\Users
+ */
+class User extends NodesModel
+{
+    /**
+     * The table associated with the model
+     *
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
+     * The attributes that aren't mass assignable
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays
+     *
+     * @var array
+     */
+    protected $hidden = ['password'];
+
+    /*
+    |-----------------------------------------------------------
+    | Relations
+    |-----------------------------------------------------------
+    */
+
+    /**
+     * User has one access token
+     *
+     * @access public
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function token()
+    {
+        return $this->hasOne(\DummyNamespace\Models\Users\Tokens\Token::class, 'user_id', 'id');
+    }
+
+    /*
+    |-----------------------------------------------------------
+    | Mutators
+    |-----------------------------------------------------------
+    */
+
+    /**
+     * Automatically hash password attribute
+     *
+     * @access public
+     * @param  string $value
+     * @return $this
+     */
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+        return $this;
+    }
+}

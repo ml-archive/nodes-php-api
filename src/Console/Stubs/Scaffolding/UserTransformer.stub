@@ -1,0 +1,31 @@
+<?php
+namespace DummyNamespace\Models\Users\Transformers;
+
+use Nodes\Api\Transformer\TransformerAbstract;
+use DummyNamespace\Models\Users\User;
+
+/**
+ * Class UserTransformer
+ *
+ * @package DummyNamespace\Models\Users\Transformer
+ */
+class UserTransformer extends TransformerAbstract
+{
+    /**
+     * Transform entity
+     *
+     * @access public
+     * @param  \DummyNamespace\Models\Users\User $data
+     * @return array
+     */
+    public function transform(User $data)
+    {
+        return [
+            'id' => $data->id,
+            'name' => $data->name,
+            'email' => $data->email,
+            'created_at' => $data->created_at->toIso8601String(),
+            'updated_at' => $data->updated_at->toIso8601String(),
+        ];
+    }
+}

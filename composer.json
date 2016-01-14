@@ -20,6 +20,8 @@
         "laravel/framework": "5.1.*||5.2.*",
         "nodes/core": "^0.1",
         "nodes/bugsnag": "^0.1",
+        "nodes/database": "^0.1",
+        "nodes/validation": "^0.1",
         "dingo/api": "1.0.x@dev"
     },
     "autoload": {

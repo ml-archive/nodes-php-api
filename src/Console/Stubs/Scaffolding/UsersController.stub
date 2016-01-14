@@ -1,0 +1,119 @@
+<?php
+namespace DummyNamespace\Controllers\Api;
+
+use Illuminate\Routing\Controller as IlluminateController;
+use Illuminate\Support\Facades\Input;
+use Nodes\Api\Auth\Exceptions\UnauthorizedException;
+use DummyNamespace\Models\Users\UserRepository;
+use DummyNamespace\Models\Users\Transformers\UserTransformer;
+
+/**
+ * Class UsersController
+ *
+ * @package DummyNamespace\Controllers\Api
+ */
+class UsersController extends IlluminateController
+{
+    /**
+     * User Repository
+     *
+     * @var \DummyNamespace\Models\Users\UserRepository
+     */
+    protected $userRepository;
+
+    /**
+    * Constructor
+    *
+    * @access public
+    * @param  \DummyNamespace\Models\Users\UserRepository $userRepository
+    */
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    /**
+    * Retrieve authenticated user's details
+    *
+    * @access public
+    * @return \Nodes\Api\Http\Response
+    */
+    public function me()
+    {
+        return $this->item(api_user(), new UserTransformer);
+    }
+
+    /**
+    * Retrieve a specific user's details
+    *
+    * @access public
+    * @param  integer $userId
+    * @return \Nodes\Api\Http\Response
+    */
+    public function details($userId)
+    {
+        $user = $this->userRepository->getByIdOrFail($userId);
+
+        return $this->item($user, new UserTransformer);
+    }
+
+    /**
+    * Authenticate user
+    *
+    * @access public
+    * @return \Nodes\Api\Http\Response
+    * @throws \Nodes\Api\Auth\Exceptions\UnauthorizedException
+    */
+    public function login()
+    {
+        // Retrieve e-mail & password
+        $email = Input::get('email');
+        $password = Input::get('password');
+
+        // Authenticate user
+        $user = $this->userRepository->login($email, $password);
+        if (empty($user)) {
+            throw new UnauthorizedException('Authentication failed');
+        }
+
+        return $this->item($user, new UserTransformer);
+    }
+
+    /**
+    * Create new user
+    *
+    * @access public
+    * @return \Nodes\Api\Http\Response
+    * @throws \Nodes\Validation\Exceptions\ValidationException
+    * @throws \Nodes\Database\Exceptions\SaveFailedException
+    */
+    public function store()
+    {
+        // Retrieve data
+        $data = Input::all();
+
+        // Create new user
+        $user = $this->userRepository->createUser($data);
+
+        return $this->item($user, new UserTransformer)->setStatusCode(201);
+    }
+
+    /**
+    * Update authenticated user
+    *
+    * @access public
+    * @return \Nodes\Api\Http\Response
+    * @throws \Nodes\Validation\Exceptions\ValidationException
+    * @throws \Nodes\Database\Exceptions\SaveFailedException
+    */
+    public function update()
+    {
+        // Retrieve data
+        $data = Input::except('password');
+
+        // Update user details
+        $user = $this->userRepository->updateUser(api_user(), $data);
+
+        return $this->item($user, new UserTransformer);
+    }
+}

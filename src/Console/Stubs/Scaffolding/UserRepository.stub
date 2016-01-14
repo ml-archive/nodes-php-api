@@ -1,0 +1,112 @@
+<?php
+namespace DummyNamespace\Models\Users;
+
+use Illuminate\Support\Facades\Hash;
+use Nodes\Database\Eloquent\Repository as NodesRepository;
+use DummyNamespace\Models\Users\Token\Token;
+use DummyNamespace\Models\Users\Validation\UserValidator;
+
+/**
+ * Class UserRepository
+ *
+ * @package DummyNamespace\Models\Users
+ */
+class UserRepository extends NodesRepository
+{
+    /**
+     * User validator
+     *
+     * @var \DummyNamespace\Models\Users\UserValidator
+     */
+    protected $userValidator;
+
+    /**
+     * Constructor
+     *
+     * @access public
+     * @param \DummyNamespace\Models\Users\User $model
+     * @param \DummyNamespace\Models\Users\Validation\UserValidator $userValidator
+     */
+    public function __construct(User $model, UserValidator $userValidator)
+    {
+        $this->setupRepository($model);
+        $this->userValidator = $userValidator;
+    }
+
+    /**
+     * Authenticate user
+     *
+     * @access public
+     * @param  string $email
+     * @param  string $password
+     * @return \DummyNamespace\Models\Users\User
+     */
+    public function login($email, $password)
+    {
+        $user = $this->with('token')
+                     ->where('email', $email)
+                     ->first();
+
+        // E-mail does not exist
+        if (empty($user)) {
+            return false;
+        }
+
+        // Validate password
+        if (!Hash::check($password, $user->password)) {
+            return false;
+        }
+
+        return $user;
+    }
+
+    /**
+     * Create new user
+     *
+     * @access public
+     * @param  array $data
+     * @return \DummyNamespace\Models\Users\User
+     * @throws \Nodes\Validation\Exceptions\ValidationException
+     * @throws \Nodes\Database\Exceptions\SaveFailedException
+     */
+    public function createUser(array $data)
+    {
+        // Validate data
+        $this->userValidator->with($data)->validateOrFail();
+
+        // Generate fresh model and populate with data
+        $user = $this->create($data);
+
+        // Generate token for user
+        $user->token()->save(new Token([
+            'user_id' => (int) $user->id,
+            'token' => Hash::make(str_random())
+        ]));
+
+        return $user;
+    }
+
+    /**
+     * Update  user
+     *
+     * @access public
+     * @param  \DummyNamespace\Models\Users\User $user
+     * @param  array $data
+     * @return \DummyNamespace\Models\Users\User
+     * @throws \Nodes\Validation\Exceptions\ValidationException
+     * @throws \Nodes\Database\Exceptions\SaveFailedException
+     */
+    public function updateUser(User $user, $data)
+    {
+        // Fill user with new data
+        $user->fill($data);
+
+        // Validate user with new data
+        $this->userValidator->withModel($user)->validateOrFail();
+
+        // Save updated user
+        $user->save();
+
+        return $user;
+    }
+}

@@ -2,23 +2,27 @@
 namespace Nodes\Api\Support\Traits;
 
 use RuntimeException;
+use Dingo\Api\Auth\Auth as DingoAuth;
 use Dingo\Api\Contract\Debug\ExceptionHandler as DingoContractDebugExceptionHandler;
 use Dingo\Api\Contract\Http\Request as DingoContractHttpRequest;
 use Dingo\Api\Contract\Routing\Adapter as DingoContractRoutingAdapter;
-use Dingo\Api\Console\Command\Cache as DingoConsoleCommandCache;
-use Dingo\Api\Console\Command\Docs as DingoConsoleCommandDocs;
-use Dingo\Api\Console\Command\Routes as DingoConsoleCommandRoutes;
 use Dingo\Api\Dispatcher as DingoDispatcher;
+use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Dingo\Api\Http\Parser\Accept as DingoHttpAcceptParser;
 use Dingo\Api\Http\RateLimit\Handler as DingoRateLimitHandler;
 use Dingo\Api\Http\Request as DingoHttpRequest;
 use Dingo\Api\Http\RequestValidator as DingoHttpRequestValidator;
+use Dingo\Api\Http\Response\Factory as DingoHttpResponseFactory;
+use Dingo\Api\Routing\Router as DingoRoutingRouter;
 use Dingo\Api\Routing\UrlGenerator as DingoRoutingUrlGenerator;
 use Dingo\Api\Http\Validation\Accept as DingoHttpValidatorAccept;
 use Dingo\Api\Http\Validation\Domain as DingoHttpValidatorDomain;
 use Dingo\Api\Http\Validation\Prefix as DingoHttpValidatorPrefix;
 use Dingo\Api\Transformer\Factory as DingoTransformerFactory;
 use Nodes\Api\Auth\Auth as NodesAuth;
+use Nodes\Api\Console\Commands\Cache as NodesConsoleCommandCache;
+use Nodes\Api\Console\Commands\Docs as NodesConsoleCommandDocs;
+use Nodes\Api\Console\Commands\Routes as NodesConsoleCommandRoutes;
 use Nodes\Api\Exceptions\Handler as NodesExceptionHandler;
 use Nodes\Api\Http\Middlewares\Auth as NodesHttpMiddlewareAuth;
 use Nodes\Api\Http\Middlewares\Ratelimit as NodesHttpMiddlewareRateLimit;
@@ -64,13 +68,13 @@ trait DingoApiServiceProvider
 
         // Register console command
         $this->commands([
-            DingoConsoleCommandDocs::class,
+            NodesConsoleCommandDocs::class,
         ]);
 
         if (class_exists(\Illuminate\Foundation\Application::class, false)) {
             $this->commands([
-                DingoConsoleCommandCache::class,
-                DingoConsoleCommandRoutes::class,
+                NodesConsoleCommandCache::class,
+                NodesConsoleCommandRoutes::class,
             ]);
         }
     }
@@ -86,7 +90,7 @@ trait DingoApiServiceProvider
     protected function setupConfig()
     {
         // Merge package config with project version
-        $this->mergeConfigFrom(realpath(__DIR__. '/../config/api.php'), 'nodes.api');
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/api.php'), 'nodes.api');
 
         if (! $this->app->runningInConsole() && empty(config('nodes.api.prefix')) && empty(config('nodes.api.domain'))) {
             throw new RuntimeException(sprintf('Unable to boot [%s], configure an API domain or prefix.', 'Nodes\Api\ServiceProvider'));
@@ -108,15 +112,15 @@ trait DingoApiServiceProvider
         $aliases = [
             'api.dispatcher'     => DingoDispatcher::class,
             'api.http.validator' => DingoHttpRequestValidator::class,
-            'api.http.response'  => NodesHttpResponseFactory::class,
-            'api.router'         => NodesRoutingRouter::class,
+            'api.http.response'  => DingoHttpResponseFactory::class,
+            'api.router'         => DingoRoutingRouter::class,
             'api.router.adapter' => DingoContractRoutingAdapter::class,
-            'api.auth'           => NodesAuth::class,
+            'api.auth'           => DingoAuth::class,
             'api.limiting'       => DingoRateLimitHandler::class,
             'api.transformer'    => DingoTransformerFactory::class,
             'api.url'            => DingoRoutingUrlGenerator::class,
             'api.exception'      => [
-                NodesExceptionHandler::class,
+                DingoExceptionHandler::class,
                 DingoContractDebugExceptionHandler::class
             ],
         ];
@@ -210,8 +214,8 @@ trait DingoApiServiceProvider
                 $app['api.router.adapter'],
                 $app['api.exception'],
                 $app,
-                config('nodes.api.domain'),
-                config('nodes.api.prefix')
+                config('nodes.api.domain', 'nodes.dk'),
+                config('nodes.api.prefix', null)
             );
 
             $router->setConditionalRequest(config('nodes.api.conditionalRequest'));
@@ -334,8 +338,8 @@ trait DingoApiServiceProvider
      */
     protected function registerDocsCommand()
     {
-        $this->app->singleton('Dingo\Api\Console\Command\Docs', function ($app) {
-            return new DingoConsoleCommandDocs(
+        $this->app->singleton(NodesConsoleCommandDocs::class, function ($app) {
+            return new NodesConsoleCommandDocs(
                 $app['api.router'],
                 $app['Dingo\Blueprint\Blueprint'],
                 $app['Dingo\Blueprint\Writer'],

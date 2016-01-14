@@ -3,13 +3,10 @@ namespace Nodes\Api;
 
 use Dingo\Api\Http\Parser\Accept as DingoHttpAcceptParser;
 use Dingo\Api\Http\Request as DingoHttpRequest;
-use Illuminate\Foundation\AliasLoader;
 use Nodes\AbstractServiceProvider as NodesAbstractServiceProvider;
 use Nodes\Api\Http\Middlewares\Auth as NodesHttpMiddlewareAuth;
 use Nodes\Api\Http\Middlewares\Ratelimit as NodesHttpMiddlewareRateLimit;
 use Nodes\Api\Http\Response as NodesHttpResponse;
-use Nodes\Api\Support\Facades\API;
-use Nodes\Api\Support\Facades\Route;
 use Nodes\Api\Support\Traits\DingoApiServiceProvider;
 use Nodes\Api\Support\Traits\DingoLaravelServiceProvider;
 
@@ -23,11 +20,30 @@ class ServiceProvider extends NodesAbstractServiceProvider
     use DingoApiServiceProvider, DingoLaravelServiceProvider;
 
     /**
-     * Indicates if loading of the provider is deferred.
+     * Package name
      *
-     * @var boolean
+     * @var string
      */
-    protected $defer = true;
+    protected $package = 'api';
+
+    /**
+     * Facades to install
+     *
+     * @var array
+     */
+    protected $facades = [
+        'NodesAPI' => \Nodes\Api\Support\Facades\API::class,
+        'NodesAPIRoute' => \Nodes\Api\Support\Facades\Route::class
+    ];
+
+    /**
+     * Register Artisan commands
+     *
+     * @var array
+     */
+    protected $commands = [
+        \Nodes\Api\Console\Commands\Scaffolding::class
+    ];
 
     /**
      * Array of configs to copy
@@ -95,29 +111,7 @@ class ServiceProvider extends NodesAbstractServiceProvider
 
         // Dingo Laravel service provider
         $this->registerLaravelServiceProvider();
-
-        // Register facades
-        $this->registerFacades();
     }
-
-    /**
-     * registerFacades
-     *
-     * @author Morten Rugaard <moru@nodes.dk>
-     *
-     * @access protected
-     * @return void
-     */
-    protected function registerFacades()
-    {
-        $this->app->booting(function() {
-            $loader = AliasLoader::getInstance();
-            $loader->alias('API', API::class);
-            $loader->alias('APIRoute', Route::class);
-        });
-    }
-
-
 
     /**
      * Load project API routes
@@ -146,16 +140,16 @@ class ServiceProvider extends NodesAbstractServiceProvider
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function installScaffolding()
+    protected function installScaffolding()
     {
-        // Ask for confirmation before we start the scaffolding
-        if (!$this->output->confirm('Do you wish to generate API scaffolding?', true)) {
-            return;
+        if (env('NODES_ENV', false)) {
+            $this->getOutput()->block([
+                'To install Nodes Scaffolding, run the command:',
+                'php artisan nodes:api:scaffold'
+            ], 'TIP!', 'fg=white;bg=black', ' ', true);
         }
-
-
     }
 }
