@@ -33,5 +33,13 @@
             "src/Support/Helpers/Manipulation.php",
             "src/Support/Helpers/Route.php"
         ]
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php -r nodes/core/install.php nodes:package:install nodes/api"
+        ],
+        "post-update-cmd": [
+            "php -r nodes/core/install.php nodes:package:install nodes/api"
+        ]
     }
 }
