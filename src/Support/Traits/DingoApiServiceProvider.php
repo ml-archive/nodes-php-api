@@ -113,14 +113,14 @@ trait DingoApiServiceProvider
             'api.dispatcher'     => DingoDispatcher::class,
             'api.http.validator' => DingoHttpRequestValidator::class,
             'api.http.response'  => DingoHttpResponseFactory::class,
-            'api.router'         => NodesRoutingRouter::class,
+            'api.router'         => DingoRoutingRouter::class,
             'api.router.adapter' => DingoContractRoutingAdapter::class,
             'api.auth'           => DingoAuth::class,
             'api.limiting'       => DingoRateLimitHandler::class,
             'api.transformer'    => DingoTransformerFactory::class,
             'api.url'            => DingoRoutingUrlGenerator::class,
             'api.exception'      => [
-                NodesExceptionHandler::class,
+                DingoExceptionHandler::class,
                 DingoContractDebugExceptionHandler::class
             ],
         ];
