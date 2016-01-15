@@ -1,5 +1,5 @@
 <?php
-namespace Nodes\Api\Http\Middlewares;
+namespace Nodes\Api\Http\Middleware;
 
 use Dingo\Api\Http\Middleware\Auth as DingoHttpMiddlewareAuth;
 use Nodes\Api\Auth\Auth as Authentication;

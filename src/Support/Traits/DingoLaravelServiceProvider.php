@@ -4,7 +4,7 @@ namespace Nodes\Api\Support\Traits;
 use ReflectionClass;
 use Dingo\Api\Routing\Adapter\Laravel as DingoRoutingLaravelAdapter;
 use Illuminate\Contracts\Http\Kernel as IlluminateContractKernel;
-use Nodes\Api\Http\Middlewares\Request as NodesHttpMiddlewareRequest;
+use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
 use Nodes\Api\Http\Response as NodesHttpResponse;
 
 /**
@@ -26,10 +26,11 @@ trait DingoLaravelServiceProvider
     protected function registerLaravelServiceProvider()
     {
         // Instantiate HTTP kernel
-        $kernel = $this->app->make(\Illuminate\Contracts\Http\Kernel::class);
+        $kernel = $this->app->make('Illuminate\Contracts\Http\Kernel');
 
         // Setup HTTP middlewares
         $this->app->instance('app.middleware', $this->gatherAppMiddleware($kernel));
+
         $this->addRequestMiddlewareToBeginning($kernel);
 
         // Register Laravel route adapter

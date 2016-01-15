@@ -4,8 +4,8 @@ namespace Nodes\Api;
 use Dingo\Api\Http\Parser\Accept as DingoHttpAcceptParser;
 use Dingo\Api\Http\Request as DingoHttpRequest;
 use Nodes\AbstractServiceProvider as NodesAbstractServiceProvider;
-use Nodes\Api\Http\Middlewares\Auth as NodesHttpMiddlewareAuth;
-use Nodes\Api\Http\Middlewares\Ratelimit as NodesHttpMiddlewareRateLimit;
+use Nodes\Api\Http\Middleware\Auth as NodesHttpMiddlewareAuth;
+use Nodes\Api\Http\Middleware\Ratelimit as NodesHttpMiddlewareRateLimit;
 use Nodes\Api\Http\Response as NodesHttpResponse;
 use Nodes\Api\Support\Traits\DingoApiServiceProvider;
 use Nodes\Api\Support\Traits\DingoLaravelServiceProvider;
@@ -81,14 +81,14 @@ class ServiceProvider extends NodesAbstractServiceProvider
             )
         );
 
-        // Register middlewares with router
-        $this->app['router']->middleware('api.auth', NodesHttpMiddlewareAuth::class);
-        $this->app['router']->middleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
-
         // Rebind API router
         $this->app->rebinding('api.routes', function ($app, $routes) {
             $app['api.url']->setRouteCollections($routes);
         });
+
+        // Register middlewares with router
+        $this->app['router']->middleware('api.auth', NodesHttpMiddlewareAuth::class);
+        $this->app['router']->middleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
 
         // Load project routes
         $this->loadRoutes();

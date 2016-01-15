@@ -24,9 +24,9 @@ use Nodes\Api\Console\Commands\Cache as NodesConsoleCommandCache;
 use Nodes\Api\Console\Commands\Docs as NodesConsoleCommandDocs;
 use Nodes\Api\Console\Commands\Routes as NodesConsoleCommandRoutes;
 use Nodes\Api\Exceptions\Handler as NodesExceptionHandler;
-use Nodes\Api\Http\Middlewares\Auth as NodesHttpMiddlewareAuth;
-use Nodes\Api\Http\Middlewares\Ratelimit as NodesHttpMiddlewareRateLimit;
-use Nodes\Api\Http\Middlewares\Request as NodesHttpMiddlewareRequest;
+use Nodes\Api\Http\Middleware\Auth as NodesHttpMiddlewareAuth;
+use Nodes\Api\Http\Middleware\Ratelimit as NodesHttpMiddlewareRateLimit;
+use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
 use Nodes\Api\Http\Response as NodesHttpResponse;
 use Nodes\Api\Http\Response\Factory as NodesHttpResponseFactory;
 use Nodes\Api\Routing\Router as NodesRoutingRouter;
@@ -92,7 +92,7 @@ trait DingoApiServiceProvider
         // Merge package config with project version
         $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/api.php'), 'nodes.api');
 
-        if (! $this->app->runningInConsole() && empty(config('nodes.api.prefix')) && empty(config('nodes.api.domain'))) {
+        if (!$this->app->runningInConsole() && empty(config('nodes.api.prefix')) && empty(config('nodes.api.domain'))) {
             throw new RuntimeException(sprintf('Unable to boot [%s], configure an API domain or prefix.', 'Nodes\Api\ServiceProvider'));
         }
     }
@@ -113,14 +113,14 @@ trait DingoApiServiceProvider
             'api.dispatcher'     => DingoDispatcher::class,
             'api.http.validator' => DingoHttpRequestValidator::class,
             'api.http.response'  => DingoHttpResponseFactory::class,
-            'api.router'         => DingoRoutingRouter::class,
+            'api.router'         => NodesRoutingRouter::class,
             'api.router.adapter' => DingoContractRoutingAdapter::class,
             'api.auth'           => DingoAuth::class,
             'api.limiting'       => DingoRateLimitHandler::class,
             'api.transformer'    => DingoTransformerFactory::class,
             'api.url'            => DingoRoutingUrlGenerator::class,
             'api.exception'      => [
-                DingoExceptionHandler::class,
+                NodesExceptionHandler::class,
                 DingoContractDebugExceptionHandler::class
             ],
         ];
@@ -300,15 +300,15 @@ trait DingoApiServiceProvider
      */
     protected function registerMiddleware()
     {
-        $this->app->singleton('Nodes\Api\Http\Middleware\Auth', function ($app) {
+        $this->app->singleton(NodesHttpMiddlewareAuth::class, function ($app) {
             return new NodesHttpMiddlewareAuth($app['api.router'], $app['api.auth']);
         });
 
-        $this->app->singleton('Nodes\Api\Http\Middleware\Request', function ($app) {
+        $this->app->singleton(NodesHttpMiddlewareRequest::class, function ($app) {
             return new NodesHttpMiddlewareRequest($app, $app['api.exception'], $app['api.router'], $app['api.http.validator'], $app['app.middleware']);
         });
 
-        $this->app->singleton('Nodes\Api\Http\Middleware\RateLimit', function ($app) {
+        $this->app->singleton(NodesHttpMiddlewareRateLimit::class, function ($app) {
             return new NodesHttpMiddlewareRateLimit($app['api.router'], $app['api.limiting']);
         });
     }

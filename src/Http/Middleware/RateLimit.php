@@ -1,5 +1,5 @@
 <?php
-namespace Nodes\Api\Http\Middlewares;
+namespace Nodes\Api\Http\Middleware;
 
 use Dingo\Api\Http\Middleware\RateLimit as DingoHttpMiddlewareRateLimit;
 use Dingo\Api\Http\RateLimit\Handler as DingoRateLimitHandler;
