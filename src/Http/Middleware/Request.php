@@ -1,5 +1,5 @@
 <?php
-namespace Nodes\Api\Http\Middlewares;
+namespace Nodes\Api\Http\Middleware;
 
 use Illuminate\Contracts\Foundation\Application;
 use Dingo\Api\Http\Middleware\Request as DingoHttpMiddlewareRequest;

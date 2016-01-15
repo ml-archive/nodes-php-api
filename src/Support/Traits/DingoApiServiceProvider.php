@@ -1,108 +1,82 @@
 <?php
-namespace Nodes\Api;
+namespace Nodes\Api\Support\Traits;
 
 use RuntimeException;
-use Dingo\Api\Console\Command\Docs as DingoConsoleCommandDocs;
+use Dingo\Api\Auth\Auth as DingoAuth;
+use Dingo\Api\Contract\Debug\ExceptionHandler as DingoContractDebugExceptionHandler;
+use Dingo\Api\Contract\Http\Request as DingoContractHttpRequest;
+use Dingo\Api\Contract\Routing\Adapter as DingoContractRoutingAdapter;
 use Dingo\Api\Dispatcher as DingoDispatcher;
+use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Dingo\Api\Http\Parser\Accept as DingoHttpAcceptParser;
 use Dingo\Api\Http\RateLimit\Handler as DingoRateLimitHandler;
 use Dingo\Api\Http\Request as DingoHttpRequest;
-<<<<<<< Updated upstream
 use Dingo\Api\Http\RequestValidator as DingoHttpRequestValidator;
+use Dingo\Api\Http\Response\Factory as DingoHttpResponseFactory;
+use Dingo\Api\Routing\Router as DingoRoutingRouter;
+use Dingo\Api\Routing\UrlGenerator as DingoRoutingUrlGenerator;
 use Dingo\Api\Http\Validation\Accept as DingoHttpValidatorAccept;
 use Dingo\Api\Http\Validation\Domain as DingoHttpValidatorDomain;
 use Dingo\Api\Http\Validation\Prefix as DingoHttpValidatorPrefix;
-use Dingo\Api\Provider\LaravelServiceProvider as DingoLaravelServiceProvider;
 use Dingo\Api\Transformer\Factory as DingoTransformerFactory;
-use Illuminate\Contracts\Http\Kernel as IlluminateContractKernel;
-use Illuminate\Foundation\AliasLoader;
-use Nodes\Api\Auth\Auth;
-use Nodes\Api\Exceptions\Handler;
-use Nodes\Api\Http\Middlewares\Auth as NodesHttpMiddlewareAuth;
-use Nodes\Api\Http\Middlewares\Ratelimit as NodesHttpMiddlewareRateLimit;
-use Nodes\Api\Http\Middlewares\Request as NodesHttpMiddlewareRequest;
-use Nodes\Api\Http\Response;
-use Nodes\Api\Http\Response\Factory;
-use Nodes\Api\Routing\Router;
-use Nodes\Api\Routing\ResourceRegistrar;
-use Nodes\Api\Support\Facades\API;
-use Nodes\Api\Support\Facades\Route;
-=======
-use Nodes\AbstractServiceProvider as NodesAbstractServiceProvider;
+use Nodes\Api\Auth\Auth as NodesAuth;
+use Nodes\Api\Console\Commands\Cache as NodesConsoleCommandCache;
+use Nodes\Api\Console\Commands\Docs as NodesConsoleCommandDocs;
+use Nodes\Api\Console\Commands\Routes as NodesConsoleCommandRoutes;
+use Nodes\Api\Exceptions\Handler as NodesExceptionHandler;
 use Nodes\Api\Http\Middleware\Auth as NodesHttpMiddlewareAuth;
 use Nodes\Api\Http\Middleware\Ratelimit as NodesHttpMiddlewareRateLimit;
+use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
 use Nodes\Api\Http\Response as NodesHttpResponse;
-use Nodes\Api\Support\Traits\DingoApiServiceProvider;
-use Nodes\Api\Support\Traits\DingoLaravelServiceProvider;
->>>>>>> Stashed changes
+use Nodes\Api\Http\Response\Factory as NodesHttpResponseFactory;
+use Nodes\Api\Routing\Router as NodesRoutingRouter;
+use Nodes\Api\Routing\ResourceRegistrar as NodesRoutingResourceRegistrar;
 
 /**
- * Class ServiceProvider
+ * Class DingoApiServiceProvider
  *
- * @package Nodes\Api
+ * @trait
+ * @package Nodes\Api\Support\Traits
  */
-class ServiceProvider extends DingoLaravelServiceProvider
+trait DingoApiServiceProvider
 {
     /**
-     * Boot the service provider
+     * Register Dingo's API service provider
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function boot()
+    protected function registerApiServiceProvider()
     {
-        $this->setupConfig();
+        // Setup class aliases
+        $this->setupClassAliases();
 
-        // Set response formatter, transformer and evnet dispatcher
-        Response::setFormatters(prepare_config_instances(config('nodes.api.formats')));
-        Response::setTransformer($this->app['api.transformer']);
-        Response::setEventDispatcher($this->app['events']);
+        // Register class bindings
+        $this->registerExceptionHandler();
+        $this->registerDispatcher();
+        $this->registerAuth();
+        $this->registerRateLimiting();
+        $this->registerRouter();
+        $this->registerUrlGenerator();
+        $this->registerHttpValidation();
+        $this->registerResponseFactory();
+        $this->registerMiddleware();
+        $this->registerTransformer();
+        $this->registerDocsCommand();
 
-        // Configure the "Accept"-header parser
-        DingoHttpRequest::setAcceptParser(
-            new DingoHttpAcceptParser(
-                config('nodes.api.standardsTree'),
-                config('nodes.api.subtype'),
-                config('nodes.api.version'),
-                config('nodes.api.defaultFormat')
-            )
-        );
+        // Register console command
+        $this->commands([
+            NodesConsoleCommandDocs::class,
+        ]);
 
-<<<<<<< Updated upstream
-        // Register middlewares with router
-        $this->app['router']->middleware('api.auth', 'Nodes\Api\Http\Middleware\Auth');
-        $this->app['router']->middleware('api.throttle', 'Dingo\Api\Http\Middleware\RateLimit');
-=======
-        // Rebind API router
-        $this->app->rebinding('api.routes', function ($app, $routes) {
-            $app['api.url']->setRouteCollections($routes);
-        });
->>>>>>> Stashed changes
-
-        // Register middlewares with router
-        $this->app['router']->middleware('api.auth', NodesHttpMiddlewareAuth::class);
-        $this->app['router']->middleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
-
-        // Load project routes
-        $this->loadRoutes();
-    }
-
-    /**
-     * Register the service provider
-     *
-     * @author Morten Rugaard <moru@nodes.dk>
-     *
-     * @access public
-     * @return void
-     */
-    public function register()
-    {
-        parent::register();
-
-        // Register facades
-        $this->registerFacades();
+        if (class_exists(\Illuminate\Foundation\Application::class, false)) {
+            $this->commands([
+                NodesConsoleCommandCache::class,
+                NodesConsoleCommandRoutes::class,
+            ]);
+        }
     }
 
     /**
@@ -116,25 +90,46 @@ class ServiceProvider extends DingoLaravelServiceProvider
     protected function setupConfig()
     {
         // Merge package config with project version
-        $this->mergeConfigFrom(realpath(__DIR__. '/../config/api.php'), 'nodes.api');
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/api.php'), 'nodes.api');
 
-        if (! $this->app->runningInConsole() && empty(config('nodes.api.prefix')) && empty(config('nodes.api.domain'))) {
-            throw new RuntimeException('Unable to boot ApiServiceProvider, configure an API domain or prefix.');
+        if (!$this->app->runningInConsole() && empty(config('nodes.api.prefix')) && empty(config('nodes.api.domain'))) {
+            throw new RuntimeException(sprintf('Unable to boot [%s], configure an API domain or prefix.', 'Nodes\Api\ServiceProvider'));
         }
     }
 
     /**
-     * Add the request middleware to the beginning of the kernel
+     * Setup the class aliases
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
      * @access protected
-     * @param \Illuminate\Contracts\Http\Kernel $kernel
      * @return void
      */
-    protected function addRequestMiddlewareToBeginning(IlluminateContractKernel $kernel)
+    protected function setupClassAliases()
     {
-        $kernel->prependMiddleware('Nodes\Api\Http\Middleware\Request');
+        $this->app->alias(DingoHttpRequest::class, DingoContractHttpRequest::class);
+
+        $aliases = [
+            'api.dispatcher'     => DingoDispatcher::class,
+            'api.http.validator' => DingoHttpRequestValidator::class,
+            'api.http.response'  => DingoHttpResponseFactory::class,
+            'api.router'         => NodesRoutingRouter::class,
+            'api.router.adapter' => DingoContractRoutingAdapter::class,
+            'api.auth'           => DingoAuth::class,
+            'api.limiting'       => DingoRateLimitHandler::class,
+            'api.transformer'    => DingoTransformerFactory::class,
+            'api.url'            => DingoRoutingUrlGenerator::class,
+            'api.exception'      => [
+                NodesExceptionHandler::class,
+                DingoContractDebugExceptionHandler::class
+            ],
+        ];
+
+        foreach ($aliases as $key => $aliases) {
+            foreach ((array) $aliases as $alias) {
+                $this->app->alias($key, $alias);
+            }
+        }
     }
 
     /**
@@ -148,7 +143,7 @@ class ServiceProvider extends DingoLaravelServiceProvider
     protected function registerExceptionHandler()
     {
         $this->app->singleton('api.exception', function ($app) {
-            return new Handler($app['log'], config('nodes.api.errorFormat'), config('nodes.api.debug'));
+            return new NodesExceptionHandler($app['log'], config('nodes.api.errorFormat'), config('nodes.api.debug'));
         });
     }
 
@@ -185,13 +180,16 @@ class ServiceProvider extends DingoLaravelServiceProvider
     protected function registerAuth()
     {
         $this->app->singleton('api.auth', function ($app) {
-            return new Auth($app['api.router'], $app, $this->prepareConfigValues(config('nodes.api.auth.providers')));
+            return new NodesAuth($app['api.router'], $app, $this->prepareConfigValues(config('nodes.api.auth.providers')));
         });
     }
 
     /**
-     * Register the rate limiting.
+     * Register the rate limiting
      *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access protected
      * @return void
      */
     protected function registerRateLimiting()
@@ -212,20 +210,38 @@ class ServiceProvider extends DingoLaravelServiceProvider
     protected function registerRouter()
     {
         $this->app->singleton('api.router', function ($app) {
-            $router = new Router(
+            $router = new NodesRoutingRouter(
                 $app['api.router.adapter'],
                 $app['api.exception'],
                 $app,
-                config('nodes.api.domain'),
-                config('nodes.api.prefix')
+                config('nodes.api.domain', 'nodes.dk'),
+                config('nodes.api.prefix', null)
             );
 
             $router->setConditionalRequest(config('nodes.api.conditionalRequest'));
             return $router;
         });
 
-        $this->app->singleton('Nodes\Api\Routing\ResourceRegistrar', function ($app) {
-            return new ResourceRegistrar($app['api.router']);
+        $this->app->singleton(NodesRoutingResourceRegistrar::class, function ($app) {
+            return new NodesRoutingResourceRegistrar($app['api.router']);
+        });
+    }
+
+    /**
+     * Register the URL generator
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access protected
+     * @return void
+     */
+    protected function registerUrlGenerator()
+    {
+        $this->app->singleton('api.url', function ($app) {
+            $url = new DingoRoutingUrlGenerator($app['request']);
+            $url->setRouteCollections($app['api.router']->getRoutes());
+
+            return $url;
         });
     }
 
@@ -270,7 +286,7 @@ class ServiceProvider extends DingoLaravelServiceProvider
     protected function registerResponseFactory()
     {
         $this->app->singleton('api.http.response', function ($app) {
-            return new Factory($app['api.transformer']);
+            return new NodesHttpResponseFactory($app['api.transformer']);
         });
     }
 
@@ -284,15 +300,15 @@ class ServiceProvider extends DingoLaravelServiceProvider
      */
     protected function registerMiddleware()
     {
-        $this->app->singleton('Nodes\Api\Http\Middleware\Auth', function ($app) {
+        $this->app->singleton(NodesHttpMiddlewareAuth::class, function ($app) {
             return new NodesHttpMiddlewareAuth($app['api.router'], $app['api.auth']);
         });
 
-        $this->app->singleton('Nodes\Api\Http\Middleware\Request', function ($app) {
+        $this->app->singleton(NodesHttpMiddlewareRequest::class, function ($app) {
             return new NodesHttpMiddlewareRequest($app, $app['api.exception'], $app['api.router'], $app['api.http.validator'], $app['app.middleware']);
         });
 
-        $this->app->singleton('Nodes\Api\Http\Middleware\RateLimit', function ($app) {
+        $this->app->singleton(NodesHttpMiddlewareRateLimit::class, function ($app) {
             return new NodesHttpMiddlewareRateLimit($app['api.router'], $app['api.limiting']);
         });
     }
@@ -313,23 +329,6 @@ class ServiceProvider extends DingoLaravelServiceProvider
     }
 
     /**
-     * registerFacades
-     *
-     * @author Morten Rugaard <moru@nodes.dk>
-     *
-     * @access protected
-     * @return void
-     */
-    protected function registerFacades()
-    {
-        $this->app->booting(function() {
-            $loader = AliasLoader::getInstance();
-            $loader->alias('API', API::class);
-            $loader->alias('APIRoute', Route::class);
-        });
-    }
-
-    /**
      * Register the documentation command
      *
      * @author Morten Rugaard <moru@nodes.dk>
@@ -339,8 +338,8 @@ class ServiceProvider extends DingoLaravelServiceProvider
      */
     protected function registerDocsCommand()
     {
-        $this->app->singleton('Dingo\Api\Console\Command\Docs', function ($app) {
-            return new DingoConsoleCommandDocs(
+        $this->app->singleton(NodesConsoleCommandDocs::class, function ($app) {
+            return new NodesConsoleCommandDocs(
                 $app['api.router'],
                 $app['Dingo\Blueprint\Blueprint'],
                 $app['Dingo\Blueprint\Writer'],
@@ -348,27 +347,5 @@ class ServiceProvider extends DingoLaravelServiceProvider
                 config('nodes.api.version')
             );
         });
-    }
-
-    /**
-     * Load project API routes
-     *
-     * @author Morten Rugaard <moru@nodes.dk>
-     *
-     * @access private
-     * @return void
-     */
-    private function loadRoutes()
-    {
-        // Generate routes directory path
-        $routesDirectory = base_path('project/Routes/');
-
-        // Make sure our directory exists
-        if (!file_exists($routesDirectory)) {
-            return;
-        }
-
-        // Load routes in directory
-        load_directory($routesDirectory);
     }
 }
