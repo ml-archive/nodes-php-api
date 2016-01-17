@@ -6,6 +6,7 @@ use Dingo\Api\Http\Request as DingoHttpRequest;
 use Nodes\AbstractServiceProvider as NodesAbstractServiceProvider;
 use Nodes\Api\Http\Middleware\Auth as NodesHttpMiddlewareAuth;
 use Nodes\Api\Http\Middleware\Ratelimit as NodesHttpMiddlewareRateLimit;
+use Nodes\Api\Http\Middleware\UserAgent as NodesHttpMiddlewareUserAgent;
 use Nodes\Api\Http\Response as NodesHttpResponse;
 use Nodes\Api\Support\Traits\DingoApiServiceProvider;
 use Nodes\Api\Support\Traits\DingoLaravelServiceProvider;
@@ -27,6 +28,15 @@ class ServiceProvider extends NodesAbstractServiceProvider
     protected $package = 'api';
 
     /**
+     * Register Artisan commands
+     *
+     * @var array
+     */
+    protected $commands = [
+        \Nodes\Api\Console\Commands\Scaffolding::class
+    ];
+
+    /**
      * Facades to install
      *
      * @var array
@@ -34,15 +44,6 @@ class ServiceProvider extends NodesAbstractServiceProvider
     protected $facades = [
         'NodesAPI' => \Nodes\Api\Support\Facades\API::class,
         'NodesAPIRoute' => \Nodes\Api\Support\Facades\Route::class
-    ];
-
-    /**
-     * Register Artisan commands
-     *
-     * @var array
-     */
-    protected $commands = [
-        \Nodes\Api\Console\Commands\Scaffolding::class
     ];
 
     /**
@@ -89,6 +90,7 @@ class ServiceProvider extends NodesAbstractServiceProvider
         // Register middlewares with router
         $this->app['router']->middleware('api.auth', NodesHttpMiddlewareAuth::class);
         $this->app['router']->middleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
+        $this->app['router']->middleware('api.useragent', NodesHttpMiddlewareUserAgent::class);
 
         // Load project routes
         $this->loadRoutes();
