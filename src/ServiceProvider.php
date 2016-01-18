@@ -148,7 +148,10 @@ class ServiceProvider extends NodesAbstractServiceProvider
     protected function installScaffolding()
     {
         if (env('NODES_ENV', false)) {
-            $this->getInstaller()->call('nodes:api:scaffold');
+            $this->getInstaller()->getOutput()->block([
+                'To install Nodes Scaffolding, run the command:',
+                'php artisan nodes:api:scaffold'
+            ], 'TIP!', 'fg=white;bg=black', ' ', true);
         }
     }
 
