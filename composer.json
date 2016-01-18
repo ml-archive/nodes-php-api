@@ -36,10 +36,10 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php -r nodes/core/install.php nodes:package:install nodes/api"
+            "php -f nodes/core/install.php nodes:package:install nodes/api"
         ],
         "post-update-cmd": [
-            "php -r nodes/core/install.php nodes:package:install nodes/api"
+            "php -f nodes/core/install.php nodes:package:install nodes/api"
         ]
     }
 }
