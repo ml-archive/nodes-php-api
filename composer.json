@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Nodes\\Api\\": "src"
+            "Nodes\\Api\\": "src/"
         },
         "files": [
             "src/Support/Helpers/Auth.php",
@@ -36,10 +36,10 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php -f nodes/core/install.php nodes:package:install nodes/api"
+            "php -f vendor/nodes/core/install.php nodes:package:install nodes/api"
         ],
         "post-update-cmd": [
-            "php -f nodes/core/install.php nodes:package:install nodes/api"
+            "php -f vendor/nodes/core/install.php nodes:package:install nodes/api"
         ]
     }
 }
