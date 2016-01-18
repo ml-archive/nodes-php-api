@@ -52,7 +52,7 @@ class ServiceProvider extends NodesAbstractServiceProvider
      * @var array
      */
     protected $configs = [
-        'config/api.php' => 'nodes/api.php'
+        'config/api.php' => 'config/nodes/api.php'
     ];
 
     /**
