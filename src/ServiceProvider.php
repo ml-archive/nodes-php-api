@@ -154,4 +154,72 @@ class ServiceProvider extends NodesAbstractServiceProvider
             ], 'TIP!', 'fg=white;bg=black', ' ', true);
         }
     }
+
+    /**
+     * Install custom stuff
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access protected
+     * @return void
+     */
+    protected function installCustom()
+    {
+        // Add "api/" to except array in "VerifyCsrfToken" middlware
+        // to always bypass the CSRF token validation on POST requests
+        $this->bypassCsrfToken();
+    }
+
+    /**
+     * Bypass CSRF validation for API routes
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access private
+     * @return boolean
+     */
+    private function bypassCsrfToken()
+    {
+        $file = file(app_path('Http/Middleware/VerifyCsrfToken.php'));
+
+        $locateExceptArray = array_keys(preg_grep('|protected \$except = \[|', $file));
+        if (empty($locateExceptArray[0])) {
+            return false;
+        }
+
+        // Bypass URL
+        $bypassUrl = 'api/*';
+
+        for ($i = $locateExceptArray[0]+2; $i < count($file); $i++) {
+            // Remove whitespace from line
+            $value = trim($file[$i]);
+
+            if (!empty($value)) {
+                // If we're on the outcommented line (which is there out-of-the-box)
+                // we'll replace this line instead of inserting it before.
+                if ($value == '//') {
+                    $file[$i] =  str_repeat("\t", 2) . sprintf('\'%s\',', $bypassUrl) . "\n";
+                    break;
+                }
+
+                // Remove single quotes from URL for comparison
+                $currentBypassUrl = substr($value, 1, strrpos($value, '\''));
+
+                // If we're on the last line of the $except array
+                // or if our bypass URL comes before current line
+                // - if sorted alphabetically - we'll insert on this line
+                if ($value == '];' || strnatcmp($currentBypassUrl, $bypassUrl) > 0) {
+                    array_splice($file, $i, 0, [
+                        str_repeat("\t", 2) . sprintf('\'%s\',', $bypassUrl) . "\n"
+                    ]);
+                    break;
+                }
+            }
+        }
+
+        // Update existing file
+        file_put_contents(app_path('Http/Middleware/VerifyCsrfToken.php'), implode('', $file));
+
+        return true;
+    }
 }
