@@ -180,7 +180,7 @@ trait DingoApiServiceProvider
     protected function registerAuth()
     {
         $this->app->singleton('api.auth', function ($app) {
-            return new NodesAuth($app['api.router'], $app, $this->prepareConfigValues(config('nodes.api.auth.providers')));
+            return new NodesAuth($app['api.router'], $app, prepare_config_instances(config('nodes.api.auth.providers')));
         });
     }
 
@@ -195,7 +195,7 @@ trait DingoApiServiceProvider
     protected function registerRateLimiting()
     {
         $this->app->singleton('api.limiting', function ($app) {
-            return new DingoRateLimitHandler($app, $app['cache'], $this->prepareConfigValues(config('nodes.api.throttling')));
+            return new DingoRateLimitHandler($app, $app['cache'], prepare_config_instances(config('nodes.api.throttling')));
         });
     }
 
