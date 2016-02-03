@@ -55,7 +55,6 @@ class MasterToken implements DingoAuthContract
      * Auth constructor
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access public
      */
     public function __construct()
@@ -71,13 +70,12 @@ class MasterToken implements DingoAuthContract
      * Set token settings
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return \Nodes\Api\Auth\Providers\MasterToken
      */
     protected function setTokenSettings()
     {
-        $this->enabled = (bool) config('nodes.auth.masterToken.enabled', false);
+        $this->enabled = (bool)config('nodes.auth.masterToken.enabled', false);
 
         // Salt used to generate the unique master token
         $this->tokenSalt = config('nodes.auth.masterToken.salt', 'nodes+' . env('APP_ENV'));
@@ -96,7 +94,6 @@ class MasterToken implements DingoAuthContract
      * Authenticate by token
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access public
      * @param  \Illuminate\Http\Request $request
      * @param  \Dingo\Api\Routing\Route $route
@@ -118,7 +115,7 @@ class MasterToken implements DingoAuthContract
         }
 
         // Set token from "X-Master-Token" header
-        $this->token = (string) $request->header('x-master-token');
+        $this->token = (string)$request->header('x-master-token');
 
         // Validate master token
         if (!$this->validateMasterToken()) {
@@ -137,26 +134,49 @@ class MasterToken implements DingoAuthContract
      * Retrieve user by token
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access proteected
      * @return \Illuminate\Database\Eloquent\Model
      */
     protected function getUserByToken()
     {
-        return $this->getUserModel()
-                    ->where(
-                        $this->getTokenColumn('column'),
-                        $this->getTokenColumn('operator'),
-                        $this->getTokenColumn('value')
-                    )
-                    ->first();
+        // Look up in cache and return if found
+        if ($user = cache_get('api.masterToken', $this->getCacheParams())) {
+            return $user;
+        }
+
+
+        $user = $this->getUserModel()->where(
+            $this->getTokenColumn('column'),
+            $this->getTokenColumn('operator'),
+            $this->getTokenColumn('value')
+        )
+            ->first();
+
+        // Add to cache
+        cache_put('api.masterToken', $this->getCacheParams(), $user);
+
+        return $user;
     }
+
+
+    /**
+     * getCacheParams
+     *
+     * @author Casper Rasmussen <cr@nodes.dk>
+     * @return array
+     */
+    private function getCacheParams()
+    {
+        return [
+            'accessToken' => $this->getToken()
+        ];
+    }
+
 
     /**
      * Validate master token
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return boolean
      */
@@ -170,7 +190,6 @@ class MasterToken implements DingoAuthContract
      *
      * @author Morten Rugaard <moru@nodes.dk>
      * @date   03-11-2015
-     *
      * @access protected
      * @return array
      */
@@ -187,7 +206,6 @@ class MasterToken implements DingoAuthContract
      * Wether or not master token is enabled
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return boolean
      */
@@ -200,7 +218,6 @@ class MasterToken implements DingoAuthContract
      * Retrieve user model
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -213,7 +230,6 @@ class MasterToken implements DingoAuthContract
      * Retrieve token from "Authorization" header
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return string
      */
@@ -226,7 +242,6 @@ class MasterToken implements DingoAuthContract
      * Retrieve token columns
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @param  string $column
      * @return string
