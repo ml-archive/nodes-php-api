@@ -55,7 +55,6 @@ class UserToken implements DingoAuthContract
      * Auth constructor
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access public
      */
     public function __construct()
@@ -71,7 +70,6 @@ class UserToken implements DingoAuthContract
      * Set token settings
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return \Nodes\Api\Auth\Authorization
      */
@@ -102,7 +100,6 @@ class UserToken implements DingoAuthContract
      * Authenticate by token
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access public
      * @param  \Illuminate\Http\Request $request
      * @param  \Dingo\Api\Routing\Route $route
@@ -119,7 +116,7 @@ class UserToken implements DingoAuthContract
         }
 
         // Set token from "Authorization" header
-        $this->token = (string) $request->header('authorization');
+        $this->token = (string)$request->header('authorization');
 
         // Authenticate user by token
         $user = $this->getUserByToken();
@@ -146,26 +143,48 @@ class UserToken implements DingoAuthContract
      * Retrieve user by token
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return \Illuminate\Database\Eloquent\Model
      */
     protected function getUserByToken()
     {
-        return $this->generateQuery()->first();
+        // Look up in cache and return if found
+        if ($user = cache_get('api.userToken', $this->getCacheParams())) {
+            return $user;
+        }
+
+        // Look up in database
+        $user = $this->generateQuery()->first();
+
+        // Add to cache
+        cache_put('api.userToken', $this->getCacheParams(), $user);
+
+        return $user;
+    }
+
+    /**
+     * getCacheParams
+     *
+     * @author Casper Rasmussen <cr@nodes.dk>
+     * @return array
+     */
+    private function getCacheParams()
+    {
+        return [
+            'accessToken' => $this->getToken()
+        ];
     }
 
     /**
      * Update token's expire time
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return boolean
      */
     protected function updateTokenExpiry()
     {
-        return (bool) $this->generateQuery()->update([
+        return (bool)$this->generateQuery()->update([
             $this->getTokenColumn('expire') => Carbon::parse('now ' . $this->getTokenLifetime())
         ]);
     }
@@ -175,7 +194,6 @@ class UserToken implements DingoAuthContract
      * and update an existing tokens expire time
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access private
      * @return mixed
      */
@@ -195,7 +213,6 @@ class UserToken implements DingoAuthContract
      * Retrieve user model
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return \Illuminate\Database\Eloquent\Model
      * @throws \Nodes\Api\Auth\Exceptions\MissingUserModelException
@@ -214,7 +231,6 @@ class UserToken implements DingoAuthContract
      * Retrieve user table
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return string
      */
@@ -227,7 +243,6 @@ class UserToken implements DingoAuthContract
      * Retrieve token from "Authorization" header
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return string
      */
@@ -240,7 +255,6 @@ class UserToken implements DingoAuthContract
      * Retrieve token table
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return string
      */
@@ -253,7 +267,6 @@ class UserToken implements DingoAuthContract
      * Retrieve token columns
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @param  string $column
      * @return string
@@ -274,7 +287,6 @@ class UserToken implements DingoAuthContract
      * Retrieve token lifetime
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return integer
      */
@@ -287,7 +299,6 @@ class UserToken implements DingoAuthContract
      * Check if token has a lifetime
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access protected
      * @return boolean
      */
