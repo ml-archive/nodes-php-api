@@ -75,16 +75,16 @@ class MasterToken implements DingoAuthContract
      */
     protected function setTokenSettings()
     {
-        $this->enabled = (bool)config('nodes.auth.masterToken.enabled', false);
+        $this->enabled = (bool) config('nodes.auth.masterToken.enabled', false);
 
         // Salt used to generate the unique master token
         $this->tokenSalt = config('nodes.auth.masterToken.salt', 'nodes+' . env('APP_ENV'));
 
         // Fields used to retrieve user associated with master token
         $this->tokenColumns = config('nodes.auth.masterToken.user', [
-            'column' => 'master',
+            'column'   => 'master',
             'operator' => '=',
-            'value' => 1
+            'value'    => 1,
         ]);
 
         return $this;
@@ -115,7 +115,7 @@ class MasterToken implements DingoAuthContract
         }
 
         // Set token from "X-Master-Token" header
-        $this->token = (string)$request->header('x-master-token');
+        $this->token = (string) $request->header('x-master-token');
 
         // Validate master token
         if (!$this->validateMasterToken()) {
@@ -134,7 +134,7 @@ class MasterToken implements DingoAuthContract
      * Retrieve user by token
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access proteected
+     * @access protected
      * @return \Illuminate\Database\Eloquent\Model
      */
     protected function getUserByToken()
@@ -144,20 +144,18 @@ class MasterToken implements DingoAuthContract
             return $user;
         }
 
-
         $user = $this->getUserModel()->where(
             $this->getTokenColumn('column'),
             $this->getTokenColumn('operator'),
             $this->getTokenColumn('value')
         )
-            ->first();
+                     ->first();
 
         // Add to cache
         cache_put('api.masterToken', $this->getCacheParams(), $user);
 
         return $user;
     }
-
 
     /**
      * getCacheParams
@@ -168,10 +166,9 @@ class MasterToken implements DingoAuthContract
     private function getCacheParams()
     {
         return [
-            'accessToken' => $this->getToken()
+            'accessToken' => $this->getToken(),
         ];
     }
-
 
     /**
      * Validate master token
@@ -198,7 +195,7 @@ class MasterToken implements DingoAuthContract
         return [
             hash('sha256', $this->tokenSalt . '+' . config('app.key') . '+' . Carbon::now()->toDateString()),
             hash('sha256', $this->tokenSalt . '+' . config('app.key') . '+' . Carbon::now()->addDay()->toDateString()),
-            hash('sha256', $this->tokenSalt . '+' . config('app.key') . '+' . Carbon::now()->subDay()->toDateString())
+            hash('sha256', $this->tokenSalt . '+' . config('app.key') . '+' . Carbon::now()->subDay()->toDateString()),
         ];
     }
 

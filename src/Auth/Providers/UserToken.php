@@ -84,8 +84,8 @@ class UserToken implements DingoAuthContract
         // Set token columns used in condition
         $columns = config('nodes.api.auth.userToken.columns', [
             'user_id' => 'user_id',
-            'token' => 'token',
-            'expire' => 'expire'
+            'token'   => 'token',
+            'expire'  => 'expire',
         ]);
 
         // Prepend token table name to token columns
@@ -116,7 +116,7 @@ class UserToken implements DingoAuthContract
         }
 
         // Set token from "Authorization" header
-        $this->token = (string)$request->header('authorization');
+        $this->token = (string) $request->header('authorization');
 
         // Authenticate user by token
         $user = $this->getUserByToken();
@@ -148,31 +148,7 @@ class UserToken implements DingoAuthContract
      */
     protected function getUserByToken()
     {
-        // Look up in cache and return if found
-        if ($user = cache_get('api.userToken', $this->getCacheParams())) {
-            return $user;
-        }
-
-        // Look up in database
-        $user = $this->generateQuery()->first();
-
-        // Add to cache
-        cache_put('api.userToken', $this->getCacheParams(), $user);
-
-        return $user;
-    }
-
-    /**
-     * getCacheParams
-     *
-     * @author Casper Rasmussen <cr@nodes.dk>
-     * @return array
-     */
-    private function getCacheParams()
-    {
-        return [
-            'accessToken' => $this->getToken()
-        ];
+        return $this->generateQuery()->first();
     }
 
     /**
@@ -184,8 +160,8 @@ class UserToken implements DingoAuthContract
      */
     protected function updateTokenExpiry()
     {
-        return (bool)$this->generateQuery()->update([
-            $this->getTokenColumn('expire') => Carbon::parse('now ' . $this->getTokenLifetime())
+        return (bool) $this->generateQuery()->update([
+            $this->getTokenColumn('expire') => Carbon::parse('now ' . $this->getTokenLifetime()),
         ]);
     }
 
@@ -200,13 +176,13 @@ class UserToken implements DingoAuthContract
     private function generateQuery()
     {
         return $this->getUserModel()
-            ->select([
-                $this->getUserTable() . '.*',
-                $this->getTokenColumn('token'),
-                $this->getTokenColumn('expire')
-            ])
-            ->join($this->getTokenTable(), $this->getTokenColumn('user_id'), '=', $this->getUserTable() . '.id')
-            ->where($this->getTokenColumn('token'), '=', $this->getToken());
+                    ->select([
+                        $this->getUserTable() . '.*',
+                        $this->getTokenColumn('token'),
+                        $this->getTokenColumn('expire'),
+                    ])
+                    ->join($this->getTokenTable(), $this->getTokenColumn('user_id'), '=', $this->getUserTable() . '.id')
+                    ->where($this->getTokenColumn('token'), '=', $this->getToken());
     }
 
     /**
