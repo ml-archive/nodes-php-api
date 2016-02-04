@@ -128,7 +128,7 @@ class UserToken implements DingoAuthContract
         // we need to validate and maybe update it as well
         if ($this->hasTokenLifetime()) {
             // Validate tokens expiry date
-            if (strtotime($user->expire) < time()) {
+            if (strtotime($user->token->expire) < time()) {
                 throw new TokenExpiredException('Token has expired');
             }
 
@@ -143,12 +143,37 @@ class UserToken implements DingoAuthContract
      * Retrieve user by token
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access protected
-     * @return \Illuminate\Database\Eloquent\Model
+     *
+     * @access
+     * @return mixed|null
      */
     protected function getUserByToken()
     {
-        return $this->generateQuery()->first();
+        // Look up in cache and return if found
+        if ($user = cache_get('api.userToken', $this->getCacheParams())) {
+            return $user;
+        }
+
+        // Look up in database
+        $user = $this->generateQuery()->first();
+
+        // Add to cache
+        cache_put('api.userToken', $this->getCacheParams(), $user);
+
+        return $user;
+    }
+
+    /**
+     * getCacheParams
+     *
+     * @author Casper Rasmussen <cr@nodes.dk>
+     * @return array
+     */
+    private function getCacheParams()
+    {
+        return [
+            'accessToken' => $this->getToken()
+        ];
     }
 
     /**
@@ -178,8 +203,6 @@ class UserToken implements DingoAuthContract
         return $this->getUserModel()
                     ->select([
                         $this->getUserTable() . '.*',
-                        $this->getTokenColumn('token'),
-                        $this->getTokenColumn('expire'),
                     ])
                     ->join($this->getTokenTable(), $this->getTokenColumn('user_id'), '=', $this->getUserTable() . '.id')
                     ->where($this->getTokenColumn('token'), '=', $this->getToken());
