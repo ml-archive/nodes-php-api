@@ -36,6 +36,23 @@ class User extends NodesModel
      */
     protected $hidden = ['password'];
 
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::saved(function($user) {
+            cache_forget('api.userToken', ['accessToken' => $this->getToken()]);
+        });
+    }
+
     /*
     |-----------------------------------------------------------
     | Relations
@@ -51,6 +68,23 @@ class User extends NodesModel
     public function token()
     {
         return $this->hasOne(\DummyNamespace\Models\Users\Tokens\Token::class, 'user_id', 'id');
+    }
+
+    /*
+    |-----------------------------------------------------------
+    | Helpers
+    |-----------------------------------------------------------
+    */
+    
+    /**
+     * getToken
+     *
+     * @author Casper Rasmussen <cr@nodes.dk>
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token->token;
     }
 
     /*
