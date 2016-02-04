@@ -48,7 +48,7 @@ class User extends NodesModel
     {
         parent::boot();
 
-        self::saved(function($user) {
+        self::updated(function($user) {
             cache_forget('api.userToken', ['accessToken' => $this->getToken()]);
         });
     }
