@@ -148,7 +148,7 @@ class ServiceProvider extends NodesAbstractServiceProvider
     protected function installScaffolding()
     {
         if (env('NODES_ENV', false)) {
-            $this->getInstaller()->reloadArtisan()->callArtisanCommand('nodes:api:scaffolding');
+            $this->getInstaller()->callArtisanCommand('nodes:api:scaffolding');
         }
     }
 
