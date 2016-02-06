@@ -18,12 +18,13 @@
     ],
     "require": {
         "laravel/framework": "5.1.*||5.2.*",
+        "dingo/api": "1.0.*@dev",
         "nodes/core": "^0.1",
+        "nodes/assets": "^0.1",
+        "nodes/cache": "^0.1",
         "nodes/bugsnag": "^0.1",
         "nodes/database": "^0.1",
-        "nodes/validation": "^0.1",
-        "nodes/cache": "^0.1",
-        "dingo/api": "1.0.x@dev"
+        "nodes/validation": "^0.1"
     },
     "autoload": {
         "psr-4": {
@@ -33,14 +34,6 @@
             "src/Support/Helpers/Auth.php",
             "src/Support/Helpers/Manipulation.php",
             "src/Support/Helpers/Route.php"
-        ]
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "php -f vendor/nodes/core/install.php nodes:package:install nodes/api"
-        ],
-        "post-update-cmd": [
-            "php -f vendor/nodes/core/install.php nodes:package:install nodes/api"
         ]
     }
 }
