@@ -20,7 +20,7 @@
         "laravel/framework": "5.1.*||5.2.*",
         "dingo/api": "1.0.*@dev",
         "nodes/core": "^0.1",
-        "nodes/assets": "^0.1",
+        "nodes/assets": "^1.0",
         "nodes/cache": "^0.1",
         "nodes/bugsnag": "^0.1",
         "nodes/database": "^0.1",
