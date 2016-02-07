@@ -97,6 +97,7 @@ class Scaffolding extends Command
         // Run scaffolding ...
         if ($this->generateStructure()) {
             $this->generateScaffolding();
+            $this->call('nodes:api:reset-password');
         }
     }
 
