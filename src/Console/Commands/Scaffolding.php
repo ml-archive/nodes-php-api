@@ -4,6 +4,9 @@ namespace Nodes\Api\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use League\Flysystem\Adapter\Local as LocalAdapter;
+use League\Flysystem\Filesystem as Flysystem;
+use League\Flysystem\MountManager;
 
 /**
  * Class Scaffolding
@@ -108,7 +111,7 @@ class Scaffolding extends Command
     protected function generateStructure()
     {
         // Confirm generation of project structure
-        if (!$this->confirm('Do you wish to generate the Nodes API structure?', true)) {
+        if (!$this->confirm('Do you wish to generate Nodes API structure?', true)) {
             return false;
         }
 
@@ -252,6 +255,7 @@ class Scaffolding extends Command
         $this->scaffoldUserTransformer();
         $this->scaffoldTokenModel();
         $this->scaffoldUserRoutes();
+        $this->copyAndRunDatabaseMigrations();
 
         return true;
     }
@@ -290,6 +294,14 @@ class Scaffolding extends Command
             sprintf('%s/../Stubs/Scaffolding/UserModel.stub', dirname(__FILE__)),
             sprintf('%s/Models/Users/User.php', $this->projectFolderPath)
         );
+
+        // Path to API auth config
+        $authConfigPath = config_path('nodes/api/auth.php');
+
+        // Add user model to API config file
+        $authConfig = file_get_contents($authConfigPath);
+        $authConfig = str_replace("'model' => null", "'model' => " . sprintf('%s\Models\Users\User::class', config('nodes.project.namespace', 'App')), $authConfig);
+        file_put_contents($authConfigPath, $authConfig);
     }
 
     /**
@@ -374,6 +386,115 @@ class Scaffolding extends Command
         $this->generateStubFile(
             sprintf('%s/../Stubs/Scaffolding/UserRoutes.stub', dirname(__FILE__)),
             sprintf('%s/Routes/Api/users.php', $this->projectFolderPath)
+        );
+    }
+
+    /**
+     * Copy and run database migrations
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access
+     * @return void
+     */
+    protected function copyAndRunDatabaseMigrations()
+    {
+        $this->comment('Copying database migrations ...');
+        $this->copyDirectory(base_path('vendor/nodes/api/database/migrations/auth'), database_path('migrations'));
+
+        $this->deleteLaravelBoilerplate();
+
+        $this->comment('Running database migrations ...');
+        $this->call('migrate');
+    }
+
+    /**
+     * Delete Laravel migration boilerplate
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access protected
+     * @return void
+     */
+    protected function deleteLaravelBoilerplate()
+    {
+        // Files to delete
+        $files = [
+            'database/migrations/2014_10_12_000000_create_users_table.php',
+            'database/migrations/2014_10_12_100000_create_password_resets_table.php'
+        ];
+
+        // Delete each file individually
+        foreach ($files as $file) {
+            // Skip if file doesn't exist
+            if (!$this->filesystem->exists(base_path($file))) {
+                continue;
+            }
+
+            // Delete file
+            $this->filesystem->delete(base_path($file));
+        }
+    }
+
+    /**
+     * Publish file to application
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access protected
+     * @param  string $from
+     * @param  string $to
+     * @return void
+     */
+    protected function copyFile($from, $to)
+    {
+        // If destination directory doesn't exist,
+        // we'll create before copying the config files
+        $directoryDestination = dirname($to);
+        if (!$this->filesystem->isDirectory($directoryDestination)) {
+            $this->filesystem->makeDirectory($directoryDestination, 0755, true);
+        }
+
+        // Copy file to application
+        $this->filesystem->copy($from, $to);
+
+        // Output status message
+        $this->line(
+            sprintf('<info>Copied %s</info> <comment>[%s]</comment> <info>To</info> <comment>[%s]</comment>',
+            'File', str_replace(base_path(), '', realpath($from)), str_replace(base_path(), '', realpath($to)))
+        );
+    }
+
+    /**
+     * Publish directory to application
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access protected
+     * @param  string $from
+     * @param  string $to
+     * @return void
+     */
+    protected function copyDirectory($from, $to)
+    {
+        // Load mount manager
+        $manager = new MountManager([
+            'from' => new Flysystem(new LocalAdapter($from)),
+            'to' => new Flysystem(new LocalAdapter($to)),
+        ]);
+
+        // Copy directory to application
+        foreach ($manager->listContents('from://', true) as $file) {
+            if ($file['type'] !== 'file') {
+                continue;
+            }
+            $manager->put(sprintf('to://%s', $file['path']), $manager->read(sprintf('from://%s', $file['path'])));
+        }
+
+        // Output status message
+        $this->line(
+            sprintf('<info>Copied %s</info> <comment>[%s]</comment> <info>To</info> <comment>[%s]</comment>',
+            'Directory', str_replace(base_path(), '', realpath($from)), str_replace(base_path(), '', realpath($to)))
         );
     }
 
