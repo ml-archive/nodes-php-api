@@ -89,10 +89,7 @@ trait DingoApiServiceProvider
      */
     protected function setupConfig()
     {
-        // Merge package config with project version
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/api.php'), 'nodes.api');
-
-        if (!$this->app->runningInConsole() && empty(config('nodes.api.prefix')) && empty(config('nodes.api.domain'))) {
+        if (!$this->app->runningInConsole() && empty(config('nodes.api.settings.prefix')) && empty(config('nodes.api.settings.domain'))) {
             throw new RuntimeException(sprintf('Unable to boot [%s], configure an API domain or prefix.', 'Nodes\Api\ServiceProvider'));
         }
     }
@@ -143,7 +140,7 @@ trait DingoApiServiceProvider
     protected function registerExceptionHandler()
     {
         $this->app->singleton('api.exception', function ($app) {
-            return new NodesExceptionHandler($app['log'], config('nodes.api.errorFormat'), config('nodes.api.debug'));
+            return new NodesExceptionHandler($app['log'], config('nodes.api.errors.errorFormat'), config('nodes.api.errors.debug'));
         });
     }
 
@@ -159,12 +156,12 @@ trait DingoApiServiceProvider
     {
         $this->app->singleton('api.dispatcher', function ($app) {
             $dispatcher = new DingoDispatcher($app, $app['files'], $app['api.router'], $app['api.auth']);
-            $dispatcher->setSubtype(config('nodes.api.subtype'));
-            $dispatcher->setStandardsTree(config('nodes.api.standardsTree'));
-            $dispatcher->setPrefix(config('nodes.api.prefix'));
-            $dispatcher->setDefaultVersion(config('nodes.api.version'));
-            $dispatcher->setDefaultDomain(config('nodes.api.domain'));
-            $dispatcher->setDefaultFormat(config('nodes.api.defaultFormat'));
+            $dispatcher->setSubtype(config('nodes.api.settings.subtype'));
+            $dispatcher->setStandardsTree(config('nodes.api.settings.standardsTree'));
+            $dispatcher->setPrefix(config('nodes.api.settings.prefix'));
+            $dispatcher->setDefaultVersion(config('nodes.api.settings.version'));
+            $dispatcher->setDefaultDomain(config('nodes.api.settings.domain'));
+            $dispatcher->setDefaultFormat(config('nodes.api.response.defaultFormat'));
             return $dispatcher;
         });
     }
@@ -214,11 +211,11 @@ trait DingoApiServiceProvider
                 $app['api.router.adapter'],
                 $app['api.exception'],
                 $app,
-                config('nodes.api.domain', 'nodes.dk'),
-                config('nodes.api.prefix', null)
+                config('nodes.api.settings.domain', 'nodes.dk'),
+                config('nodes.api.settings.prefix', null)
             );
 
-            $router->setConditionalRequest(config('nodes.api.conditionalRequest'));
+            $router->setConditionalRequest(config('nodes.api.settings.conditionalRequest'));
             return $router;
         });
 
@@ -260,17 +257,17 @@ trait DingoApiServiceProvider
         });
 
         $this->app->singleton('Dingo\Api\Http\Validation\Domain', function ($app) {
-            return new DingoHttpValidatorDomain(config('nodes.api.domain'));
+            return new DingoHttpValidatorDomain(config('nodes.api.settings.domain'));
         });
 
         $this->app->singleton('Dingo\Api\Http\Validation\Prefix', function ($app) {
-            return new DingoHttpValidatorPrefix(config('nodes.api.prefix'));
+            return new DingoHttpValidatorPrefix(config('nodes.api.settings.prefix'));
         });
 
         $this->app->singleton('Dingo\Api\Http\Validation\Accept', function ($app) {
             return new DingoHttpValidatorAccept(
-                new DingoHttpAcceptParser(config('nodes.api.standardsTree'), config('nodes.api.subtype'), config('nodes.api.version'), config('nodes.api.defaultFormat')),
-                config('nodes.api.strict')
+                new DingoHttpAcceptParser(config('nodes.api.settings.standardsTree'), config('nodes.api.settings.subtype'), config('nodes.api.settings.version'), config('nodes.api.response.defaultFormat')),
+                config('nodes.api.settings.strict')
             );
         });
     }
@@ -343,8 +340,8 @@ trait DingoApiServiceProvider
                 $app['api.router'],
                 $app['Dingo\Blueprint\Blueprint'],
                 $app['Dingo\Blueprint\Writer'],
-                config('nodes.api.name'),
-                config('nodes.api.version')
+                config('nodes.api.settings.name'),
+                config('nodes.api.settings.version')
             );
         });
     }

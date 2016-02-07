@@ -1,0 +1,10 @@
+body {
+    background: #eaeaea;
+}
+
+#nBox {
+    width: 80vw;
+    max-width: 80vh;
+    max-width: 450px;
+    display: none;
+}

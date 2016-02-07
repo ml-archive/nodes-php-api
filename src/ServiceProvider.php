@@ -33,7 +33,8 @@ class ServiceProvider extends NodesAbstractServiceProvider
      * @var array
      */
     protected $commands = [
-        \Nodes\Api\Console\Commands\Scaffolding::class
+        \Nodes\Api\Console\Commands\Scaffolding::class,
+        \Nodes\Api\Console\Commands\ResetPassword::class,
     ];
 
     /**
@@ -43,7 +44,7 @@ class ServiceProvider extends NodesAbstractServiceProvider
      */
     protected $facades = [
         'NodesAPI' => \Nodes\Api\Support\Facades\API::class,
-        'NodesAPIRoute' => \Nodes\Api\Support\Facades\Route::class
+        'NodesAPIRoute' => \Nodes\Api\Support\Facades\Route::class,
     ];
 
     /**
@@ -52,7 +53,7 @@ class ServiceProvider extends NodesAbstractServiceProvider
      * @var array
      */
     protected $configs = [
-        'config/api.php' => 'config/nodes/api.php'
+        'config/' => 'config/nodes/api/',
     ];
 
     /**
@@ -68,17 +69,17 @@ class ServiceProvider extends NodesAbstractServiceProvider
         $this->setupConfig();
 
         // Set response formatter, transformer and evnet dispatcher
-        NodesHttpResponse::setFormatters(prepare_config_instances(config('nodes.api.formats')));
+        NodesHttpResponse::setFormatters(prepare_config_instances(config('nodes.api.response.formats')));
         NodesHttpResponse::setTransformer($this->app['api.transformer']);
         NodesHttpResponse::setEventDispatcher($this->app['events']);
 
         // Configure the "Accept"-header parser
         DingoHttpRequest::setAcceptParser(
             new DingoHttpAcceptParser(
-                config('nodes.api.standardsTree'),
-                config('nodes.api.subtype'),
-                config('nodes.api.version'),
-                config('nodes.api.defaultFormat')
+                config('nodes.api.settings.standardsTree'),
+                config('nodes.api.settings.subtype'),
+                config('nodes.api.settings.version'),
+                config('nodes.api.settings.defaultFormat')
             )
         );
 
@@ -94,6 +95,9 @@ class ServiceProvider extends NodesAbstractServiceProvider
 
         // Load project routes
         $this->loadRoutes();
+
+        // Register namespace for API views
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nodes.api');
     }
 
     /**

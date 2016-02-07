@@ -241,7 +241,7 @@ class Scaffolding extends Command
      */
     protected function generateScaffolding()
     {
-        if (!$this->confirm('Do you wish to generate the Nodes API scaffolding? <comment>Note: Existing files will be overwritten.</comment>', true)) {
+        if (!$this->confirm('Do you wish to generate Nodes API scaffolding? <comment>Note: Existing files will be overwritten.</comment>', true)) {
             return false;
         }
 
