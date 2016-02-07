@@ -125,6 +125,7 @@ class Scaffolding extends Command
         $this->generateControllersFolders();
         $this->generateModelsFolder();
         $this->generateRoutesFolder();
+        $this->addToComposer();
 
         return true;
     }
@@ -210,7 +211,7 @@ class Scaffolding extends Command
             $this->line(sprintf('<comment>Folder</comment> [%s] <comment>already exists</comment>', sprintf('%s/%s/%s', $this->projectFolderName, 'Routes', 'Frontend')));
         }
 
-        // Create Frontend doesroutes folder and put .gitkeep in there
+        // Create Frontend routes folder and put .gitkeep in there
         $routesFrontendPath = sprintf('%s/%s/%s', $this->projectFolderPath, 'Routes', 'Frontend');
         if (!$this->filesystem->exists($routesFrontendPath)) {
             $this->filesystem->makeDirectory($routesFrontendPath, 0755, true);
@@ -219,6 +220,12 @@ class Scaffolding extends Command
         } else {
             $this->line(sprintf('<comment>Folder</comment> [%s] <comment>already exists</comment>', sprintf('%s/%s/%s', $this->projectFolderName, 'Routes', 'Frontend')));
         }
+
+        // Add route folders to Nodes autoload config
+        add_to_autoload_config([
+            'project/Routes/Api/',
+            'project/Routes/Frontend/'
+        ]);
     }
 
     /**
@@ -546,5 +553,31 @@ class Scaffolding extends Command
     private function replaceNamespace($content)
     {
         return str_replace('DummyNamespace', config('nodes.project.namespace', 'App'), $content);
+    }
+
+    /**
+     * Add "project" to composer file
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access private
+     * @return void
+     */
+    private function addToComposer()
+    {
+        // File path to composer file
+        $composerFilePath = base_path('composer.json');
+
+        // Load and JSON decode composer file
+        $composerFile = json_decode(file_get_contents($composerFilePath));
+        if (in_array('project', $composerFile->autoload->classmap)) {
+            return;
+        }
+
+        // Add "project" to composer's classmap
+        $composerFile->autoload->classmap[] = 'project';
+
+        // Save changes to composer file
+        file_put_contents($composerFilePath, json_encode($composerFile, JSON_PRETTY_PRINT));
     }
 }
