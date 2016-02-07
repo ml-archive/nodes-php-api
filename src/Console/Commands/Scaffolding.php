@@ -125,7 +125,9 @@ class Scaffolding extends Command
         $this->generateControllersFolders();
         $this->generateModelsFolder();
         $this->generateRoutesFolder();
-        $this->addToComposer();
+
+        // Add to Composer's autoload
+        add_to_composer_autoload('classmap', 'project');
 
         return true;
     }
