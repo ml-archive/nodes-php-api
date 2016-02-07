@@ -13,7 +13,7 @@ Route::group(['namespace' => 'Nodes\Api\Auth\ResetPassword', 'prefix' => 'reset-
     ]);
 
     // Reset password done
-    Route::get('/reset/done', [
+    Route::get('/done', [
         'as' => 'nodes.api.auth.reset-password.done',
         'uses' => 'ResetPasswordController@done',
     ]);
