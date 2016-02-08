@@ -5,9 +5,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Nodes\Api\Auth\Exceptions\ResetPasswordNoUserException;
 use Nodes\Database\Eloquent\Repository as NodesRepository;
 use Nodes\Api\Auth\Exceptions\MissingUserModelException;
-use Nodes\Api\Auth\Exceptions\ResetPasswordNoUserException;
+
 
 /**
  * Class ResetPasswordRepository
