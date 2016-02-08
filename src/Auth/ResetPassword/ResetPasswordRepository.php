@@ -5,9 +5,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Nodes\Api\Auth\Exception\ResetPasswordNoUserException;
 use Nodes\Database\Eloquent\Repository as NodesRepository;
 use Nodes\Api\Auth\Exceptions\MissingUserModelException;
-use Nodes\Api\Auth\Exceptions\ResetPasswordNoUserException;
+
 
 /**
  * Class ResetPasswordRepository
@@ -85,7 +86,7 @@ class ResetPasswordRepository extends NodesRepository
      * @access public
      * @param  array $conditions WHERE conditions to locate user. Format: ['column' => 'value']
      * @return boolean
-     * @throws \Nodes\Api\Auth\Exceptions\ResetPasswordNoUserException
+     * @throws \Nodes\Api\Auth\Exception\ResetPasswordNoUserException;
      */
     public function sendResetPasswordEmail(array $conditions)
     {
