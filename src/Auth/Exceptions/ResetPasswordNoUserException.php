@@ -1,5 +1,5 @@
 <?php
-namespace Nodes\Api\Auth\Exception;
+namespace Nodes\Api\Auth\Exceptions;
 
 use Nodes\Exceptions\Exception;
 
