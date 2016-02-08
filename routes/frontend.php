@@ -8,7 +8,7 @@ Route::group(['namespace' => 'Nodes\Api\Auth\ResetPassword', 'prefix' => 'reset-
 
     // Change password
     Route::post('/', [
-        'as' => 'nodes.api.auth.reset-password.reset.update',
+        'as' => 'nodes.api.auth.reset-password.reset',
         'uses' => 'ResetPasswordController@resetPassword',
     ]);
 
