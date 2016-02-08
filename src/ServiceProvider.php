@@ -66,8 +66,6 @@ class ServiceProvider extends NodesAbstractServiceProvider
      */
     public function boot()
     {
-        $this->setupConfig();
-
         // Set response formatter, transformer and evnet dispatcher
         NodesHttpResponse::setFormatters(prepare_config_instances(config('nodes.api.response.formats')));
         NodesHttpResponse::setTransformer($this->app['api.transformer']);
@@ -111,6 +109,9 @@ class ServiceProvider extends NodesAbstractServiceProvider
     public function register()
     {
         parent::register();
+
+        // Setup config files
+        $this->setupConfig();
 
         // Dingo API service provider
         $this->registerApiServiceProvider();

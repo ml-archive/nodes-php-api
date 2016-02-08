@@ -89,6 +89,15 @@ trait DingoApiServiceProvider
      */
     protected function setupConfig()
     {
+        // Merge project config and default package config
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/auth.php'), 'nodes.api.auth');
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/errors.php'), 'nodes.api.errors');
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/reset-password.php'), 'nodes.api.reset-password');
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/response.php'), 'nodes.api.response');
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/settings.php'), 'nodes.api.settings');
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/throttling.php'), 'nodes.api.throttling');
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/transformer.php'), 'nodes.api.transformer');
+
         if (!$this->app->runningInConsole() && empty(config('nodes.api.settings.prefix')) && empty(config('nodes.api.settings.domain'))) {
             throw new RuntimeException(sprintf('Unable to boot [%s], configure an API domain or prefix.', 'Nodes\Api\ServiceProvider'));
         }
