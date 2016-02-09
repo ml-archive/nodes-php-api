@@ -97,7 +97,7 @@ class ResetPasswordRepository extends NodesRepository
 
         // Add conditions to query builder
         foreach ($conditions as $column => $value) {
-            $this->authModel->where($column, '=', $value);
+            $this->authModel = $this->authModel->where($column, '=', $value);
         }
 
         // Retrieve user with conditions
