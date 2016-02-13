@@ -77,7 +77,7 @@ class ServiceProvider extends NodesAbstractServiceProvider
                 config('nodes.api.settings.standardsTree'),
                 config('nodes.api.settings.subtype'),
                 config('nodes.api.settings.version'),
-                config('nodes.api.settings.defaultFormat')
+                config('nodes.api.response.defaultFormat')
             )
         );
 
