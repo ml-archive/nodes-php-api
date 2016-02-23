@@ -23,7 +23,7 @@ return [
     */
     'adapter' => function() {
         // Instantiate Fractal Manager
-        $manager = new League\Fractal\Manager;
+        $manager = new Nodes\Api\Transformer\Manager;
 
         // Set serializer
         $serializer = prepare_config_instance(config('nodes.api.transformer.fractal.serializer.class'));
@@ -35,9 +35,9 @@ return [
         // Instantiate transformer
         return new $adapter(
             $manager,
-            config('nodes.api.transformer.includeKey', 'include'),
-            config('nodes.api.transformer.incldueSeparator', ','),
-            config('nodes.api.transformer.eagerLoad', true)
+            config('nodes.api.transformer.fractal.includeKey', 'include'),
+            config('nodes.api.transformer.fractal.incldueSeparator', ','),
+            config('nodes.api.transformer.fractal.eagerLoad', true)
         );
     },
 
