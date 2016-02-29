@@ -2,10 +2,11 @@
 namespace Nodes\Api\Exceptions;
 
 use Exception;
-use Dingo\Api\Exception\Handler as DingoExceptionHandler;
-use Dingo\Api\Contract\Debug\MessageBagErrors;
 use Nodes\Api\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Dingo\Api\Contract\Debug\MessageBagErrors;
 use Nodes\Exceptions\Exception as NodesException;
+use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
@@ -16,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
  */
 class Handler extends DingoExceptionHandler
 {
+
     /**
      * Array of exceptions not to report
      *
@@ -41,14 +43,14 @@ class Handler extends DingoExceptionHandler
         try {
             if ($e instanceof NodesException && $e->getReport()) {
                 app('nodes.bugsnag')->notifyException($e, $e->getMeta(), $e->getSeverity());
-            } elseif (!$e instanceof NodesException) {
+            } elseif (! $e instanceof NodesException) {
                 app('nodes.bugsnag')->notifyException($e, null, 'error');
             }
         } catch (Exception $e) {
             // Do nothing
         }
 
-        $this->log->error($e);
+        Log::error($e);
     }
 
     /**
@@ -65,12 +67,12 @@ class Handler extends DingoExceptionHandler
         $this->report($exception);
 
         foreach ($this->handlers as $hint => $handler) {
-            if (!$exception instanceof $hint) {
+            if (! $exception instanceof $hint) {
                 continue;
             }
 
             if ($response = $handler($exception)) {
-                if (!$response instanceof Response) {
+                if (! $response instanceof Response) {
                     $response = new Response($response, $this->getExceptionStatusCode($exception));
                 }
 
@@ -126,14 +128,14 @@ class Handler extends DingoExceptionHandler
         //
         // If the exception does not have a message,
         // we'll fallback to a message of the status code and status message.
-        if (!$message = $exception->getMessage()) {
+        if (! $message = $exception->getMessage()) {
             $message = sprintf('%d: %s', $statusCode, Response::$statusTexts[$statusCode]);
         }
 
         // Base replacements
         $replacements = [
             ':message' => $message,
-            ':code' => $statusCode,
+            ':code'    => $statusCode,
         ];
 
         // If exception contains a message bag of errors
@@ -148,8 +150,8 @@ class Handler extends DingoExceptionHandler
         if ($this->runningInDebugMode()) {
             $replacements[':debug'] = [
                 'class' => get_class($exception),
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
+                'file'  => $exception->getFile(),
+                'line'  => $exception->getLine(),
                 'trace' => explode("\n", $exception->getTraceAsString()),
             ];
         }
@@ -164,7 +166,7 @@ class Handler extends DingoExceptionHandler
      *
      * @access public
      * @param  \Exception $exception
-     * @param  integer        $defaultStatusCode
+     * @param  integer    $defaultStatusCode
      * @return integer
      */
     protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = 500)

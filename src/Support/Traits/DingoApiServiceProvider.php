@@ -149,7 +149,11 @@ trait DingoApiServiceProvider
     protected function registerExceptionHandler()
     {
         $this->app->singleton('api.exception', function ($app) {
-            return new NodesExceptionHandler($app['log'], config('nodes.api.errors.errorFormat'), config('nodes.api.errors.debug'));
+            return new NodesExceptionHandler(
+                $app['Illuminate\Contracts\Debug\ExceptionHandler'],
+                config('nodes.api.errors.errorFormat'),
+                config('nodes.api.errors.debug')
+            );
         });
     }
 
