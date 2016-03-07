@@ -36,7 +36,7 @@ return [
         return new $adapter(
             $manager,
             config('nodes.api.transformer.fractal.includeKey', 'include'),
-            config('nodes.api.transformer.fractal.incldueSeparator', ','),
+            config('nodes.api.transformer.fractal.includeSeparator', ','),
             config('nodes.api.transformer.fractal.eagerLoad', true)
         );
     },
