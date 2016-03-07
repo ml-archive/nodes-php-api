@@ -237,7 +237,7 @@ abstract class TransformerAbstract
      *
      * @access protected
      * @param  mixed                                              $data
-     * @param  \Nodes\Api\Transformer\TransformerAbsract|callable $transformer
+     * @param  \Nodes\Api\Transformer\TransformerAbstract|callable $transformer
      * @param  string                                             $resourceKey
      * @return \League\Fractal\Resource\Item|\League\Fractal\Resource\NullResource
      */
@@ -257,7 +257,7 @@ abstract class TransformerAbstract
      *
      * @access protected
      * @param  mixed                                              $data
-     * @param  \Nodes\Api\Transformer\TransformerAbsract|callable $transformer
+     * @param  \Nodes\Api\Transformer\TransformerAbstract|callable $transformer
      * @param  string                                             $resourceKey
      * @return \League\Fractal\Resource\Collection|\League\Fractal\Resource\NullResource
      */
