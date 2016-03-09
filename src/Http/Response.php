@@ -55,7 +55,7 @@ class Response extends DingoResponse
     }
 
     /**
-     * Make an API response from an existing Illuminate response
+     * Make an API response from an existing response object
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -65,7 +65,11 @@ class Response extends DingoResponse
      */
     public static function makeFromExisting(IlluminateResponse $old)
     {
-        $new = static::create($old->getOriginalContent(), $old->getStatusCodeAndMessage());
+        // Support for custom status code and message
+        $statusCode = ($old instanceof Response) ? $old->getStatusCodeAndMessage() : $old->getStatusCode();
+
+        // Generate API response from response object
+        $new = static::create($old->getOriginalContent(), $statusCode);
         $new->headers = $old->headers;
         return $new;
     }
