@@ -18,7 +18,7 @@
     ],
     "require": {
         "laravel/framework": "5.1.*||5.2.*",
-        "dingo/api": "1.0.*@dev",
+        "nodes/dingo": "^1.0",
         "nodes/core": "^0.1",
         "nodes/assets": "^1.0",
         "nodes/cache": "^0.1",
