@@ -1,14 +1,12 @@
 <?php
 namespace Nodes\Api;
 
-use Dingo\Api\Http\Parser\Accept as DingoHttpAcceptParser;
+use Dingo\Api\Event\RequestWasMatched as DingoEventRequestWasMatched;
 use Dingo\Api\Http\Request as DingoHttpRequest;
 use Nodes\AbstractServiceProvider as NodesAbstractServiceProvider;
-use Nodes\Api\Http\Middleware\Auth as NodesHttpMiddlewareAuth;
-use Nodes\Api\Http\Middleware\Ratelimit as NodesHttpMiddlewareRateLimit;
-use Nodes\Api\Http\Middleware\UserAgent as NodesHttpMiddlewareUserAgent;
+use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
 use Nodes\Api\Http\Response as NodesHttpResponse;
-use Nodes\Api\Support\Traits\DingoApiServiceProvider;
+use Nodes\Api\Support\Traits\DingoServiceProvider;
 use Nodes\Api\Support\Traits\DingoLaravelServiceProvider;
 
 /**
@@ -18,7 +16,7 @@ use Nodes\Api\Support\Traits\DingoLaravelServiceProvider;
  */
 class ServiceProvider extends NodesAbstractServiceProvider
 {
-    use DingoApiServiceProvider, DingoLaravelServiceProvider;
+    use DingoServiceProvider, DingoLaravelServiceProvider;
 
     /**
      * Package name
@@ -66,30 +64,33 @@ class ServiceProvider extends NodesAbstractServiceProvider
      */
     public function boot()
     {
-        // Set response formatter, transformer and evnet dispatcher
-        NodesHttpResponse::setFormatters(prepare_config_instances(config('nodes.api.response.formats')));
-        NodesHttpResponse::setTransformer($this->app['api.transformer']);
-        NodesHttpResponse::setEventDispatcher($this->app['events']);
+        // Set response static instances
+        $this->setResponseStaticInstances();
 
         // Configure the "Accept"-header parser
-        DingoHttpRequest::setAcceptParser(
-            new DingoHttpAcceptParser(
-                config('nodes.api.settings.standardsTree'),
-                config('nodes.api.settings.subtype'),
-                config('nodes.api.settings.version'),
-                config('nodes.api.response.defaultFormat')
-            )
-        );
+        DingoHttpRequest::setAcceptParser($this->app['Dingo\Api\Http\Parser\Accept']);
 
         // Rebind API router
         $this->app->rebinding('api.routes', function ($app, $routes) {
             $app['api.url']->setRouteCollections($routes);
         });
 
-        // Register middlewares with router
-        $this->app['router']->middleware('api.auth', NodesHttpMiddlewareAuth::class);
-        $this->app['router']->middleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
-        $this->app['router']->middleware('api.useragent', NodesHttpMiddlewareUserAgent::class);
+        // Initiate HTTP kernel
+        $kernel = $this->app->make('Illuminate\Contracts\Http\Kernel');
+
+        /// Add middlewares to HTTP request
+        $this->app[NodesHttpMiddlewareRequest::class]->mergeMiddlewares(
+            $this->gatherAppMiddleware($kernel)
+        );
+
+        // Prepend request middleware
+        $this->addRequestMiddlewareToBeginning($kernel);
+
+        // Replace route dispatcher
+        $this->app['events']->listen(DingoEventRequestWasMatched::class, function (DingoEventRequestWasMatched $event) {
+            $this->replaceRouteDispatcher();
+            $this->updateRouterBindings();
+        });
 
         // Load project routes
         $this->loadRoutes();
@@ -110,11 +111,8 @@ class ServiceProvider extends NodesAbstractServiceProvider
     {
         parent::register();
 
-        // Setup config files
-        $this->setupConfig();
-
-        // Dingo API service provider
-        $this->registerApiServiceProvider();
+        // Dingo service provider
+        $this->registerServiceProvider();
 
         // Dingo Laravel service provider
         $this->registerLaravelServiceProvider();

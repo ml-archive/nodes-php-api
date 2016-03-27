@@ -4,7 +4,12 @@ namespace Nodes\Api\Support\Traits;
 use ReflectionClass;
 use Dingo\Api\Routing\Adapter\Laravel as DingoRoutingLaravelAdapter;
 use Illuminate\Contracts\Http\Kernel as IlluminateContractKernel;
+use Illuminate\Routing\ControllerDispatcher as IlluminateControllerDispatcher;
+use Nodes\Api\Http\Middleware\Auth as NodesHttpMiddlewareAuth;
+use Nodes\Api\Http\Middleware\PrepareController as NodesHttpMiddlewarePrepareController;
+use Nodes\Api\Http\Middleware\Ratelimit as NodesHttpMiddlewareRateLimit;
 use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
+use Nodes\Api\Http\Middleware\UserAgent as NodesHttpMiddlewareUserAgent;
 use Nodes\Api\Http\Response as NodesHttpResponse;
 
 /**
@@ -25,18 +30,72 @@ trait DingoLaravelServiceProvider
      */
     protected function registerLaravelServiceProvider()
     {
-        // Instantiate HTTP kernel
-        $kernel = $this->app->make('Illuminate\Contracts\Http\Kernel');
+        // Register router adapter
+        $this->registerRouterAdapter();
+    }
 
-        // Setup HTTP middlewares
-        $this->app->instance('app.middleware', $this->gatherAppMiddleware($kernel));
-
-        $this->addRequestMiddlewareToBeginning($kernel);
-
-        // Register Laravel route adapter
-        $this->app->singleton('api.router.adapter', function ($app) {
-            return new DingoRoutingLaravelAdapter($app['router']);
+    /**
+     * Replace the route dispatcher.
+     *
+     * @return void
+     */
+    protected function replaceRouteDispatcher()
+    {
+        $this->app->singleton('illuminate.route.dispatcher', function ($app) {
+            return new IlluminateControllerDispatcher($app['api.router.adapter']->getRouter(), $app);
         });
+    }
+
+    /**
+     * Grab the bindings from the Laravel router and set them on the adapters
+     * router.
+     *
+     * @return void
+     */
+    protected function updateRouterBindings()
+    {
+        foreach ($this->getRouterBindings() as $key => $binding) {
+            $this->app['api.router.adapter']->getRouter()->bind($key, $binding);
+        }
+    }
+
+    /**
+     * Get the Laravel routers bindings.
+     *
+     * @return array
+     */
+    protected function getRouterBindings()
+    {
+        $property = (new ReflectionClass($this->app['router']))->getProperty('binders');
+        $property->setAccessible(true);
+        return $property->getValue($this->app['router']);
+    }
+
+    /**
+     * Register the router adapter.
+     *
+     * @return void
+     */
+    protected function registerRouterAdapter()
+    {
+        $this->app->singleton('api.router.adapter', function ($app) {
+            return new DingoRoutingLaravelAdapter($app, $this->cloneLaravelRouter(), $app['router']->getRoutes());
+        });
+    }
+
+    /**
+     * Clone the Laravel router and set the middleware on the cloned router.
+     *
+     * @return \Illuminate\Routing\Router
+     */
+    protected function cloneLaravelRouter()
+    {
+        $router = clone $this->app['router'];
+        $router->middleware('api.auth', NodesHttpMiddlewareAuth::class);
+        $router->middleware('api.controllers', NodesHttpMiddlewarePrepareController::class);
+        $router->middleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
+        $router->middleware('api.useragent', NodesHttpMiddlewareUserAgent::class);
+        return $router;
     }
 
     /**
@@ -65,13 +124,8 @@ trait DingoLaravelServiceProvider
      */
     protected function gatherAppMiddleware(IlluminateContractKernel $kernel)
     {
-        $reflection = new ReflectionClass($kernel);
-
-        $property = $reflection->getProperty('middleware');
+        $property = (new ReflectionClass($kernel))->getProperty('middleware');
         $property->setAccessible(true);
-
-        $middleware = $property->getValue($kernel);
-
-        return $middleware;
+        return $property->getValue($kernel);
     }
 }
