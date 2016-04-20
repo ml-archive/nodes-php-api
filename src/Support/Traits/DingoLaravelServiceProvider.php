@@ -79,7 +79,7 @@ trait DingoLaravelServiceProvider
     protected function registerRouterAdapter()
     {
         $this->app->singleton('api.router.adapter', function ($app) {
-            return new DingoRoutingLaravelAdapter($app, $this->cloneLaravelRouter(), $app['router']->getRoutes());
+            return new DingoRoutingLaravelAdapter($this->cloneLaravelRouter(), $app['router']->getRoutes());
         });
     }
 
