@@ -4,7 +4,6 @@ namespace Nodes\Api\Auth\ResetPassword;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model as IlluminateModel;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Hash;
 use Nodes\Api\Auth\Exceptions\ResetPasswordNoUserException;
 use Nodes\Database\Eloquent\Repository as NodesRepository;
 use Nodes\Api\Auth\Exceptions\MissingUserModelException;
@@ -181,7 +180,7 @@ class ResetPasswordRepository extends NodesRepository
 
         // Update user with new password
         return (bool) $user->update([
-            'password' => Hash::make($password)
+            'password' => $password
         ]);
     }
 }
