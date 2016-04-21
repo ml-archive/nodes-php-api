@@ -158,7 +158,9 @@ class UserToken implements DingoAuthContract
         $user = $this->generateQuery()->first();
 
         // Add to cache
-        cache_put('api.userToken', $this->getCacheParams(), $user);
+       if($user) {
+            cache_put('api.userToken', $this->getCacheParams(), $user);
+        }
 
         return $user;
     }
