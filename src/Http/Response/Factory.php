@@ -21,14 +21,14 @@ class Factory extends DingoHttpResponseFactory
      * Respond with a created response and associate a location if provided
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access public
      * @param  string|null $location
+     * @param null         $content
      * @return \Nodes\Api\Http\Response
      */
-    public function created($location = null)
+    public function created($location = null, $content = null)
     {
-        $response = new Response(null);
+        $response = new Response($content);
         $response->setStatusCode(201);
 
         if (! is_null($location)) {
@@ -164,13 +164,11 @@ class Factory extends DingoHttpResponseFactory
      * Return an error response
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @access public
      * @param  string  $message
      * @param  integer $statusCode
      * @param  string  $statusMessage
-     * @return void
-     * @throws \Nodes\Exception\Exception
+     * @throws \Nodes\Exceptions\Exception
      */
     public function error($message, $statusCode, $statusMessage = null)
     {
