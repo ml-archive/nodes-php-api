@@ -1,6 +1,7 @@
 <?php
 namespace Nodes\Api\Exceptions;
 
+use App;
 use Exception;
 use Nodes\Api\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -35,11 +36,15 @@ class Handler extends DingoExceptionHandler
      * @author Morten Rugaard <moru@nodes.dk>
      *
      * @access public
-     * @param  \Exception $e
-     * @return void
+     * @param  Exception $e
+     * @throws Exception
      */
     public function report(Exception $e)
     {
+        // If we are testing, just throw the exception.
+        if (App::environment() == 'testing') {
+            throw $e;
+        }
         try {
             if ($e instanceof NodesException && $e->getReport()) {
                 app('nodes.bugsnag')->notifyException($e, $e->getMeta(), $e->getSeverity());
