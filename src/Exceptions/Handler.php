@@ -128,14 +128,14 @@ class Handler extends DingoExceptionHandler
         //
         // If the exception does not have a message,
         // we'll fallback to a message of the status code and status message.
-        if (! $message = $exception->getMessage()) {
+        if (!$message = $exception->getMessage()) {
             $message = sprintf('%d: %s', $statusCode, Response::$statusTexts[$statusCode]);
         }
 
         // Base replacements
         $replacements = [
             ':message' => $message,
-            ':code'    => $statusCode,
+            ':code'    => $exception->getCode(),
         ];
 
         // If exception contains a message bag of errors
