@@ -41,10 +41,6 @@ class Handler extends DingoExceptionHandler
      */
     public function report(Exception $e)
     {
-        // If we are testing, just throw the exception.
-        if (App::environment() == 'testing') {
-            throw $e;
-        }
         try {
             if ($e instanceof NodesException && $e->getReport()) {
                 app('nodes.bugsnag')->notifyException($e, $e->getMeta(), $e->getSeverity());
@@ -62,13 +58,20 @@ class Handler extends DingoExceptionHandler
      * Handle an exception if it has an existing handler
      *
      * @author Morten Rugaard <moru@nodes.dk>
+     * @author Casper Rasmussen <cr@nodes.dk>
      *
      * @access public
      * @param \Exception $exception
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function handle(Exception $exception)
     {
+        // If we are in configured environments, just throw the exception. Useful for unit testing
+        if (in_array(app()->environment(), config('nodes.api.errors.throwOnEnvironment', []))) {
+            throw $exception;
+        }
+
         $this->report($exception);
 
         foreach ($this->handlers as $hint => $handler) {
