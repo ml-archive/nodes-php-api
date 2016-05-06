@@ -29,6 +29,19 @@ return [
         'code' => ':code',
         'errors' => ':errors',
         'debug' => ':debug',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Throw exception in these environments
+    |--------------------------------------------------------------------------
+    |
+    | For some cases, like unit testing. It can be useful to not render
+    | exception as json
+    |
+    */
+    'throwOnEnvironment' => [
+       'testing'
     ]
 
 ];
