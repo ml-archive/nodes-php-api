@@ -580,6 +580,6 @@ class Scaffolding extends Command
         $composerFile->autoload->classmap[] = 'project';
 
         // Save changes to composer file
-        file_put_contents($composerFilePath, json_encode($composerFile, JSON_PRETTY_PRINT));
+        file_put_contents($composerFilePath, json_encode($composerFile, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 }
