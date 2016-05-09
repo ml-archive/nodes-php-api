@@ -12,6 +12,7 @@ use Dingo\Api\Routing\Helpers as DingoRoutingHelpers;
  * @property \Illuminate\Database\Eloquent\Model $user
  * @property \Nodes\Api\Auth\Auth                $auth
  * @property \Nodes\Api\Http\Response\Factory    $response
+ * @method Response item() item($item, $transformer, array $parameters = [], Closure $after = null) Bind an item to a transformer and start building a response
  */
 trait Helpers
 {
