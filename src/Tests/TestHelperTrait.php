@@ -1,6 +1,6 @@
 <?php
 
-namespace Nodes\Tests;
+namespace Nodes\Api\Tests;
 
 use App;
 use Nodes\Api\Auth\Auth;

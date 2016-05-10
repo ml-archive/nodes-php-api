@@ -28,8 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Nodes\\Api\\": "src/",
-            "Nodes\\Tests\\": "tests/"
+            "Nodes\\Api\\": "src/"
         },
         "files": [
             "src/Support/Helpers/Auth.php",
