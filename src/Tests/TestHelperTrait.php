@@ -17,8 +17,6 @@ use PHPUnit_Framework_MockObject_MockObject;
  * $this->being($user)->callApi('GET', '/api/users')->seeJson((new UserTransformer)->transform($user));
  * ?>
  * </code>
- *
- * @package Tests\Project\Controllers\Api
  */
 trait TestHelperTrait
 {
