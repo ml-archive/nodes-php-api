@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Project\Controllers\Api;
+namespace Nodes\Tests;
 
 use App;
 use Nodes\Api\Auth\Auth;
