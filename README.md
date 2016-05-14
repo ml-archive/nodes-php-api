@@ -16,7 +16,7 @@ Before this package we used the awesome and popular [Dingo API](https://github.c
 [Dingo](http://github.com/dingo/api) was lacking a few things here and there.
 
 This package is in some way a more "mobile friendly" version of [Dingo](https://github.com/dingo/api). It is build on-top of [Dingo](https://github.com/dingo/api) so all the goodies
-that [Dingo](https://github.com/dingo/api) contains is also availble here.
+that [Dingo](https://github.com/dingo/api) comes with out-of-the-box is still availble here.
 
 We simply just added extra functionality and made it more flexible.
 
