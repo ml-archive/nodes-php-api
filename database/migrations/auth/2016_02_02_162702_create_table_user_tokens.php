@@ -22,6 +22,9 @@ class CreateTableUserTokens extends Migration
             $table->string('token', 60);
             $table->dateTime('expire')->nullable()->default(null);
             $table->timestamps();
+
+            // Update "token" to be binary, so it's case sensitive
+            DB::statement('ALTER TABLE `user_tokens` CHANGE `token` `token` VARCHAR(60) BINARY NOT NULL');
         });
     }
 
