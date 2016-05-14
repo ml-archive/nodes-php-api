@@ -63,6 +63,26 @@ trait TestHelperTrait
     }
 
     /**
+     * @author Robert Trzebinski <rotr@nodesagency.com>
+     * Content of 'data' property of the JSON returned by API call
+     * @return mixed
+     */
+    protected function responseData()
+    {
+        return json_decode($this->response->getContent())->data;
+    }
+
+    /**
+     * @author Robert Trzebinski <rotr@nodesagency.com>
+     * Content of 'meta' property of the JSON returned by API call
+     * @return mixed
+     */
+    protected function responseMeta()
+    {
+        return json_decode($this->response->getContent())->meta;
+    }
+
+    /**
      * Get api version that is tested.
      *
      * @return mixed
