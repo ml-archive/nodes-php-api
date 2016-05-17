@@ -21,7 +21,7 @@
         "nodes/dingo": "^1.0",
         "nodes/core": "^0.1",
         "nodes/assets": "^1.0",
-        "nodes/cache": "^0.1",
+        "nodes/cache": "^1.0",
         "nodes/bugsnag": "^0.1",
         "nodes/database": "^0.1",
         "nodes/validation": "^0.1"
