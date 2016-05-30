@@ -38,7 +38,7 @@ You must then modify your `composer.json` file and run `composer update` to incl
 Or you can run the composer require command from your terminal.
 
 ```
-composer require nodes/api
+composer require nodes/api:^1.0
 ```
 
 ## 🔧 Setup
@@ -62,7 +62,7 @@ Publish config files
 php artisan vendor:publish --provider="Nodes\Api\ServiceProvider"
 ```
 
-If you want to overwrite any existing config files use the `--force` paramter
+If you want to overwrite any existing config files use the `--force` parameter
 
 ```
 php artisan vendor:publish --provider="Nodes\Core\ServiceProvider" --force
