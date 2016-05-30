@@ -62,6 +62,25 @@ Publish config files
 php artisan vendor:publish --provider="Nodes\Api\ServiceProvider"
 ```
 
+If you want to overwrite any existing config files use the `--force` paramter
+
+```
+php artisan vendor:publish --provider="Nodes\Core\ServiceProvider" --force
+```
+
+## Bypass Laravel's CSRF tokens
+
+Laravel comes with a built-in CSRF token system, which is by default hooked into all `POST` requests. This gives us a bit of a problem
+since API requests won't contain the required CSRF token that Laravel expects. Therefore we need to _whitelist_ all requests hitting our API. 
+
+This can be done by modifying the following file `app/Http/Middleware/VerifyCsrfToken.php` and add `api/*` to the `$except` array:
+
+```
+protected $except = [
+    'api/*',
+];
+```
+
 ## ⚙ Usage
 
 Please refer to our extensive [Wiki dokumentation](https://github.com/nodes-php/api/wiki) for more infromation

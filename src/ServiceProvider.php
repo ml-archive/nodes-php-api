@@ -3,7 +3,7 @@ namespace Nodes\Api;
 
 use Dingo\Api\Event\RequestWasMatched as DingoEventRequestWasMatched;
 use Dingo\Api\Http\Request as DingoHttpRequest;
-use Nodes\AbstractServiceProvider as NodesAbstractServiceProvider;
+use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
 use Nodes\Api\Http\Response as NodesHttpResponse;
 use Nodes\Api\Support\Traits\DingoServiceProvider;
@@ -14,45 +14,9 @@ use Nodes\Api\Support\Traits\DingoLaravelServiceProvider;
  *
  * @package Nodes\Api
  */
-class ServiceProvider extends NodesAbstractServiceProvider
+class ServiceProvider extends IlluminateServiceProvider
 {
     use DingoServiceProvider, DingoLaravelServiceProvider;
-
-    /**
-     * Package name
-     *
-     * @var string
-     */
-    protected $package = 'api';
-
-    /**
-     * Register Artisan commands
-     *
-     * @var array
-     */
-    protected $commands = [
-        \Nodes\Api\Console\Commands\Scaffolding::class,
-        \Nodes\Api\Console\Commands\ResetPassword::class,
-    ];
-
-    /**
-     * Facades to install
-     *
-     * @var array
-     */
-    protected $facades = [
-        'NodesAPI' => \Nodes\Api\Support\Facades\API::class,
-        'NodesAPIRoute' => \Nodes\Api\Support\Facades\Route::class,
-    ];
-
-    /**
-     * Array of configs to copy
-     *
-     * @var array
-     */
-    protected $configs = [
-        'config/' => 'config/nodes/api/',
-    ];
 
     /**
      * Boot the service provider
@@ -97,6 +61,9 @@ class ServiceProvider extends NodesAbstractServiceProvider
 
         // Register namespace for API views
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nodes.api');
+
+        // Register publish groups
+        $this->publishGroups();
     }
 
     /**
@@ -119,6 +86,29 @@ class ServiceProvider extends NodesAbstractServiceProvider
     }
 
     /**
+     * Register publish groups
+     *
+     * @author Morten Rugaard <moru@nodes.dk>
+     *
+     * @access protected
+     * @return void
+     */
+    protected function publishGroups()
+    {
+        // Config files
+        $this->publishes([
+            __DIR__ . '/../config/auth.php' => config_path('nodes/api/auth.php'),
+            __DIR__ . '/../config/errors.php' => config_path('nodes/api/errors.php'),
+            __DIR__ . '/../config/middleware.php' => config_path('nodes/api/middleware.php'),
+            __DIR__ . '/../config/reset-password.php' => config_path('nodes/api/reset-password.php'),
+            __DIR__ . '/../config/response.php' => config_path('nodes/api/response.php'),
+            __DIR__ . '/../config/settings.php' => config_path('nodes/api/settings.php'),
+            __DIR__ . '/../config/throttling.php' => config_path('nodes/api/throttling.php'),
+            __DIR__ . '/../config/transformer.php' => config_path('nodes/api/transformer.php')
+        ], 'config');
+    }
+
+    /**
      * Load project API routes
      *
      * @author Morten Rugaard <moru@nodes.dk>
@@ -138,88 +128,5 @@ class ServiceProvider extends NodesAbstractServiceProvider
 
         // Load routes in directory
         load_directory($routesDirectory);
-    }
-
-    /**
-     * Install scaffolding
-     *
-     * @author Morten Rugaard <moru@nodes.dk>
-     *
-     * @access protected
-     * @return void
-     */
-    protected function installScaffolding()
-    {
-        if (env('NODES_ENV', false)) {
-            $this->getInstaller()->callArtisanCommand('nodes:api:scaffolding');
-        }
-    }
-
-    /**
-     * Install custom stuff
-     *
-     * @author Morten Rugaard <moru@nodes.dk>
-     *
-     * @access protected
-     * @return void
-     */
-    protected function installCustom()
-    {
-        // Add "api/" to except array in "VerifyCsrfToken" middlware
-        // to always bypass the CSRF token validation on POST requests
-        $this->bypassCsrfToken();
-    }
-
-    /**
-     * Bypass CSRF validation for API routes
-     *
-     * @author Morten Rugaard <moru@nodes.dk>
-     *
-     * @access private
-     * @return boolean
-     */
-    private function bypassCsrfToken()
-    {
-        $file = file(app_path('Http/Middleware/VerifyCsrfToken.php'));
-
-        $locateExceptArray = array_keys(preg_grep('|protected \$except = \[|', $file));
-        if (empty($locateExceptArray[0])) {
-            return false;
-        }
-
-        // Bypass URL
-        $bypassUrl = 'api/*';
-
-        for ($i = $locateExceptArray[0]+2; $i < count($file); $i++) {
-            // Remove whitespace from line
-            $value = trim($file[$i]);
-
-            if (!empty($value)) {
-                // If we're on the outcommented line (which is there out-of-the-box)
-                // we'll replace this line instead of inserting it before.
-                if ($value == '//') {
-                    $file[$i] =  str_repeat("\t", 2) . sprintf('\'%s\',', $bypassUrl) . "\n";
-                    break;
-                }
-
-                // Remove single quotes from URL for comparison
-                $currentBypassUrl = substr($value, 1, strrpos($value, '\''));
-
-                // If we're on the last line of the $except array
-                // or if our bypass URL comes before current line
-                // - if sorted alphabetically - we'll insert on this line
-                if ($value == '];' || strnatcmp($currentBypassUrl, $bypassUrl) > 0) {
-                    array_splice($file, $i, 0, [
-                        str_repeat("\t", 2) . sprintf('\'%s\',', $bypassUrl) . "\n"
-                    ]);
-                    break;
-                }
-            }
-        }
-
-        // Update existing file
-        file_put_contents(app_path('Http/Middleware/VerifyCsrfToken.php'), implode('', $file));
-
-        return true;
     }
 }
