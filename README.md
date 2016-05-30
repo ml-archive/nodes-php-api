@@ -65,7 +65,7 @@ php artisan vendor:publish --provider="Nodes\Api\ServiceProvider"
 If you want to overwrite any existing config files use the `--force` parameter
 
 ```
-php artisan vendor:publish --provider="Nodes\Core\ServiceProvider" --force
+php artisan vendor:publish --provider="Nodes\Assets\ServiceProvider" --force
 ```
 
 ## Bypass Laravel's CSRF tokens
