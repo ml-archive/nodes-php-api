@@ -64,6 +64,6 @@ return [
     | Default: 60 minutes
     |
     */
-    'expire' => 120
+    'expire' => 2
 
 ];

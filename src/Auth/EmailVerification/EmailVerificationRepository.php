@@ -134,7 +134,7 @@ class EmailVerificationRepository extends NodesRepository
         $token = hash_hmac('sha256', str_random(40), config('app.key'));
 
         // Expire timestamp
-        $expire = Carbon::now()->addMinutes(config('nodes.api.reset-password.expire', 120));
+        $expire = Carbon::now()->addDays(config('nodes.api.email-verification.expire', 1));
 
         // If user has previously tried to reset his/her password
         // we should just update the token of the previous entry
