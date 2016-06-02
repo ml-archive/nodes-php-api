@@ -18,3 +18,12 @@ Route::group(['namespace' => 'Nodes\Api\Auth\ResetPassword', 'prefix' => 'reset-
         'uses' => 'ResetPasswordController@done',
     ]);
 });
+
+Route::group(['namespace' => 'Nodes\Api\Auth\EmailVerification', 'prefix' => 'email-verification'], function() {
+
+    // Confirm email
+    Route::get('/{token}/{email}', [
+        'as' => 'nodes.api.auth.email-verificatio.confirm',
+        'uses' => 'EmailVerificationController@index',
+    ])->where('token', '[[:alnum:]]{64}');
+});
