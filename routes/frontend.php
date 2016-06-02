@@ -23,7 +23,7 @@ Route::group(['namespace' => 'Nodes\Api\Auth\EmailVerification', 'prefix' => 'em
 
     // Confirm email
     Route::get('/{token}/{email}', [
-        'as' => 'nodes.api.auth.email-verificatio.confirm',
-        'uses' => 'EmailVerificationController@index',
+        'as' => 'nodes.api.auth.email-verification.confirm',
+        'uses' => 'EmailVerificationsController@index',
     ])->where('token', '[[:alnum:]]{64}');
 });

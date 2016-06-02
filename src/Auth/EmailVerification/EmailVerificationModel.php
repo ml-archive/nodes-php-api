@@ -16,7 +16,7 @@ class EmailVerificationModel extends NodesModel
      *
      * @var string
      */
-    protected $table = 'email_verification';
+    protected $table = 'user_verifications';
 
     /**
      * Indicates if the model should be timestamped
@@ -32,7 +32,7 @@ class EmailVerificationModel extends NodesModel
      */
     protected $fillable = [
         'email',
-        'verification',
+        'token',
         'used',
         'expire_at'
     ];
@@ -55,7 +55,7 @@ class EmailVerificationModel extends NodesModel
         parent::__construct($attributes);
 
         // Override table with the one from config
-        $this->table = config('nodes.api.email-verification.table', 'user_verification');
+        $this->table = config('nodes.api.email-verifications.table', 'user_verifications');
     }
 
     /**

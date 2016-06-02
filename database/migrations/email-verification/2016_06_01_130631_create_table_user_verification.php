@@ -12,7 +12,7 @@ class CreateTableUserVerification extends Migration
      */
     public function up()
     {
-        Schema::create('user_verification', function(Blueprint $table)
+        Schema::create('user_verifications', function(Blueprint $table)
         {
             $table->increments('id');
             $table->string('email', 255)->index();
@@ -30,6 +30,6 @@ class CreateTableUserVerification extends Migration
      */
     public function down()
     {
-        Schema::drop('user_verification');
+        Schema::drop('user_verifications');
     }
 }

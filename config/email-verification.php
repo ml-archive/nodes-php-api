@@ -1,10 +1,10 @@
 <?php
 /*
 |--------------------------------------------------------------------------
-| Reset password
+| Email verification
 |--------------------------------------------------------------------------
 |
-| Settings used by the reset password feature.
+| Settings used by the email verification feature.
 |
 | Change the templates used to generate the e-mails or/and sender name
 | and subject of the e-mail.
@@ -20,7 +20,7 @@ return [
     |--------------------------------------------------------------------------
 
     */
-    'table' => 'user_email_verification',
+    'table' => 'user_verifications',
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ return [
     |--------------------------------------------------------------------------
 
     */
-    'subject' => 'Email verification request',
+    'subject' => 'User verification',
 
     /*
     |--------------------------------------------------------------------------

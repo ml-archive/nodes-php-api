@@ -57,7 +57,6 @@ class EmailVerificationRepository extends NodesRepository
      */
     public function getByToken($token)
     {
-        dd($token);
         return $this->where('token', '=', $token)
             ->first();
     }
@@ -121,9 +120,9 @@ class EmailVerificationRepository extends NodesRepository
     }
 
     /**
-     * Generate reset token
+     * Generate verification token
      *
-     * @author Morten Rugaard <moru@nodes.dk>
+     * @author Paulius Navickas <pana@nodes.dk>
      *
      * @access protected
      * @param  \Illuminate\Database\Eloquent\Model $user
@@ -164,43 +163,9 @@ class EmailVerificationRepository extends NodesRepository
         }
 
         // Update user with new password
-        return (bool) $user->update([
+
+        return (bool) $user->fill([
             'verified_at' => Carbon::now()
-        ]);
-    }
-
-
-    /**
-     * @param $email
-     * @param $token
-     * @return bool
-     * @author Paulius Navickas <pana@nodes.dk>
-     */
-    public function verify($email, $token)
-    {
-        $user = $this->with('verification')
-            ->where('email', $email)
-            ->first();
-
-
-        // E-mail does not exist
-        if (empty($user) || !$user->verification instanceof EmailVerificationModel) {
-            return false;
-        }
-
-        if($user->verification->user){
-            return false;
-        }
-
-        // Validate password
-        if (strcmp($token, $user->verification->token) !== 0) {
-            return false;
-        }
-        $user->verified_at = new Carbon();
-        $user->verification->used = 1;
-        $user->save();
-        $user->verification->save();
-
-        return $user;
+        ])->save();
     }
 }
