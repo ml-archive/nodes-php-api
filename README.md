@@ -5,11 +5,11 @@ A "mobile friendly" API package made on-top of the popular [Dingo API](https://g
 [![Total downloads](https://img.shields.io/packagist/dt/nodes/api.svg)](https://packagist.org/packages/nodes/api)
 [![Monthly downloads](https://img.shields.io/packagist/dm/nodes/api.svg)](https://packagist.org/packages/nodes/api)
 [![Latest release](https://img.shields.io/packagist/v/nodes/api.svg)](https://packagist.org/packages/nodes/api)
-[![Open issues](https://img.shields.io/github/issues/nodes-php/backend.svg)](https://github.com/nodes-php/backend/issues)
+[![Open issues](https://img.shields.io/github/issues/nodes-php/api.svg)](https://github.com/nodes-php/api/issues)
 [![License](https://img.shields.io/packagist/l/nodes/api.svg)](https://packagist.org/packages/nodes/api)
-[![Star repository on GitHub](https://img.shields.io/github/stars/nodes-php/backend.svg?style=social&label=Star)](https://github.com/nodes-php/backend/stargazers)
-[![Watch repository on GitHub](https://img.shields.io/github/watchers/nodes-php/backend.svg?style=social&label=Watch)](https://github.com/nodes-php/backend/watchers)
-[![Fork repository on GitHub](https://img.shields.io/github/forks/nodes-php/backend.svg?style=social&label=Fork)](https://github.com/nodes-php/backend/network)
+[![Star repository on GitHub](https://img.shields.io/github/stars/nodes-php/api.svg?style=social&label=Star)](https://github.com/nodes-php/api/stargazers)
+[![Watch repository on GitHub](https://img.shields.io/github/watchers/nodes-php/api.svg?style=social&label=Watch)](https://github.com/nodes-php/api/watchers)
+[![Fork repository on GitHub](https://img.shields.io/github/forks/nodes-php/api.svg?style=social&label=Fork)](https://github.com/nodes-php/api/network)
 
 ## 📝 Introduction
 
