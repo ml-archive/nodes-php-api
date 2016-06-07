@@ -12,6 +12,7 @@ A "mobile friendly" API package made on-top of the popular [Dingo API](https://g
 [![Fork repository on GitHub](https://img.shields.io/github/forks/nodes-php/backend.svg?style=social&label=Fork)](https://github.com/nodes-php/backend/network)
 
 ## 📝 Introduction
+
 Before this package we used the awesome and popular [Dingo API](https://github.com/dingo/api) package, but as a company who create **a lot** of native iOS / Android apps,
 [Dingo](http://github.com/dingo/api) was lacking a few things here and there.
 

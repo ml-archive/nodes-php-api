@@ -28,6 +28,8 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function boot()
     {
+        parent::boot();
+
         // Set response static instances
         $this->setResponseStaticInstances();
 
@@ -76,8 +78,6 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function register()
     {
-        parent::register();
-
         // Dingo service provider
         $this->registerServiceProvider();
 
