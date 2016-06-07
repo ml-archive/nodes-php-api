@@ -12,6 +12,7 @@ A "mobile friendly" API package made on-top of the popular [Dingo API](https://g
 [![Fork repository on GitHub](https://img.shields.io/github/forks/nodes-php/backend.svg?style=social&label=Fork)](https://github.com/nodes-php/backend/network)
 
 ## 📝 Introduction
+
 Before this package we used the awesome and popular [Dingo API](https://github.com/dingo/api) package, but as a company who create **a lot** of native iOS / Android apps,
 [Dingo](http://github.com/dingo/api) was lacking a few things here and there.
 
@@ -38,7 +39,7 @@ You must then modify your `composer.json` file and run `composer update` to incl
 Or you can run the composer require command from your terminal.
 
 ```
-composer require nodes/api
+composer require nodes/api:^1.0
 ```
 
 ## 🔧 Setup
@@ -60,6 +61,25 @@ Publish config files
 
 ```
 php artisan vendor:publish --provider="Nodes\Api\ServiceProvider"
+```
+
+If you want to overwrite any existing config files use the `--force` parameter
+
+```
+php artisan vendor:publish --provider="Nodes\Api\ServiceProvider" --force
+```
+
+## Bypass Laravel's CSRF tokens
+
+Laravel comes with a built-in CSRF token system, which is by default hooked into all `POST` requests. This gives us a bit of a problem
+since API requests won't contain the required CSRF token that Laravel expects. Therefore we need to _whitelist_ all requests hitting our API. 
+
+This can be done by modifying the following file `app/Http/Middleware/VerifyCsrfToken.php` and add `api/*` to the `$except` array:
+
+```
+protected $except = [
+    'api/*',
+];
 ```
 
 ## ⚙ Usage
