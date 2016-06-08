@@ -30,7 +30,7 @@ To install this package you will need:
 
 You must then modify your `composer.json` file and run `composer update` to include the latest version of the package in your project.
 
-```
+```json
 "require": {
     "nodes/api": "^1.0"
 }
@@ -38,7 +38,7 @@ You must then modify your `composer.json` file and run `composer update` to incl
 
 Or you can run the composer require command from your terminal.
 
-```
+```bash
 composer require nodes/api:^1.0
 ```
 
@@ -46,26 +46,26 @@ composer require nodes/api:^1.0
 
 Setup service providers in `config/app.php`
 
-```
+```php
 Nodes\Api\ServiceProvider::class,
 ```
 
 Setup alias in `config/app.php`
 
-```
+```php
 'API' => Nodes\Api\Support\Facades\Api::class,
 'APIRoute' => Nodes\Api\Support\Facades\Route::class
 ```
 
 Publish config files
 
-```
+```bash
 php artisan vendor:publish --provider="Nodes\Api\ServiceProvider"
 ```
 
 If you want to overwrite any existing config files use the `--force` parameter
 
-```
+```bash
 php artisan vendor:publish --provider="Nodes\Api\ServiceProvider" --force
 ```
 
@@ -76,7 +76,7 @@ since API requests won't contain the required CSRF token that Laravel expects. T
 
 This can be done by modifying the following file `app/Http/Middleware/VerifyCsrfToken.php` and add `api/*` to the `$except` array:
 
-```
+```php
 protected $except = [
     'api/*',
 ];
