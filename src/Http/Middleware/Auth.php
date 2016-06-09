@@ -5,6 +5,7 @@ use Dingo\Api\Http\Middleware\Auth as DingoHttpMiddlewareAuth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;;
 use Nodes\Api\Auth\Auth as Authentication;
+use Nodes\Api\Auth\Exceptions\UnVerifiedException;
 use Nodes\Api\Routing\Router;
 use Closure;
 
@@ -30,7 +31,7 @@ class Auth extends DingoHttpMiddlewareAuth
      * @param \Illuminate\Http\Request $request
      * @param Closure $next
      * @return mixed
-     * @throws AuthorizationException
+     * @throws UnVerifiedException
      * @author Paulius Navickas <pana@nodes.dk>
      */
     public function handle($request, Closure $next)
@@ -42,7 +43,7 @@ class Auth extends DingoHttpMiddlewareAuth
         }
 
         if(config('nodes.api.email-verification.active') && !api_user()->verified_at){
-            throw (new AuthorizationException('User account is unconfirmed.', 442));
+            throw new UnVerifiedException();
         }
 
         return $next($request);
