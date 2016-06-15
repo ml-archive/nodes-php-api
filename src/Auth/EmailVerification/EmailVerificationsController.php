@@ -2,10 +2,7 @@
 namespace Nodes\Api\Auth\EmailVerification;
 
 use Illuminate\Routing\Controller as IlluminateController;
-use Illuminate\Support\Facades\Input;
-use Nodes\Api\Auth\Exceptions\MissingUserModelException;
 use Nodes\Api\Routing\Helpers as ApiHelpers;
-use Nodes\Exceptions\Exception;
 
 /**
  * Class EmailVerificationsController
@@ -40,13 +37,14 @@ class EmailVerificationsController extends IlluminateController
     }
 
     /**
+     * Verify account by e-mail and token
      *
-     * Verifies user email
-     *
-     * @param $token
-     * @param $email
-     * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      * @author Paulius Navickas <pana@nodes.dk>
+     *
+     * @access public
+     * @param  string $token
+     * @param  string $email
+     * @return \Illuminate\View\View
      */
     public function index($token, $email)
     {

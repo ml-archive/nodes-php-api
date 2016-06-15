@@ -65,10 +65,10 @@ php artisan vendor:publish --provider="Nodes\Api\ServiceProvider"
 If you want to overwrite any existing config files use the `--force` parameter
 
 ```
-php artisan vendor:publish --provider="Nodes\Assets\ServiceProvider" --force
+php artisan vendor:publish --provider="Nodes\Api\ServiceProvider" --force
 ```
 
-## Bypass Laravel's CSRF tokens
+#### Bypass Laravel's CSRF tokens
 
 Laravel comes with a built-in CSRF token system, which is by default hooked into all `POST` requests. This gives us a bit of a problem
 since API requests won't contain the required CSRF token that Laravel expects. Therefore we need to _whitelist_ all requests hitting our API. 
