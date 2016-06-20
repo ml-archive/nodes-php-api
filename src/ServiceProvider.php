@@ -64,6 +64,8 @@ class ServiceProvider extends NodesAbstractServiceProvider
      */
     public function boot()
     {
+        parent::boot();
+
         // Set response static instances
         $this->setResponseStaticInstances();
 
@@ -109,8 +111,6 @@ class ServiceProvider extends NodesAbstractServiceProvider
      */
     public function register()
     {
-        parent::register();
-
         // Dingo service provider
         $this->registerServiceProvider();
 
