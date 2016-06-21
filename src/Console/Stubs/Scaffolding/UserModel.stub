@@ -26,7 +26,8 @@ class User extends NodesModel
     protected $fillable = [
         'name',
         'email',
-        'password'
+        'password',
+        'verified_at',
     ];
 
     /**
@@ -36,6 +37,12 @@ class User extends NodesModel
      */
     protected $hidden = ['password'];
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['verified_at'];
 
     /**
      * The "booting" method of the model.

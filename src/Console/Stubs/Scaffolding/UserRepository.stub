@@ -1,7 +1,9 @@
 <?php
 namespace DummyNamespace\Models\Users;
 
+use Carbon;
 use Illuminate\Support\Facades\Hash;
+use Nodes\Api\Auth\EmailVerification as UserEmailVerification;
 use Nodes\Database\Eloquent\Repository as NodesRepository;
 use DummyNamespace\Models\Users\Tokens\Token;
 use DummyNamespace\Models\Users\Validation\UserValidator;
@@ -24,13 +26,15 @@ class UserRepository extends NodesRepository
      * Constructor
      *
      * @access public
-     * @param \DummyNamespace\Models\Users\User $model
+     * @param \DummyNamespace\Models\Users\User                     $model
      * @param \DummyNamespace\Models\Users\Validation\UserValidator $userValidator
+     * @param \Nodes\Api\Auth\EmailVerification                     $userEmailVerification
      */
-    public function __construct(User $model, UserValidator $userValidator)
+    public function __construct(User $model, UserValidator $userValidator, UserEmailVerification $userEmailVerification)
     {
         $this->setupRepository($model);
         $this->userValidator = $userValidator;
+        $this->userEmailVerification = $userEmailVerification;
     }
 
     /**
@@ -74,6 +78,18 @@ class UserRepository extends NodesRepository
         // Validate data
         $this->userValidator->with($data)->validateOrFail();
 
+        // Determine state of "e-mail verification" for creating users
+        $shouldBeEmailVerified = config('nodes.api.email-verification.enabled', false);
+
+        // If "e-mail verification" is disabled
+        // we'll automatically set the user as verified
+        if (!$shouldBeEmailVerified) {
+            $data = array_merge([
+                'is_verified' => 1,
+                'verified_at' => Carbon::now()
+            ], $data);
+        }
+
         // Generate fresh model and populate with data
         $user = $this->create($data);
 
@@ -82,6 +98,12 @@ class UserRepository extends NodesRepository
             'user_id' => (int) $user->id,
             'token' => Hash::make(str_random())
         ]));
+
+        // If "e-mail verification" is enabled,
+        // then generate token and send e-mail with instructions
+        if ($shouldBeEmailVerified) {
+            $this->userEmailVerification->sendVerificationEmail($user);
+        }
 
         return $user;
     }

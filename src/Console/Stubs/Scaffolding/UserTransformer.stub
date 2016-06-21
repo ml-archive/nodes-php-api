@@ -24,6 +24,8 @@ class UserTransformer extends TransformerAbstract
             'id' => $data->id,
             'name' => $data->name,
             'email' => $data->email,
+            'is_verified' => $data->is_verified,
+            'verified_at' => $data->verified_at->toIso8601String(),
             'created_at' => $data->created_at->toIso8601String(),
             'updated_at' => $data->updated_at->toIso8601String(),
         ];
