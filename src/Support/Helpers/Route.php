@@ -17,9 +17,9 @@ if (!function_exists('api_version')) {
     function api_version($version, $options, $callback = null)
     {
         if (func_num_args() == 2) {
-            return \NodesAPIRoute::version($version, $options);
+            return app('api.router')->version($version, $options);
         } else {
-            return \NodesAPIRoute::version($version, $options, $callback);
+            return app('api.router')->version($version, $options, $callback);
         }
     }
 }
@@ -36,7 +36,7 @@ if (!function_exists('api_group')) {
      */
     function api_group(array $attributes, $callback)
     {
-        return \NodesAPIRoute::group($attributes, $callback);
+        return app('api.router')->group($attributes, $callback);
     }
 }
 
@@ -48,11 +48,11 @@ if (!function_exists('api_get')) {
      *
      * @param  string                $uri
      * @param  array|string|callable $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     function api_get($uri, $action)
     {
-        return \NodesAPIRoute::get($uri, $action);
+        return app('api.router')->get($uri, $action);
     }
 }
 
@@ -64,11 +64,11 @@ if (!function_exists('api_post')) {
      *
      * @param  string                $uri
      * @param  array|string|callable $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     function api_post($uri, $action)
     {
-        return \NodesAPIRoute::post($uri, $action);
+        return app('api.router')->post($uri, $action);
     }
 }
 
@@ -80,11 +80,11 @@ if (!function_exists('api_put')) {
      *
      * @param  string                $uri
      * @param  array|string|callable $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     function api_put($uri, $action)
     {
-        return \NodesAPIRoute::put($uri, $action);
+        return app('api.router')->put($uri, $action);
     }
 }
 
@@ -96,11 +96,11 @@ if (!function_exists('api_patch')) {
      *
      * @param  string                $uri
      * @param  array|string|callable $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     function api_patch($uri, $action)
     {
-        return \NodesAPIRoute::patch($uri, $action);
+        return app('api.router')->patch($uri, $action);
     }
 }
 
@@ -112,11 +112,11 @@ if (!function_exists('api_delete')) {
      *
      * @param  string                $uri
      * @param  array|string|callable $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     function api_delete($uri, $action)
     {
-        return \NodesAPIRoute::delete($uri, $action);
+        return app('api.router')->delete($uri, $action);
     }
 }
 
@@ -128,11 +128,11 @@ if (!function_exists('api_options')) {
      *
      * @param  string                $uri
      * @param  array|string|callable $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     function api_options($uri, $action)
     {
-        return \NodesAPIRoute::options($uri, $action);
+        return app('api.router')->options($uri, $action);
     }
 }
 
@@ -144,11 +144,11 @@ if (!function_exists('api_any')) {
      *
      * @param  string                $uri
      * @param  array|string|callable $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     function api_any($uri, $action)
     {
-        return \NodesAPIRoute::any($uri, $action);
+        return app('api.router')->any($uri, $action);
     }
 }
 
@@ -161,11 +161,11 @@ if (!function_exists('api_match')) {
      * @param  array|string          $methods
      * @param  string                $uri
      * @param  array|string|callable $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     function api_match($methods, $uri, $action)
     {
-        return \NodesAPIRoute::match($methods, $uri, $action);
+        return app('api.router')->match($methods, $uri, $action);
     }
 }
 
@@ -180,7 +180,7 @@ if (!function_exists('api_resources')) {
      */
     function api_resources(array $resources)
     {
-        return \NodesAPIRoute::resources($resources);
+        return app('api.router')->resources($resources);
     }
 }
 
@@ -197,7 +197,7 @@ if (!function_exists('api_resource')) {
      */
     function api_resource($name, $controller, array $options = [])
     {
-        return \NodesAPIRoute::resource($name, $controller, $options);
+        return app('api.router')->resource($name, $controller, $options);
     }
 }
 
@@ -212,7 +212,7 @@ if (!function_exists('api_controllers')) {
      */
     function api_controllers(array $controllers)
     {
-        return \NodesAPIRoute::controllers($controllers);
+        return app('api.router')->controllers($controllers);
     }
 }
 
@@ -229,7 +229,7 @@ if (!function_exists('api_controller')) {
      */
     function api_controller($uri, $controller, $names = [])
     {
-        return \NodesAPIRoute::controller($uri, $controller, $names);
+        return app('api.router')->controller($uri, $controller, $names);
     }
 }
 
@@ -243,6 +243,6 @@ if (!function_exists('api_current_route')) {
      */
     function api_current_route()
     {
-        return \NodesAPIRoute::current();
+        return app('api.router')->current();
     }
 }
