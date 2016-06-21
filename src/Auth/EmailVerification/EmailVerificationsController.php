@@ -43,7 +43,6 @@ class EmailVerificationsController extends IlluminateController
      *
      * @access public
      * @param  string $token
-     * @param  string $email
      * @return \Illuminate\View\View
      */
     public function index($token, $email)
@@ -61,9 +60,9 @@ class EmailVerificationsController extends IlluminateController
         }
 
         // All good! Update user's password
-        $status = $this->emailVerificationRepository->updateVerificationByEmail($email);
+        $status = $this->emailVerificationRepository->updateVerificationByEmail($verificationToken->email);
         if (empty($status)) {
-            return view('nodes.api::email-verification.invalid')->with(['email' => $email, 'error' => 'Couldn\'t verify the user. Please contact administrator']);
+            return view('nodes.api::email-verification.invalid')->with(['email' => $verificationToken->email, 'error' => 'Couldn\'t verify the user. Please contact administrator']);
         }
 
         // Mark token as used

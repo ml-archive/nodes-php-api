@@ -142,7 +142,7 @@ class EmailVerificationRepository extends NodesRepository
         if (!empty($verificationToken)) {
             $verificationToken->update(['token' => $token, 'used' => 0, 'expire_at' => $expire->format('Y-m-d H:i:s')]);
         } else {
-            $this->insert(['email' => $user->email, 'token' => $token, 'expire_at' => $expire->format('Y-m-d H:i:s')]);
+            $this->create(['email' => $user->email, 'token' => $token, 'expire_at' => $expire->format('Y-m-d H:i:s')]);
         }
 
         return $token;
@@ -167,6 +167,7 @@ class EmailVerificationRepository extends NodesRepository
 
         // Update user with a timestamp of when he/her was verified
         return (bool) $user->fill([
+            'is_verified' => 1,
             'verified_at' => Carbon::now()
         ])->save();
     }

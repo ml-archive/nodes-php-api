@@ -20,7 +20,6 @@ Route::group(['namespace' => 'Nodes\Api\Auth\ResetPassword', 'prefix' => 'reset-
 });
 
 Route::group(['namespace' => 'Nodes\Api\Auth\EmailVerification', 'prefix' => 'email-verification'], function() {
-
     // Confirm email
     Route::get('/{token}/{email}', [
         'as' => 'nodes.api.auth.email-verification.confirm',

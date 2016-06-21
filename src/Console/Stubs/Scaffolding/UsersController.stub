@@ -4,6 +4,7 @@ namespace DummyNamespace\Controllers\Api;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Facades\Input;
 use Nodes\Api\Auth\Exceptions\UnauthorizedException;
+use Nodes\Api\Routing\Helpers as ApiHelpers;
 use DummyNamespace\Models\Users\UserRepository;
 use DummyNamespace\Models\Users\Transformers\UserTransformer;
 
@@ -14,6 +15,8 @@ use DummyNamespace\Models\Users\Transformers\UserTransformer;
  */
 class UsersController extends IlluminateController
 {
+    use ApiHelpers;
+
     /**
      * User Repository
      *

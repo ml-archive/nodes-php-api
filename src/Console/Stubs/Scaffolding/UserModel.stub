@@ -27,6 +27,7 @@ class User extends NodesModel
         'name',
         'email',
         'password',
+        'is_verified',
         'verified_at',
     ];
 
@@ -36,6 +37,15 @@ class User extends NodesModel
      * @var array
      */
     protected $hidden = ['password'];
+
+    /**
+     * The attributes that should be cast to native types
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_verified' => 'boolean'
+    ];
 
     /**
      * The attributes that should be mutated to dates.

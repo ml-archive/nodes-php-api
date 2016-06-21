@@ -1,7 +1,7 @@
 <?php
 namespace DummyNamespace\Models\Users;
 
-use Carbon;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Nodes\Api\Auth\EmailVerification as UserEmailVerification;
 use Nodes\Database\Eloquent\Repository as NodesRepository;
@@ -18,23 +18,30 @@ class UserRepository extends NodesRepository
     /**
      * User validator
      *
-     * @var \DummyNamespace\Models\Users\UserValidator
+     * @var \DummyNamespace\Models\Users\Validation\UserValidator
      */
     protected $userValidator;
+
+    /**
+     * User e-mail verification repository
+     *
+     * @var \Nodes\Api\Auth\EmailVerification\EmailVerificationRepository
+     */
+    protected $userEmailVerificationRepository;
 
     /**
      * Constructor
      *
      * @access public
-     * @param \DummyNamespace\Models\Users\User                     $model
+     * @param \DummyNamespace\Models\Users\User $model
      * @param \DummyNamespace\Models\Users\Validation\UserValidator $userValidator
-     * @param \Nodes\Api\Auth\EmailVerification                     $userEmailVerification
+     * @param \Nodes\Api\Auth\EmailVerification\EmailVerificationRepository  $userEmailVerificationRepository
      */
-    public function __construct(User $model, UserValidator $userValidator, UserEmailVerification $userEmailVerification)
+    public function __construct(User $model, UserValidator $userValidator, UserEmailVerificationRepository $userEmailVerificationRepository)
     {
         $this->setupRepository($model);
         $this->userValidator = $userValidator;
-        $this->userEmailVerification = $userEmailVerification;
+        $this->userEmailVerificationRepository = $userEmailVerificationRepository;
     }
 
     /**
@@ -102,7 +109,7 @@ class UserRepository extends NodesRepository
         // If "e-mail verification" is enabled,
         // then generate token and send e-mail with instructions
         if ($shouldBeEmailVerified) {
-            $this->userEmailVerification->sendVerificationEmail($user);
+            $this->userEmailVerificationRepository->sendVerificationEmail($user);
         }
 
         return $user;

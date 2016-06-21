@@ -19,7 +19,6 @@ class CreateTableUserVerifications extends Migration
             $table->string('token', 64)->index();
             $table->boolean('used')->unsigned()->default(false);
             $table->timestamp('expire_at')->nullable()->default(null);
-            $table->timestamps();
         });
     }
 
