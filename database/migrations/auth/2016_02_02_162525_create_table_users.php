@@ -21,6 +21,8 @@ class CreateTableUsers extends Migration
             $table->string('email', 190)->unique();
             $table->string('password', 60);
             $table->boolean('master')->unsigned()->default(false)->index();
+            $table->boolean('is_verified')->unsigned()->default(false)->index();
+            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
         });
     }
