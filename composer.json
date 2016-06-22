@@ -29,5 +29,6 @@
             "src/Support/Helpers/Manipulation.php",
             "src/Support/Helpers/Route.php"
         ]
-    }
+    },
+    "minimum-stability": "dev"
 }
