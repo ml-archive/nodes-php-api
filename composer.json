@@ -30,5 +30,6 @@
             "src/Support/Helpers/Route.php"
         ]
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
