@@ -22,7 +22,7 @@ class NodesFormRequest extends FormRequest
      *
      * @author Pedro Coutinho <peco@nodesagency.com>
      * @access public
-     * @return array|null
+     * @return array
      */
     public function getErrorCodes()
     {
