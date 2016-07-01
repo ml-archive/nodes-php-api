@@ -111,7 +111,7 @@ class EmailVerificationRepository extends NodesRepository
             'senderName' => (config('nodes.api.email-verification.from.name') != 'Nodes') ? config('nodes.api.email-verification.from.name') : config('nodes.project.name')
         ], function($message) use ($user) {
             $message->to($user->email)
-                ->from(config('nodes.api.remail-verification.from.email', 'no-reply@nodes.dk'), config('nodes.api.email-verification.from.name', 'Nodes'))
+                ->from(config('nodes.api.email-verification.from.email', 'no-reply@nodes.dk'), config('nodes.api.email-verification.from.name', 'Nodes'))
                 ->subject(config('nodes.api.email-verification.subject', 'Email verification request'));
         });
 
