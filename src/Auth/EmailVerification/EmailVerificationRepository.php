@@ -10,7 +10,7 @@ use Nodes\Api\Auth\Exceptions\MissingUserModelException;
 
 
 /**
- * Class ResetPasswordRepository
+ * Class EmailVerificationRepository
  *
  * @package Nodes\Api\Auth\ResetPassword
  */
@@ -53,12 +53,11 @@ class EmailVerificationRepository extends NodesRepository
      *
      * @access public
      * @param  string $token
-     * @return \Nodes\Api\Auth\EmailVerification\Model
+     * @return \Nodes\Api\Auth\EmailVerification\EmailVerificationModel
      */
     public function getByToken($token)
     {
-        return $this->where('token', '=', $token)
-            ->first();
+        return $this->where('token', '=', $token)->first();
     }
 
     /**
@@ -73,8 +72,8 @@ class EmailVerificationRepository extends NodesRepository
     public function getByUnexpiredToken($token)
     {
         return $this->where('token', '=', $token)
-            ->where('expire_at', '>', Carbon::now()->format('Y-m-d H:i:s'))
-            ->first();
+                    ->where('expire_at', '>', Carbon::now()->format('Y-m-d H:i:s'))
+                    ->first();
     }
 
     /**
@@ -83,11 +82,11 @@ class EmailVerificationRepository extends NodesRepository
      * @author Paulius Navickas <pana@nodes.dk>
      *
      * @access public
-     * @param  array $conditions WHERE conditions to locate user. Format: ['column' => 'value']
+     * @param  \Illuminate\Database\Eloquent\Model $user
      * @return boolean
      * @throws \Nodes\Api\Auth\Exceptions\ResetPasswordNoUserException
      */
-    public function sendVerificationEmail($user)
+    public function sendVerificationEmail(IlluminateModel $user)
     {
         if (empty($user)) {
             throw new ResetPasswordNoUserException('Could not find any user with those credentials');
@@ -112,7 +111,7 @@ class EmailVerificationRepository extends NodesRepository
             'senderName' => (config('nodes.api.email-verification.from.name') != 'Nodes') ? config('nodes.api.email-verification.from.name') : config('nodes.project.name')
         ], function($message) use ($user) {
             $message->to($user->email)
-                ->from(config('nodes.api.remail-verification.from.email', 'no-reply@nodes.dk'), config('nodes.api.email-verification.from.name', 'Nodes'))
+                ->from(config('nodes.api.email-verification.from.email', 'no-reply@nodes.dk'), config('nodes.api.email-verification.from.name', 'Nodes'))
                 ->subject(config('nodes.api.email-verification.subject', 'Email verification request'));
         });
 
@@ -143,16 +142,20 @@ class EmailVerificationRepository extends NodesRepository
         if (!empty($verificationToken)) {
             $verificationToken->update(['token' => $token, 'used' => 0, 'expire_at' => $expire->format('Y-m-d H:i:s')]);
         } else {
-            $this->insert(['email' => $user->email, 'token' => $token, 'expire_at' => $expire->format('Y-m-d H:i:s')]);
+            $this->create(['email' => $user->email, 'token' => $token, 'expire_at' => $expire->format('Y-m-d H:i:s')]);
         }
 
         return $token;
     }
 
     /**
-     * @param $email
-     * @return bool
+     * Update e-mail verification record by e-mail
+     *
      * @author Paulius Navickas <pana@nodes.dk>
+     *
+     * @access public
+     * @param  string $email
+     * @return boolean
      */
     public function updateVerificationByEmail($email)
     {
@@ -162,9 +165,9 @@ class EmailVerificationRepository extends NodesRepository
             return false;
         }
 
-        // Update user with new password
-
+        // Update user with a timestamp of when he/her was verified
         return (bool) $user->fill([
+            'is_verified' => 1,
             'verified_at' => Carbon::now()
         ])->save();
     }

@@ -6,8 +6,8 @@ use Nodes\Database\Eloquent\Model as NodesModel;
 
 /**
  * Class EmailVerificationModel
+ *
  * @package Nodes\Api\Auth\EmailVerification
- * @author Paulius Navickas <pana@nodes.dk>
  */
 class EmailVerificationModel extends NodesModel
 {
@@ -47,8 +47,10 @@ class EmailVerificationModel extends NodesModel
     ];
 
     /**
-     * EmailAuthorizationModel constructor.
-     * @param array $attributes
+     * EmailAuthorizationModel constructor
+     *
+     * @access public
+     * @param  array $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -59,8 +61,12 @@ class EmailVerificationModel extends NodesModel
     }
 
     /**
-     * @return bool
+     * Check if token has expired
+     *
      * @author Paulius Navickas <pana@nodes.dk>
+     *
+     * @access public
+     * @return boolean
      */
     public function isExpired()
     {
@@ -68,8 +74,12 @@ class EmailVerificationModel extends NodesModel
     }
 
     /**
-     * @return bool
+     * Check if token has already been used
+     *
      * @author Paulius Navickas <pana@nodes.dk>
+     *
+     * @access public
+     * @return boolean
      */
     public function isUsed()
     {
@@ -77,8 +87,12 @@ class EmailVerificationModel extends NodesModel
     }
 
     /**
-     * @return bool
+     * Mark token has used
+     *
      * @author Paulius Navickas <pana@nodes.dk>
+     *
+     * @access public
+     * @return boolean
      */
     public function markAsUsed()
     {
