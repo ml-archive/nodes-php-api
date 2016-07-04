@@ -74,7 +74,6 @@ trait DingoServiceProvider
         $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/auth.php'), 'nodes.api.auth');
         $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/errors.php'), 'nodes.api.errors');
         $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/middleware.php'), 'nodes.api.middleware');
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/reset-password.php'), 'nodes.api.reset-password');
         $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/response.php'), 'nodes.api.response');
         $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/settings.php'), 'nodes.api.settings');
         $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/throttling.php'), 'nodes.api.throttling');
