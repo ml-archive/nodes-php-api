@@ -54,6 +54,7 @@ class ResetPasswordController extends IlluminateController
     public function index($token)
     {
         // Validate token
+        /** @var $resetToken ResetPasswordModel*/
         $resetToken = $this->resetPasswordRepository->getByToken($token);
         if (empty($resetToken) || $resetToken->isUsed()) {
             return view('nodes.api::reset-password.invalid');
@@ -96,7 +97,7 @@ class ResetPasswordController extends IlluminateController
         // Validate token
         $resetToken = $this->resetPasswordRepository->getByUnexpiredToken($token);
         if (empty($resetToken)) {
-            return redirect()->back();
+            return view('nodes.api::reset-password.invalid');
         }
 
         // Retrieve received e-mail
