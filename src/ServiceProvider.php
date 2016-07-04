@@ -118,7 +118,7 @@ class ServiceProvider extends IlluminateServiceProvider
     private function loadRoutes()
     {
         // Generate routes directory path
-        $routesDirectory = base_path('project/Routes/');
+        $routesDirectory = base_path('project/Routes/Api');
 
         // Make sure our directory exists
         if (!file_exists($routesDirectory)) {
