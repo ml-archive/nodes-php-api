@@ -53,7 +53,7 @@ Nodes\Api\ServiceProvider::class,
 Setup alias in `config/app.php`
 
 ```php
-'API' => Nodes\Api\Support\Facades\Api::class,
+'API' => Nodes\Api\Support\Facades\API::class,
 'APIRoute' => Nodes\Api\Support\Facades\Route::class
 ```
 
