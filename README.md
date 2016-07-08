@@ -84,7 +84,7 @@ protected $except = [
 
 ## ⚙ Usage
 
-Please refer to our extensive [Wiki dokumentation](https://github.com/nodes-php/api/wiki) for more infromation
+Please refer to our extensive [Wiki documentation](https://github.com/nodes-php/api/wiki) for more infromation
 
 ## 🏆 Credits
 
