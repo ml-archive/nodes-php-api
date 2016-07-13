@@ -114,7 +114,7 @@ return [
         | The unique identifier which is used to generate the master token.
         |
         */
-        'salt' => 'nodes+' . env('APP_KEY', 'nodes'),
+        'salt' => 'nodes+' . env('APP_ENV', 'nodes'),
 
         /*
         |--------------------------------------------------------------------------
