@@ -78,7 +78,7 @@ class MasterToken implements DingoAuthContract
         $this->enabled = (bool) config('nodes.auth.masterToken.enabled', false);
 
         // Salt used to generate the unique master token
-        $this->tokenSalt = config('nodes.auth.masterToken.salt', 'nodes+' . env('APP_ENV'));
+        $this->tokenSalt = config('nodes.api.auth.masterToken.salt', 'nodes+' . env('APP_ENV'));
 
         // Fields used to retrieve user associated with master token
         $this->tokenColumns = config('nodes.auth.masterToken.user', [
