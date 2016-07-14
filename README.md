@@ -53,7 +53,7 @@ Nodes\Api\ServiceProvider::class,
 Setup alias in `config/app.php`
 
 ```php
-'API' => Nodes\Api\Support\Facades\Api::class,
+'API' => Nodes\Api\Support\Facades\API::class,
 'APIRoute' => Nodes\Api\Support\Facades\Route::class
 ```
 
@@ -84,7 +84,7 @@ protected $except = [
 
 ## ⚙ Usage
 
-Please refer to our extensive [Wiki dokumentation](https://github.com/nodes-php/api/wiki) for more infromation
+Please refer to our extensive [Wiki documentation](https://github.com/nodes-php/api/wiki) for more infromation
 
 ## 🏆 Credits
 
