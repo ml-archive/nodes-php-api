@@ -1,25 +1,23 @@
 <?php
+
 namespace Nodes\Api\Auth\Exceptions;
 
 use Nodes\Exceptions\Exception as NodesException;
 
 /**
- * Class MissingUserModelException
- *
- * @package Nodes\Api\Auth\Exceptions
+ * Class MissingUserModelException.
  */
 class MissingUserModelException extends NodesException
 {
     /**
-     * MissingUserModelException constructor
+     * MissingUserModelException constructor.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string   $message
-     * @param  integer  $code
+     * @param  int  $code
      * @param  array    $headers
-     * @param  boolean  $report
+     * @param  bool  $report
      * @param  string   $severity
      */
     public function __construct($message = 'Missing user model for authentication', $code = 500, array $headers = [], $report = false, $severity = 'error')

@@ -1,17 +1,16 @@
 <?php
+
 namespace Nodes\Api\Console\Commands;
 
 use Dingo\Api\Console\Command\Docs as DingoCommandDocs;
 
 /**
- * Class Docs
- *
- * @package Nodes\Api\Console\Commands
+ * Class Docs.
  */
 class Docs extends DingoCommandDocs
 {
     /**
-     * The name and signature of the console command
+     * The name and signature of the console command.
      *
      * @var string
      */

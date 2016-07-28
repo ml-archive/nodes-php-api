@@ -21,7 +21,7 @@ return [
     | a Closure or the namespace of the adapter.
     |
     */
-    'adapter' => function() {
+    'adapter' => function () {
         // Instantiate Fractal Manager
         $manager = new Nodes\Api\Transformer\Manager;
 
@@ -53,11 +53,11 @@ return [
     'fractal' => [
         'serializer' => [
             'class' => env('API_TRANSFORMER_SERIALIZER', Nodes\Api\Transformer\Serializer::class),
-            'rootKey' => 'data'
+            'rootKey' => 'data',
         ],
         'includeKey' => 'include',
         'includeSeparator' => ',',
-        'eagerLoad' => true
-    ]
+        'eagerLoad' => true,
+    ],
 
 ];

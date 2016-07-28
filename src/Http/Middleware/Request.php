@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Http\Middleware;
 
 use Illuminate\Contracts\Foundation\Application;
@@ -9,9 +10,7 @@ use Nodes\Api\Exceptions\Handler as ExceptionHandler;
 use Nodes\Api\Routing\Router;
 
 /**
- * Class Request
- *
- * @package Nodes\Api\Http\Middleware
+ * Class Request.
  */
 class Request extends DingoHttpMiddlewareRequest
 {
