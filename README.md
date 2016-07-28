@@ -10,6 +10,7 @@ A "mobile friendly" API package made on-top of the popular [Dingo API](https://g
 [![Star repository on GitHub](https://img.shields.io/github/stars/nodes-php/api.svg?style=social&label=Star)](https://github.com/nodes-php/api/stargazers)
 [![Watch repository on GitHub](https://img.shields.io/github/watchers/nodes-php/api.svg?style=social&label=Watch)](https://github.com/nodes-php/api/watchers)
 [![Fork repository on GitHub](https://img.shields.io/github/forks/nodes-php/api.svg?style=social&label=Fork)](https://github.com/nodes-php/api/network)
+[![StyleCI](https://styleci.io/repos/49190735/shield)](https://styleci.io/repos/49190735)
 
 ## 📝 Introduction
 
