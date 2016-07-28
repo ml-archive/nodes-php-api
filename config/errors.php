@@ -1,4 +1,5 @@
 <?php
+
 return [
 
     /*
@@ -41,7 +42,7 @@ return [
     |
     */
     'throwOnEnvironment' => [
-        'testing'
-    ]
+        'testing',
+    ],
 
 ];

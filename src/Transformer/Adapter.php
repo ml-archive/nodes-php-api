@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Transformer;
 
 use Dingo\Api\Transformer\Adapter\Fractal as DingoAdapterFractal;
@@ -8,18 +9,15 @@ use Illuminate\Support\Collection as IlluminateCollection;
 use Illuminate\Contracts\Pagination\Paginator as IlluminatePaginator;
 
 /**
- * Class Fractal
- *
- * @package Nodes\Api\Transformer
+ * Class Fractal.
  */
 class Adapter extends DingoAdapterFractal
 {
     /**
-     * Create a Fractal resource instance
+     * Create a Fractal resource instance.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @param  mixed                                      $response
      * @param  \Nodes\Api\Transformer\TransformerAbstract $transformer
      * @param  array                                      $parameters
@@ -33,7 +31,7 @@ class Adapter extends DingoAdapterFractal
         if (array_key_exists('key', $parameters) && is_null($parameters['key'])) {
             $key = null;
         } else {
-            $key = !empty($parameters['key']) ? $parameters['key'] : config('nodes.api.transformer.fractal.serializer.rootKey', 'data');
+            $key = ! empty($parameters['key']) ? $parameters['key'] : config('nodes.api.transformer.fractal.serializer.rootKey', 'data');
         }
 
         if ($response instanceof IlluminatePaginator || $response instanceof IlluminateCollection) {

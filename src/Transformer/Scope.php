@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Transformer;
 
 use InvalidArgumentException;
@@ -12,40 +13,36 @@ use Nodes\Api\Transformer\Resources\Content as NodesResourceContent;
 use Nodes\Api\Transformer\TransformerAbstract as NodesTransformerAbstract;
 
 /**
- * Class Scope
- *
- * @package Nodes\Api\Transformers
+ * Class Scope.
  */
 class Scope extends FractalScope
 {
     /**
-     * Determine if a transformer has any available includes
+     * Determine if a transformer has any available includes.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @param  \Nodes\Api\Transformer\TransformerAbstract|\League\Fractal\TransformerAbstract|callable $transformer
-     * @return boolean
+     * @return bool
      */
     protected function transformerHasIncludes($transformer)
     {
-        if (!$transformer instanceof NodesTransformerAbstract &&
-            !$transformer instanceof FractalTransformerAbstract) {
+        if (! $transformer instanceof NodesTransformerAbstract &&
+            ! $transformer instanceof FractalTransformerAbstract) {
             return false;
         }
 
         $defaultIncludes = $transformer->getDefaultIncludes();
         $availableIncludes = $transformer->getAvailableIncludes();
 
-        return !empty($defaultIncludes) || !empty($availableIncludes);
+        return ! empty($defaultIncludes) || ! empty($availableIncludes);
     }
 
     /**
-     * Serialize a resource
+     * Serialize a resource.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \League\Fractal\Serializer\SerializerAbstract $serializer
      * @param  mixed                                         $data
      * @return array
@@ -59,18 +56,17 @@ class Scope extends FractalScope
         } elseif ($this->resource instanceof FractalItem) {
             return $serializer->item($resourceKey, $data);
         } elseif ($this->resource instanceof NodesResourceContent) {
-            return (!empty($resourceKey)) ? [$resourceKey => $data] : $data;
+            return (! empty($resourceKey)) ? [$resourceKey => $data] : $data;
         }
 
         return $serializer->null();
     }
 
     /**
-     * Execute the resources transformer and return the data and included data
+     * Execute the resources transformer and return the data and included data.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return array
      * @throws \InvalidArgumentException
      */

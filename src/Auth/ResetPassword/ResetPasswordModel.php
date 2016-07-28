@@ -1,56 +1,54 @@
 <?php
+
 namespace Nodes\Api\Auth\ResetPassword;
 
 use Carbon\Carbon;
 use Nodes\Database\Eloquent\Model as NodesModel;
 
 /**
- * Class Model
- *
- * @package Nodes\Api\Auth\ResetPassword
+ * Class Model.
  */
 class ResetPasswordModel extends NodesModel
 {
     /**
-     * The table associated with the model
+     * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'user_reset_password_tokens';
 
     /**
-     * Indicates if the model should be timestamped
+     * Indicates if the model should be timestamped.
      *
      * @var bool
      */
     public $timestamps = false;
 
     /**
-     * The attributes that are mass assignable
+     * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
         'token',
         'used',
-        'expire_at'
+        'expire_at',
     ];
 
     /**
-     * The attributes that should be mutated to dates
+     * The attributes that should be mutated to dates.
      *
      * @var array
      */
     protected $dates = [
-        'expire_at'
+        'expire_at',
     ];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  array $attributes
      */
     public function __construct(array $attributes = [])
@@ -62,12 +60,11 @@ class ResetPasswordModel extends NodesModel
     }
 
     /**
-     * Check if token is expired
+     * Check if token is expired.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
-     * @return boolean
+     * @return bool
      */
     public function isExpired()
     {
@@ -75,12 +72,11 @@ class ResetPasswordModel extends NodesModel
     }
 
     /**
-     * Check if token has already been used
+     * Check if token has already been used.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
-     * @return boolean
+     * @return bool
      */
     public function isUsed()
     {
@@ -88,12 +84,11 @@ class ResetPasswordModel extends NodesModel
     }
 
     /**
-     * Mark token as used
+     * Mark token as used.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
-     * @return boolean
+     * @return bool
      */
     public function markAsUsed()
     {

@@ -1,21 +1,19 @@
 <?php
+
 namespace Nodes\Api\Transformer;
 
 use League\Fractal\Serializer\DataArraySerializer as FractalSerializerDataArray;
 
 /**
- * Class Fractal
- *
- * @package Nodes\Api\Transformer
+ * Class Fractal.
  */
 class Serializer extends FractalSerializerDataArray
 {
     /**
-     * Serialize a collection
+     * Serialize a collection.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string $resourceKey
      * @param  array  $data
      * @return array
@@ -26,11 +24,10 @@ class Serializer extends FractalSerializerDataArray
     }
 
     /**
-     * Serialize an item
+     * Serialize an item.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string $resourceKey
      * @param  array  $data
      * @return array

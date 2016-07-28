@@ -1,17 +1,16 @@
 <?php
+
 namespace Nodes\Api\Auth\Exceptions;
 
 use Nodes\Exceptions\Exception as NodesException;
 
 /**
- * Class UnauthorizedException
- *
- * @package Nodes\Api\Auth\Exceptions
+ * Class UnauthorizedException.
  */
 class UnVerifiedException extends NodesException
 {
     /**
-     * UnVerifiedException constructor
+     * UnVerifiedException constructor.
      */
     public function __construct()
     {

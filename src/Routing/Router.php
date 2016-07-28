@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Routing;
 
 use Dingo\Api\Http\Request as DingoRequest;
@@ -8,18 +9,15 @@ use Nodes\Api\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
 /**
- * Class Router
- *
- * @package Nodes\Api\Routing
+ * Class Router.
  */
 class Router extends DingoRouter
 {
     /**
-     * Register a resource controller
+     * Register a resource controller.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string $name
      * @param  string $controller
      * @param  array  $options
@@ -37,11 +35,10 @@ class Router extends DingoRouter
     }
 
     /**
-     * Prepare a response by transforming and formatting it correctly
+     * Prepare a response by transforming and formatting it correctly.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  mixed                   $response
      * @param  \Dingo\Api\Http\Request $request
      * @param  string                  $format

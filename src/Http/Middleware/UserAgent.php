@@ -1,22 +1,20 @@
 <?php
+
 namespace Nodes\Api\Http\Middleware;
 
 use Closure;
 use Nodes\Api\Exceptions\InvalidUserAgent;
 
 /**
- * Class UserAgent
- *
- * @package Nodes\Api\Http\Middleware
+ * Class UserAgent.
  */
 class UserAgent
 {
     /**
-     * Handle an incoming request
+     * Handle an incoming request.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param \Illuminate\Http\Request $request
      * @param \Closure                 $next
      * @return mixed

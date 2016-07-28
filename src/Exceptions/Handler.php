@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Exceptions;
 
 use App;
@@ -11,31 +12,28 @@ use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
- * Class Handler
+ * Class Handler.
  *
  * @see Dingo\Api\Exception\Handler
- * @package Nodes\Api\Exception
  */
 class Handler extends DingoExceptionHandler
 {
-
     /**
-     * Array of exceptions not to report
+     * Array of exceptions not to report.
      *
      * @var array
      */
     protected $dontReport = [
         'Nodes\Api\Auth\Exception\InvalidTokenException',
         'Nodes\Api\Auth\Exception\MissingTokenException',
-        'Nodes\Api\Auth\Exception\TokenExpiredException'
+        'Nodes\Api\Auth\Exception\TokenExpiredException',
     ];
 
     /**
-     * Report and log an exception
+     * Report and log an exception.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  Exception $e
      * @throws Exception
      */
@@ -55,12 +53,11 @@ class Handler extends DingoExceptionHandler
     }
 
     /**
-     * Handle an exception if it has an existing handler
+     * Handle an exception if it has an existing handler.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      * @author Casper Rasmussen <cr@nodes.dk>
      *
-     * @access public
      * @param \Exception $exception
      * @return \Illuminate\Http\Response
      * @throws \Exception
@@ -92,11 +89,10 @@ class Handler extends DingoExceptionHandler
     }
 
     /**
-     * Handle a generic error response if there is no handler available
+     * Handle a generic error response if there is no handler available.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param \Exception $exception
      * @throws \Exception
      * @return \Illuminate\Http\Response
@@ -123,7 +119,6 @@ class Handler extends DingoExceptionHandler
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @param \Exception $exception
      * @return array
      */
@@ -136,7 +131,7 @@ class Handler extends DingoExceptionHandler
         //
         // If the exception does not have a message,
         // we'll fallback to a message of the status code and status message.
-        if (!$message = $exception->getMessage()) {
+        if (! $message = $exception->getMessage()) {
             $message = sprintf('%d: %s', $statusCode, Response::$statusTexts[$statusCode]);
         }
 
@@ -168,21 +163,20 @@ class Handler extends DingoExceptionHandler
     }
 
     /**
-     * Get the exception status code
+     * Get the exception status code.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \Exception $exception
-     * @param  integer    $defaultStatusCode
-     * @return integer
+     * @param  int    $defaultStatusCode
+     * @return int
      */
     protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = 500)
     {
         if ($exception instanceof NodesException) {
             return [
                 $exception->getStatusCode(),
-                $exception->getStatusMessage()
+                $exception->getStatusMessage(),
             ];
         } elseif ($exception instanceof HttpExceptionInterface) {
             return $exception->getStatusCode();

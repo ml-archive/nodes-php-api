@@ -1,7 +1,8 @@
 <?php
-if (!function_exists('api_transform')) {
+
+if (! function_exists('api_transform')) {
     /**
-     * Transform content with an API transformer
+     * Transform content with an API transformer.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *

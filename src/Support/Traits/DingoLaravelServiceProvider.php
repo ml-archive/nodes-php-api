@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Support\Traits;
 
 use ReflectionClass;
@@ -10,22 +11,19 @@ use Nodes\Api\Http\Middleware\PrepareController as NodesHttpMiddlewarePrepareCon
 use Nodes\Api\Http\Middleware\Ratelimit as NodesHttpMiddlewareRateLimit;
 use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
 use Nodes\Api\Http\Middleware\UserAgent as NodesHttpMiddlewareUserAgent;
-use Nodes\Api\Http\Response as NodesHttpResponse;
 
 /**
- * Class DingoLaravelServiceProvider
+ * Class DingoLaravelServiceProvider.
  *
  * @trait
- * @package Nodes\Api\Support\Traits
  */
 trait DingoLaravelServiceProvider
 {
     /**
-     * Register Dingo's Laravel service provider
+     * Register Dingo's Laravel service provider.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerLaravelServiceProvider()
@@ -68,6 +66,7 @@ trait DingoLaravelServiceProvider
     {
         $property = (new ReflectionClass($this->app['router']))->getProperty('binders');
         $property->setAccessible(true);
+
         return $property->getValue($this->app['router']);
     }
 
@@ -95,15 +94,15 @@ trait DingoLaravelServiceProvider
         $router->middleware('api.controllers', NodesHttpMiddlewarePrepareController::class);
         $router->middleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
         $router->middleware('api.useragent', NodesHttpMiddlewareUserAgent::class);
+
         return $router;
     }
 
     /**
-     * Add the request middleware to the beginning of the kernel
+     * Add the request middleware to the beginning of the kernel.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @param  \Illuminate\Contracts\Http\Kernel $kernel
      * @return void
      */
@@ -114,11 +113,10 @@ trait DingoLaravelServiceProvider
 
     /**
      * Gather the application middleware besides this one so that we can send
-     * our request through them, exactly how the developer wanted
+     * our request through them, exactly how the developer wanted.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @param  \Illuminate\Contracts\Http\Kernel $kernel
      * @return array
      */
@@ -126,6 +124,7 @@ trait DingoLaravelServiceProvider
     {
         $property = (new ReflectionClass($kernel))->getProperty('middleware');
         $property->setAccessible(true);
+
         return $property->getValue($kernel);
     }
 }
