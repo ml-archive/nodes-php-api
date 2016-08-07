@@ -94,16 +94,16 @@ trait DingoServiceProvider
     {
         $aliases = [
             DingoHttpRequest::class => DingoContractHttpRequest::class,
-            'api.dispatcher'        => DingoDispatcher::class,
-            'api.http.validator'    => DingoHttpRequestValidator::class,
-            'api.http.response'     => DingoHttpResponseFactory::class,
-            'api.router'            => DingoRoutingRouter::class,
-            'api.router.adapter'    => DingoContractRoutingAdapter::class,
-            'api.auth'              => DingoAuth::class,
-            'api.limiting'          => DingoRateLimitHandler::class,
-            'api.transformer'       => DingoTransformerFactory::class,
-            'api.url'               => DingoRoutingUrlGenerator::class,
-            'api.exception'         => [
+            'api.dispatcher' => DingoDispatcher::class,
+            'api.http.validator' => DingoHttpRequestValidator::class,
+            'api.http.response' => DingoHttpResponseFactory::class,
+            'api.router' => DingoRoutingRouter::class,
+            'api.router.adapter' => DingoContractRoutingAdapter::class,
+            'api.auth' => DingoAuth::class,
+            'api.limiting' => DingoRateLimitHandler::class,
+            'api.transformer' => DingoTransformerFactory::class,
+            'api.url' => DingoRoutingUrlGenerator::class,
+            'api.exception' => [
                 DingoExceptionHandler::class,
                 DingoContractDebugExceptionHandler::class,
             ],
