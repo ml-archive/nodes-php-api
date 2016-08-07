@@ -1,13 +1,13 @@
 <?php
+
 namespace Nodes\Api\Routing;
 
 use Dingo\Api\Routing\Helpers as DingoRoutingHelpers;
 
 /**
- * Class Helpers
+ * Class Helpers.
  *
  * @trait
- * @package  Nodes\Api\Routing
  *
  * @property \Illuminate\Database\Eloquent\Model $user
  * @property \Nodes\Api\Auth\Auth                $auth
@@ -19,11 +19,10 @@ trait Helpers
     use DingoRoutingHelpers;
 
     /**
-     * Get the authenticated user
+     * Get the authenticated user.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return \Illuminate\Database\Eloquent\Model
      */
     protected function user()
@@ -32,11 +31,10 @@ trait Helpers
     }
 
     /**
-     * Get the auth instance
+     * Get the auth instance.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return \Nodes\Api\Auth\Auth
      */
     protected function auth()
@@ -45,11 +43,10 @@ trait Helpers
     }
 
     /**
-     * Get the response factory instance
+     * Get the response factory instance.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return \Nodes\Api\Http\Response\Factory
      */
     protected function response()

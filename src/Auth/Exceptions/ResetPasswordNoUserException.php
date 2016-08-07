@@ -1,25 +1,23 @@
 <?php
+
 namespace Nodes\Api\Auth\Exceptions;
 
 use Nodes\Exceptions\Exception;
 
 /**
- * Class ResetPasswordNoUserException
- *
- * @package Nodes\Auth\Exception
+ * Class ResetPasswordNoUserException.
  */
 class ResetPasswordNoUserException extends Exception
 {
     /**
-     * ResetPasswordNoUserException constructor
+     * ResetPasswordNoUserException constructor.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string   $message
-     * @param  integer  $code
+     * @param  int  $code
      * @param  array    $headers
-     * @param  boolean  $report
+     * @param  bool  $report
      * @param  string   $severity
      */
     public function __construct($message = 'No user found', $code = 445, array $headers = [], $report = false, $severity = 'error')

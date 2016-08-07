@@ -1,7 +1,8 @@
 <?php
-if (!function_exists('api_auth')) {
+
+if (! function_exists('api_auth')) {
     /**
-     * Retrieve authenticator instance
+     * Retrieve authenticator instance.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -13,9 +14,9 @@ if (!function_exists('api_auth')) {
     }
 }
 
-if (!function_exists('api_user')) {
+if (! function_exists('api_user')) {
     /**
-     * Retrieve current authenticated user
+     * Retrieve current authenticated user.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *

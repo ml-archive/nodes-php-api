@@ -32,7 +32,7 @@ return [
     */
     'providers' => [
         'userToken' => Nodes\Api\Auth\Providers\UserToken::class,
-        'masterToken' => Nodes\Api\Auth\Providers\MasterToken::class
+        'masterToken' => Nodes\Api\Auth\Providers\MasterToken::class,
     ],
 
     /*
@@ -68,7 +68,7 @@ return [
         'columns' => [
             'user_id' => 'user_id',
             'token' => 'token',
-            'expire' => 'expire'
+            'expire' => 'expire',
         ],
 
         /*
@@ -82,7 +82,7 @@ return [
         | @see http://php.net/manual/en/datetime.formats.relative.php
         |
         */
-        'lifetime' => null
+        'lifetime' => null,
     ],
 
     /*
@@ -114,7 +114,7 @@ return [
         | The unique identifier which is used to generate the master token.
         |
         */
-        'salt' => 'nodes+' . env('APP_ENV', 'nodes'),
+        'salt' => 'nodes+'.env('APP_ENV', 'nodes'),
 
         /*
         |--------------------------------------------------------------------------
@@ -131,8 +131,8 @@ return [
         'user' => [
             'column' => 'master',
             'operator' => '=',
-            'value' => 1
-        ]
-    ]
+            'value' => 1,
+        ],
+    ],
 
 ];

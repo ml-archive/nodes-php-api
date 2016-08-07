@@ -1,32 +1,31 @@
 <?php
+
 namespace Nodes\Api\Auth\EmailVerification;
 
 use Carbon\Carbon;
 use Nodes\Database\Eloquent\Model as NodesModel;
 
 /**
- * Class EmailVerificationModel
- *
- * @package Nodes\Api\Auth\EmailVerification
+ * Class EmailVerificationModel.
  */
 class EmailVerificationModel extends NodesModel
 {
     /**
-     * The table associated with the model
+     * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'user_verifications';
 
     /**
-     * Indicates if the model should be timestamped
+     * Indicates if the model should be timestamped.
      *
      * @var bool
      */
     public $timestamps = false;
 
     /**
-     * The attributes that aren't mass assignable
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
@@ -34,22 +33,21 @@ class EmailVerificationModel extends NodesModel
         'email',
         'token',
         'used',
-        'expire_at'
+        'expire_at',
     ];
 
     /**
-     * The attributes that should be mutated to dates
+     * The attributes that should be mutated to dates.
      *
      * @var array
      */
     protected $dates = [
-        'expire_at'
+        'expire_at',
     ];
 
     /**
-     * EmailAuthorizationModel constructor
+     * EmailAuthorizationModel constructor.
      *
-     * @access public
      * @param  array $attributes
      */
     public function __construct(array $attributes = [])
@@ -61,12 +59,11 @@ class EmailVerificationModel extends NodesModel
     }
 
     /**
-     * Check if token has expired
+     * Check if token has expired.
      *
      * @author Paulius Navickas <pana@nodes.dk>
      *
-     * @access public
-     * @return boolean
+     * @return bool
      */
     public function isExpired()
     {
@@ -74,12 +71,11 @@ class EmailVerificationModel extends NodesModel
     }
 
     /**
-     * Check if token has already been used
+     * Check if token has already been used.
      *
      * @author Paulius Navickas <pana@nodes.dk>
      *
-     * @access public
-     * @return boolean
+     * @return bool
      */
     public function isUsed()
     {
@@ -87,12 +83,11 @@ class EmailVerificationModel extends NodesModel
     }
 
     /**
-     * Mark token has used
+     * Mark token has used.
      *
      * @author Paulius Navickas <pana@nodes.dk>
      *
-     * @access public
-     * @return boolean
+     * @return bool
      */
     public function markAsUsed()
     {
