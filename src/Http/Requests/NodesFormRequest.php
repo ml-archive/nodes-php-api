@@ -70,9 +70,12 @@ class NodesFormRequest extends FormRequest
     /**
      * Get the proper failed validation response for the request.
      *
-     * @param  array $errors
+     * @author Pedro Coutinho <peco@nodesagency.com>
+     * @access public
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param array $errors
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function response(array $errors)
     {
