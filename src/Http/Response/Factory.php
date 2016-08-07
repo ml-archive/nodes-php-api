@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Http\Response;
 
 use Closure;
@@ -11,17 +12,14 @@ use Nodes\Api\Http\Response;
 use Nodes\Exceptions\Exception;
 
 /**
- * Class Factory
- *
- * @package Nodes\Api\Http\Response
+ * Class Factory.
  */
 class Factory extends DingoHttpResponseFactory
 {
     /**
-     * Respond with a created response and associate a location if provided
+     * Respond with a created response and associate a location if provided.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access public
      * @param  string|null $location
      * @param null         $content
      * @return \Nodes\Api\Http\Response
@@ -39,11 +37,10 @@ class Factory extends DingoHttpResponseFactory
     }
 
     /**
-     * Respond with an accepted response and associate a location and/or content if provided
+     * Respond with an accepted response and associate a location and/or content if provided.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string|null $location
      * @param  mixed       $content
      * @return \Nodes\Api\Http\Response
@@ -53,7 +50,7 @@ class Factory extends DingoHttpResponseFactory
         $response = new Response($content);
         $response->setStatusCode(202);
 
-        if (!is_null($location)) {
+        if (! is_null($location)) {
             $response->header('Location', $location);
         }
 
@@ -61,11 +58,10 @@ class Factory extends DingoHttpResponseFactory
     }
 
     /**
-     * Respond with a no content response
+     * Respond with a no content response.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return \Nodes\Api\Http\Response
      */
     public function noContent()
@@ -76,11 +72,10 @@ class Factory extends DingoHttpResponseFactory
     }
 
     /**
-     * Bind a collection to a transformer and start building a response
+     * Bind a collection to a transformer and start building a response.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \Illuminate\Support\Collection $collection
      * @param  object                         $transformer
      * @param  array                          $parameters
@@ -101,11 +96,10 @@ class Factory extends DingoHttpResponseFactory
     }
 
     /**
-     * Bind an item to a transformer and start building a response
+     * Bind an item to a transformer and start building a response.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  object   $item
      * @param  object   $transformer
      * @param  array    $parameters
@@ -122,11 +116,10 @@ class Factory extends DingoHttpResponseFactory
     }
 
     /**
-     * Bind a paginator to a transformer and start building a response
+     * Bind a paginator to a transformer and start building a response.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \Illuminate\Contracts\Pagination\Paginator $paginator
      * @param  object                                     $transformer
      * @param  array                                      $parameters
@@ -147,11 +140,10 @@ class Factory extends DingoHttpResponseFactory
     }
 
     /**
-     * Returns a response with an array of data
+     * Returns a response with an array of data.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  $data
      * @return \Nodes\Api\Http\Response
      */
@@ -161,12 +153,11 @@ class Factory extends DingoHttpResponseFactory
     }
 
     /**
-     * Return an error response
+     * Return an error response.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access public
      * @param  string  $message
-     * @param  integer $statusCode
+     * @param  int $statusCode
      * @param  string  $statusMessage
      * @throws \Nodes\Exceptions\Exception
      */
@@ -176,11 +167,10 @@ class Factory extends DingoHttpResponseFactory
     }
 
     /**
-     * Call magic methods beginning with "with"
+     * Call magic methods beginning with "with".
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string $method
      * @param  array  $parameters
      * @return mixed

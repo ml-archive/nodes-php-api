@@ -40,6 +40,7 @@ trait TestHelperTrait
         $this->authMock = $this->getMockBuilder(Auth::class)->disableOriginalConstructor()->getMock();
         $this->authMock->method('user')->willReturn($user);
         App::instance('api.auth', $this->authMock);
+
         return $this;
     }
 
@@ -59,7 +60,7 @@ trait TestHelperTrait
     public function callApi($method, $uri, array $data = [], array $headers = [])
     {
         return $this->json($method, $uri, $data,
-            array_merge(['Accept' => 'application/vnd.nodes.v' . $this->getApiVersion() . '+json'], $headers));
+            array_merge(['Accept' => 'application/vnd.nodes.v'.$this->getApiVersion().'+json'], $headers));
     }
 
     /**

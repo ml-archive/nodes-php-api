@@ -1,10 +1,9 @@
 <?php
+
 namespace Nodes\Api\Events;
 
 /**
- * Class ResponseWasMorphed
- *
- * @package Nodes\Api\Event
+ * Class ResponseWasMorphed.
  */
 class ResponseWasMorphed extends ResponseIsMorphing
 {

@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Nodes\Validation\Exceptions\ValidationException;
 
 /**
- * Class NodesApiRequest
+ * Class NodesApiRequest.
  */
 class NodesFormRequest extends FormRequest
 {
@@ -19,7 +19,7 @@ class NodesFormRequest extends FormRequest
     protected $errorCodes = [];
 
     /**
-     * Retrieve errorCodes
+     * Retrieve errorCodes.
      *
      * @author Pedro Coutinho <peco@nodesagency.com>
      * @access public
@@ -31,7 +31,7 @@ class NodesFormRequest extends FormRequest
     }
 
     /**
-     * Set errorCodes
+     * Set errorCodes.
      *
      * @author Pedro Coutinho <peco@nodesagency.com>
      * @access public
@@ -48,7 +48,7 @@ class NodesFormRequest extends FormRequest
     }
 
     /**
-     * failedValidation
+     * failedValidation.
      *
      * @author Pedro Coutinho <peco@nodesagency.com>
      * @access protected

@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Support\Traits;
 
 use Dingo\Api\Routing\UrlGenerator as DingoRoutingUrlGenerator;
@@ -6,10 +7,9 @@ use Nodes\Api\Routing\Router as NodesRoutingRouter;
 use Nodes\Api\Routing\ResourceRegistrar as NodesRoutingResourceRegistrar;
 
 /**
- * Class DingoRoutingServiceProvider
+ * Class DingoRoutingServiceProvider.
  *
  * @trait
- * @package Nodes\Api\Support\Traits
  */
 trait DingoRoutingServiceProvider
 {
@@ -25,11 +25,10 @@ trait DingoRoutingServiceProvider
     }
 
     /**
-     * Register the router
+     * Register the router.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerRouter()
@@ -44,6 +43,7 @@ trait DingoRoutingServiceProvider
             );
 
             $router->setConditionalRequest(config('nodes.api.settings.conditionalRequest'));
+
             return $router;
         });
 
@@ -53,11 +53,10 @@ trait DingoRoutingServiceProvider
     }
 
     /**
-     * Register the URL generator
+     * Register the URL generator.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerUrlGenerator()
@@ -65,6 +64,7 @@ trait DingoRoutingServiceProvider
         $this->app->singleton('api.url', function ($app) {
             $url = new DingoRoutingUrlGenerator($app['request']);
             $url->setRouteCollections($app['api.router']->getRoutes());
+
             return $url;
         });
     }

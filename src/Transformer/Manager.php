@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Transformer;
 
 use League\Fractal\Resource\ResourceInterface;
@@ -6,19 +7,16 @@ use League\Fractal\Scope as FractalScope;
 use League\Fractal\Manager as FractalManager;
 
 /**
- * Class Manager
- *
- * @package Nodes\Api\Transformer
+ * Class Manager.
  */
 class Manager extends FractalManager
 {
     /**
      * Main method to kick this all off.
-     * Make a resource then pass it over, and use toArray()
+     * Make a resource then pass it over, and use toArray().
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \League\Fractal\Resource\ResourceInterface $resource
      * @param  string                                     $scopeIdentifier
      * @param  \League\Fractal\Scope                      $parentScopeInstance
