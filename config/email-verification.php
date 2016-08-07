@@ -30,7 +30,7 @@ return [
     */
     'from' => [
         'name' => 'Nodes',
-        'email' => 'no-reply@nodes.dk'
+        'email' => 'no-reply@nodes.dk',
     ],
 
     /*
@@ -52,7 +52,7 @@ return [
     */
     'views' => [
         'html' => 'nodes.api::email-verification.emails.html',
-        'text' => 'nodes.api::email-verification.emails.text'
+        'text' => 'nodes.api::email-verification.emails.text',
     ],
 
     /*
@@ -64,6 +64,6 @@ return [
     | Default: 60 minutes
     |
     */
-    'expire' => 2
+    'expire' => 2,
 
 ];

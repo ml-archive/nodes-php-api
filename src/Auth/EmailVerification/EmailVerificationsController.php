@@ -1,20 +1,19 @@
 <?php
+
 namespace Nodes\Api\Auth\EmailVerification;
 
 use Illuminate\Routing\Controller as IlluminateController;
 use Nodes\Api\Routing\Helpers as ApiHelpers;
 
 /**
- * Class EmailVerificationsController
- *
- * @package Nodes\Api\Auth\EmailVerification
+ * Class EmailVerificationsController.
  */
 class EmailVerificationsController extends IlluminateController
 {
     use ApiHelpers;
 
     /**
-     * Reset password model
+     * Reset password model.
      *
      * @var \Nodes\Api\Auth\EmailVerification\EmailVerificationRepository
      */
@@ -32,16 +31,15 @@ class EmailVerificationsController extends IlluminateController
         // Share variables with all views
         view()->share([
             'title' => 'Email verification',
-            'senderName' => (config('nodes.api.email-verification.from.name') != 'Nodes') ? config('nodes.api.email-verification.from.name') : config('nodes.project.name')
+            'senderName' => (config('nodes.api.email-verification.from.name') != 'Nodes') ? config('nodes.api.email-verification.from.name') : config('nodes.project.name'),
         ]);
     }
 
     /**
-     * Verify account by e-mail and token
+     * Verify account by e-mail and token.
      *
      * @author Paulius Navickas <pana@nodes.dk>
      *
-     * @access public
      * @param  string $token
      * @return \Illuminate\View\View
      */

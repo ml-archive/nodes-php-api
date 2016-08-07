@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Transformer;
 
 use League\Fractal\Resource\Collection as FractalCollection;
@@ -8,21 +9,19 @@ use League\Fractal\Resource\ResourceAbstract as FractalResourceAbstract;
 use Nodes\Api\Transformer\Resources\Content as NodesResourceContent;
 
 /**
- * Class TransformerAbstract
- *
- * @package Nodes\Api\Transformer
+ * Class TransformerAbstract.
  */
 abstract class TransformerAbstract
 {
     /**
-     * Resources that can be included if requested
+     * Resources that can be included if requested.
      *
      * @var array
      */
     protected $availableIncludes = [];
 
     /**
-     * Include resources without needing it to be requested
+     * Include resources without needing it to be requested.
      *
      * @var array
      */
@@ -30,18 +29,17 @@ abstract class TransformerAbstract
 
     /**
      * The transformer should know about the current scope,
-     * so we can fetch relevant params
+     * so we can fetch relevant params.
      *
      * @var \Nodes\Api\Transformer\Scope
      */
     protected $currentScope;
 
     /**
-     * Getter for availableIncludes
+     * Getter for availableIncludes.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return array
      */
     public function getAvailableIncludes()
@@ -50,11 +48,10 @@ abstract class TransformerAbstract
     }
 
     /**
-     * Getter for defaultIncludes
+     * Getter for defaultIncludes.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return array
      */
     public function getDefaultIncludes()
@@ -63,11 +60,10 @@ abstract class TransformerAbstract
     }
 
     /**
-     * Getter for currentScope
+     * Getter for currentScope.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return \Nodes\Api\Transformer\Scope
      */
     public function getCurrentScope()
@@ -76,11 +72,10 @@ abstract class TransformerAbstract
     }
 
     /**
-     * Figure out which includes we need
+     * Figure out which includes we need.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access private
      * @param  \Nodes\Api\Transformer\Scope $scope
      * @return array
      */
@@ -98,11 +93,10 @@ abstract class TransformerAbstract
 
     /**
      * This method is fired to loop through available includes, see if any of
-     * them are requested and permitted for this scope
+     * them are requested and permitted for this scope.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \Nodes\Api\Transformer\Scope $scope
      * @param  mixed                        $data
      * @return array
@@ -126,32 +120,31 @@ abstract class TransformerAbstract
     }
 
     /**
-     * Include a resource only if it is available on the method
+     * Include a resource only if it is available on the method.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access private
      * @param  \Nodes\Api\Transformer\Scope $scope
      * @param  mixed                        $data
      * @param  array                        $includedData
      * @param  string                       $include
      * @return array
      */
-    private function includeResourceIfAvailable(Scope $scope, $data, $includedData, $include) {
+    private function includeResourceIfAvailable(Scope $scope, $data, $includedData, $include)
+    {
         if ($resource = $this->callIncludeMethod($scope, $include, $data)) {
             $childScope = $scope->embedChildScope($include, $resource);
-            $includedData[$include] = (!$childScope->getResource() instanceof FractalNullResource) ? $childScope->toArray() : null;
+            $includedData[$include] = (! $childScope->getResource() instanceof FractalNullResource) ? $childScope->toArray() : null;
         }
 
         return $includedData;
     }
 
     /**
-     * Call Include Method
+     * Call Include Method.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @param  Scope  $scope
      * @param  string $includeName
      * @param  mixed  $data
@@ -172,7 +165,7 @@ abstract class TransformerAbstract
             return false;
         }
 
-        if (!$resource instanceof FractalResourceAbstract) {
+        if (! $resource instanceof FractalResourceAbstract) {
             throw new \Exception(sprintf(
                 'Invalid return value from %s::%s(). Expected %s, received %s.',
                 __CLASS__,
@@ -186,56 +179,55 @@ abstract class TransformerAbstract
     }
 
     /**
-     * Setter for availableIncludes
+     * Setter for availableIncludes.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  array $availableIncludes
      * @return $this
      */
     public function setAvailableIncludes($availableIncludes)
     {
         $this->availableIncludes = $availableIncludes;
+
         return $this;
     }
 
     /**
-     * Setter for defaultIncludes
+     * Setter for defaultIncludes.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  array $defaultIncludes
      * @return $this
      */
     public function setDefaultIncludes($defaultIncludes)
     {
         $this->defaultIncludes = $defaultIncludes;
+
         return $this;
     }
 
     /**
-     * Setter for currentScope
+     * Setter for currentScope.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \Nodes\Api\Transformer\Scope $currentScope
      * @return $this
      */
     public function setCurrentScope($currentScope)
     {
         $this->currentScope = $currentScope;
+
         return $this;
     }
 
     /**
-     * Create a new item resource object
+     * Create a new item resource object.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @param  mixed                                              $data
      * @param  \Nodes\Api\Transformer\TransformerAbstract|callable $transformer
      * @param  string                                             $resourceKey
@@ -251,11 +243,10 @@ abstract class TransformerAbstract
     }
 
     /**
-     * Create a new collection resource object
+     * Create a new collection resource object.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @param  mixed                                              $data
      * @param  \Nodes\Api\Transformer\TransformerAbstract|callable $transformer
      * @param  string                                             $resourceKey
@@ -271,11 +262,10 @@ abstract class TransformerAbstract
     }
 
     /**
-     * Create a new content (array) resource object
+     * Create a new content (array) resource object.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  array $data
      * @param  string $resourceKey
      * @return \Nodes\Api\Transformer\Resources\Content|\League\Fractal\Resource\NullResource

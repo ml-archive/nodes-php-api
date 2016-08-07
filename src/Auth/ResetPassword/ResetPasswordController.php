@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Auth\ResetPassword;
 
 use Illuminate\Routing\Controller as IlluminateController;
@@ -8,27 +9,24 @@ use Nodes\Api\Routing\Helpers as ApiHelpers;
 use Nodes\Exceptions\Exception;
 
 /**
- * Class ResetPasswordController
- *
- * @package Nodes\Api\Auth\ResetPassword
+ * Class ResetPasswordController.
  */
 class ResetPasswordController extends IlluminateController
 {
     use ApiHelpers;
 
     /**
-     * Reset password model
+     * Reset password model.
      *
      * @var \Nodes\Api\Auth\ResetPassword\ResetPasswordRepository
      */
     protected $resetPasswordRepository;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \Nodes\Api\Auth\ResetPassword\ResetPasswordRepository $resetPasswordRepository
      */
     public function __construct(ResetPasswordRepository $resetPasswordRepository)
@@ -38,23 +36,22 @@ class ResetPasswordController extends IlluminateController
         // Share variables with all views
         view()->share([
             'title' => 'Reset password',
-            'senderName' => (config('nodes.api.reset-password.from.name') != 'Nodes') ? config('nodes.api.reset-password.from.name') : config('nodes.project.name')
+            'senderName' => (config('nodes.api.reset-password.from.name') != 'Nodes') ? config('nodes.api.reset-password.from.name') : config('nodes.project.name'),
         ]);
     }
 
     /**
-     * Reset password form
+     * Reset password form.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string $token
      * @return \Illuminate\View\View
      */
     public function index($token)
     {
         // Validate token
-        /** @var $resetToken ResetPasswordModel*/
+        /** @var $resetToken ResetPasswordModel */
         $resetToken = $this->resetPasswordRepository->getByToken($token);
         if (empty($resetToken) || $resetToken->isUsed()) {
             return view('nodes.api::reset-password.invalid');
@@ -69,11 +66,10 @@ class ResetPasswordController extends IlluminateController
     }
 
     /**
-     * Reset password confirmation
+     * Reset password confirmation.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return \Illuminate\View\View
      */
     public function done()
@@ -82,11 +78,10 @@ class ResetPasswordController extends IlluminateController
     }
 
     /**
-     * Reset/Update user's password
+     * Reset/Update user's password.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return \Illuminate\Http\RedirectResponse
      */
     public function resetPassword()
@@ -130,11 +125,10 @@ class ResetPasswordController extends IlluminateController
     }
 
     /**
-     * Generate reset password token and send it on e-mail
+     * Generate reset password token and send it on e-mail.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return \Nodes\Api\Http\Response
      * @throws \Nodes\Api\Auth\Exceptions\MissingUserModelException
      * @throws \Nodes\Exceptions\Exception
@@ -150,7 +144,7 @@ class ResetPasswordController extends IlluminateController
         }
 
         // Validate e-mail
-        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (empty($email) || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw (new Exception('Missing or invalid e-mail address', 412))->setStatusCode(412);
         }
 
@@ -161,7 +155,7 @@ class ResetPasswordController extends IlluminateController
         }
 
         return $this->response->content([
-            'email' => 'sent'
+            'email' => 'sent',
         ]);
     }
 }
