@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Auth\Providers;
 
 use Carbon\Carbon;
@@ -10,52 +11,49 @@ use Nodes\Api\Auth\Exceptions\UnauthorizedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class MasterToken
- *
- * @package Nodes\Api\Auth\Providers
+ * Class MasterToken.
  */
 class MasterToken implements DingoAuthContract
 {
     /**
-     * User model
+     * User model.
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
     protected $userModel;
 
     /**
-     * Wether or not Master Token is enabled
+     * Wether or not Master Token is enabled.
      *
-     * @var boolean
+     * @var bool
      */
     protected $enabled;
 
     /**
-     * Token from "X-Master-Token" header
+     * Token from "X-Master-Token" header.
      *
      * @var string
      */
     protected $token;
 
     /**
-     * Token salt
+     * Token salt.
      *
      * @var string
      */
     protected $tokenSalt;
 
     /**
-     * Token columns used in condition
+     * Token columns used in condition.
      *
      * @var array
      */
     protected $tokenColumns = [];
 
     /**
-     * Auth constructor
+     * Auth constructor.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access public
      */
     public function __construct()
     {
@@ -67,10 +65,9 @@ class MasterToken implements DingoAuthContract
     }
 
     /**
-     * Set token settings
+     * Set token settings.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access protected
      * @return \Nodes\Api\Auth\Providers\MasterToken
      */
     protected function setTokenSettings()
@@ -78,23 +75,22 @@ class MasterToken implements DingoAuthContract
         $this->enabled = (bool) config('nodes.auth.masterToken.enabled', false);
 
         // Salt used to generate the unique master token
-        $this->tokenSalt = config('nodes.api.auth.masterToken.salt', 'nodes+' . env('APP_ENV'));
+        $this->tokenSalt = config('nodes.api.auth.masterToken.salt', 'nodes+'.env('APP_ENV'));
 
         // Fields used to retrieve user associated with master token
         $this->tokenColumns = config('nodes.auth.masterToken.user', [
-            'column'   => 'master',
+            'column' => 'master',
             'operator' => '=',
-            'value'    => 1,
+            'value' => 1,
         ]);
 
         return $this;
     }
 
     /**
-     * Authenticate by token
+     * Authenticate by token.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access public
      * @param  \Illuminate\Http\Request $request
      * @param  \Dingo\Api\Routing\Route $route
      * @return \Illuminate\Database\Eloquent\Model
@@ -118,7 +114,7 @@ class MasterToken implements DingoAuthContract
         $this->token = (string) $request->header('x-master-token');
 
         // Validate master token
-        if (!$this->validateMasterToken()) {
+        if (! $this->validateMasterToken()) {
             throw new InvalidTokenException('Invalid master token provided');
         }
 
@@ -131,10 +127,9 @@ class MasterToken implements DingoAuthContract
     }
 
     /**
-     * Retrieve user by token
+     * Retrieve user by token.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access protected
      * @return \Illuminate\Database\Eloquent\Model
      */
     protected function getUserByToken()
@@ -158,7 +153,7 @@ class MasterToken implements DingoAuthContract
     }
 
     /**
-     * getCacheParams
+     * getCacheParams.
      *
      * @author Casper Rasmussen <cr@nodes.dk>
      * @return array
@@ -171,11 +166,10 @@ class MasterToken implements DingoAuthContract
     }
 
     /**
-     * Validate master token
+     * Validate master token.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access protected
-     * @return boolean
+     * @return bool
      */
     protected function validateMasterToken()
     {
@@ -183,28 +177,26 @@ class MasterToken implements DingoAuthContract
     }
 
     /**
-     * Generate master token
+     * Generate master token.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      * @date   03-11-2015
-     * @access protected
      * @return array
      */
     protected function generateMasterToken()
     {
         return [
-            hash('sha256', $this->tokenSalt . '+' . config('app.key') . '+' . Carbon::now()->toDateString()),
-            hash('sha256', $this->tokenSalt . '+' . config('app.key') . '+' . Carbon::now()->addDay()->toDateString()),
-            hash('sha256', $this->tokenSalt . '+' . config('app.key') . '+' . Carbon::now()->subDay()->toDateString()),
+            hash('sha256', $this->tokenSalt.'+'.config('app.key').'+'.Carbon::now()->toDateString()),
+            hash('sha256', $this->tokenSalt.'+'.config('app.key').'+'.Carbon::now()->addDay()->toDateString()),
+            hash('sha256', $this->tokenSalt.'+'.config('app.key').'+'.Carbon::now()->subDay()->toDateString()),
         ];
     }
 
     /**
-     * Wether or not master token is enabled
+     * Wether or not master token is enabled.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access protected
-     * @return boolean
+     * @return bool
      */
     protected function isEnabled()
     {
@@ -212,10 +204,9 @@ class MasterToken implements DingoAuthContract
     }
 
     /**
-     * Retrieve user model
+     * Retrieve user model.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access protected
      * @return \Illuminate\Database\Eloquent\Model
      */
     protected function getUserModel()
@@ -224,10 +215,9 @@ class MasterToken implements DingoAuthContract
     }
 
     /**
-     * Retrieve token from "Authorization" header
+     * Retrieve token from "Authorization" header.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access protected
      * @return string
      */
     protected function getToken()
@@ -236,16 +226,15 @@ class MasterToken implements DingoAuthContract
     }
 
     /**
-     * Retrieve token columns
+     * Retrieve token columns.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     * @access protected
      * @param  string $column
      * @return string
      */
     protected function getTokenColumn($column)
     {
-        if (!array_key_exists($column, $this->tokenColumns)) {
+        if (! array_key_exists($column, $this->tokenColumns)) {
             // This should never happen. If it does, then it means
             // that someone is a moron and has removed required
             // settings from the config files. Better safe than sorry.

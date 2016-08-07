@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Http;
 
 use Dingo\Api\Transformer\Binding;
@@ -10,20 +11,17 @@ use Nodes\Api\Events\ResponseWasMorphed;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
- * Class Response
- *
- * @package Nodes\Api\Http
+ * Class Response.
  */
 class Response extends DingoResponse
 {
     /**
-     * Create a new response instance
+     * Create a new response instance.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  mixed                          $content
-     * @param  integer|array                  $status
+     * @param  int|array                  $status
      * @param  array                          $headers
      * @param  \Dingo\Api\Transformer\Binding $binding
      */
@@ -37,7 +35,7 @@ class Response extends DingoResponse
 
         // Set status code and text
         if (is_array($status)) {
-            $this->setStatusCode($status[0], !empty($status[1]) ? $status[1] : null);
+            $this->setStatusCode($status[0], ! empty($status[1]) ? $status[1] : null);
         } else {
             $this->setStatusCode($status);
         }
@@ -46,7 +44,7 @@ class Response extends DingoResponse
         $this->setProtocolVersion('1.0');
 
         // If "Date" header is missing, we'll set one.
-        if (!$this->headers->has('Date')) {
+        if (! $this->headers->has('Date')) {
             $this->setDate(\DateTime::createFromFormat('U', time(), new \DateTimeZone('UTC')));
         }
 
@@ -55,52 +53,50 @@ class Response extends DingoResponse
     }
 
     /**
-     * Make an API response from an existing response object
+     * Make an API response from an existing response object.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \Illuminate\Http\Response $old
      * @return \Nodes\Api\Http\Response
      */
     public static function makeFromExisting(IlluminateResponse $old)
     {
         // Support for custom status code and message
-        $statusCode = ($old instanceof Response) ? $old->getStatusCodeAndMessage() : $old->getStatusCode();
+        $statusCode = ($old instanceof self) ? $old->getStatusCodeAndMessage() : $old->getStatusCode();
 
         // Generate API response from response object
         $new = static::create($old->getOriginalContent(), $statusCode);
         $new->headers = $old->headers;
+
         return $new;
     }
 
     /**
-     * Fire the morphed event
+     * Fire the morphed event.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function fireMorphedEvent()
     {
-        if (!static::$events) {
+        if (! static::$events) {
             return;
         }
         static::$events->fire(new ResponseWasMorphed($this, $this->content));
     }
 
     /**
-     * Fire the morphing event
+     * Fire the morphing event.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function fireMorphingEvent()
     {
-        if (!static::$events) {
+        if (! static::$events) {
             return;
         }
         static::$events->fire(new ResponseIsMorphing($this, $this->content));
@@ -111,7 +107,6 @@ class Response extends DingoResponse
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return bool
      */
     public function isInvalid()
@@ -120,12 +115,11 @@ class Response extends DingoResponse
     }
 
     /**
-     * Sets the response status code (and message if provided)
+     * Sets the response status code (and message if provided).
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
-     * @param  integer $statusCode HTTP status code
+     * @param  int $statusCode HTTP status code
      * @param  string  $text       HTTP status text
      * @return \Nodes\Api\Http\Response
      * @throws \InvalidArgumentException
@@ -133,9 +127,9 @@ class Response extends DingoResponse
     public function setStatusCode($statusCode, $text = null)
     {
         // Fallback status code message if missing
-        if (!empty($text)) {
+        if (! empty($text)) {
             $statusText = $text;
-        } elseif (!empty(self::$statusTexts[$statusCode])) {
+        } elseif (! empty(self::$statusTexts[$statusCode])) {
             $statusText = self::$statusTexts[$statusCode];
         } else {
             $statusText = 'Undefined code';
@@ -154,18 +148,17 @@ class Response extends DingoResponse
     }
 
     /**
-     * Get status code and message
+     * Get status code and message.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return array
      */
     public function getStatusCodeAndMessage()
     {
         return [
             $this->statusCode,
-            $this->statusText
+            $this->statusText,
         ];
     }
 }

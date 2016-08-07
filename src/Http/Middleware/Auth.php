@@ -1,18 +1,15 @@
 <?php
+
 namespace Nodes\Api\Http\Middleware;
 
 use Dingo\Api\Http\Middleware\Auth as DingoHttpMiddlewareAuth;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;;
 use Nodes\Api\Auth\Auth as Authentication;
 use Nodes\Api\Auth\Exceptions\UnVerifiedException;
 use Nodes\Api\Routing\Router;
 use Closure;
 
 /**
- * Class Auth
- *
- * @package Nodes\Api\Http\Middleware
+ * Class Auth.
  */
 class Auth extends DingoHttpMiddlewareAuth
 {
@@ -42,11 +39,10 @@ class Auth extends DingoHttpMiddlewareAuth
             $this->auth->authenticate($route->getAuthenticationProviders());
         }
 
-        if(config('nodes.api.email-verification.active') && !api_user()->verified_at){
+        if (config('nodes.api.email-verification.active') && ! api_user()->verified_at) {
             throw new UnVerifiedException();
         }
 
         return $next($request);
     }
-    
 }

@@ -1,29 +1,26 @@
 <?php
+
 namespace Nodes\Api;
 
 use Dingo\Api\Event\RequestWasMatched as DingoEventRequestWasMatched;
 use Dingo\Api\Http\Request as DingoHttpRequest;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
-use Nodes\Api\Http\Response as NodesHttpResponse;
 use Nodes\Api\Support\Traits\DingoServiceProvider;
 use Nodes\Api\Support\Traits\DingoLaravelServiceProvider;
 
 /**
- * Class ServiceProvider
- *
- * @package Nodes\Api
+ * Class ServiceProvider.
  */
 class ServiceProvider extends IlluminateServiceProvider
 {
     use DingoServiceProvider, DingoLaravelServiceProvider;
 
     /**
-     * Boot the service provider
+     * Boot the service provider.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return void
      */
     public function boot()
@@ -62,18 +59,17 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->loadRoutes();
 
         // Register namespace for API views
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nodes.api');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'nodes.api');
 
         // Register publish groups
         $this->publishGroups();
     }
 
     /**
-     * Register the service provider
+     * Register the service provider.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return void
      */
     public function register()
@@ -86,35 +82,33 @@ class ServiceProvider extends IlluminateServiceProvider
     }
 
     /**
-     * Register publish groups
+     * Register publish groups.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function publishGroups()
     {
         // Config files
         $this->publishes([
-            __DIR__ . '/../config/auth.php'                 => config_path('nodes/api/auth.php'),
-            __DIR__ . '/../config/email-verification.php'   => config_path('nodes/api/email-verification.php'),
-            __DIR__ . '/../config/errors.php'               => config_path('nodes/api/errors.php'),
-            __DIR__ . '/../config/middleware.php'           => config_path('nodes/api/middleware.php'),
-            __DIR__ . '/../config/reset-password.php'       => config_path('nodes/api/reset-password.php'),
-            __DIR__ . '/../config/response.php'             => config_path('nodes/api/response.php'),
-            __DIR__ . '/../config/settings.php'             => config_path('nodes/api/settings.php'),
-            __DIR__ . '/../config/throttling.php'           => config_path('nodes/api/throttling.php'),
-            __DIR__ . '/../config/transformer.php'          => config_path('nodes/api/transformer.php')
+            __DIR__.'/../config/auth.php' => config_path('nodes/api/auth.php'),
+            __DIR__.'/../config/email-verification.php' => config_path('nodes/api/email-verification.php'),
+            __DIR__.'/../config/errors.php' => config_path('nodes/api/errors.php'),
+            __DIR__.'/../config/middleware.php' => config_path('nodes/api/middleware.php'),
+            __DIR__.'/../config/reset-password.php' => config_path('nodes/api/reset-password.php'),
+            __DIR__.'/../config/response.php' => config_path('nodes/api/response.php'),
+            __DIR__.'/../config/settings.php' => config_path('nodes/api/settings.php'),
+            __DIR__.'/../config/throttling.php' => config_path('nodes/api/throttling.php'),
+            __DIR__.'/../config/transformer.php' => config_path('nodes/api/transformer.php'),
         ], 'config');
     }
 
     /**
-     * Load project API routes
+     * Load project API routes.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access private
      * @return void
      */
     private function loadRoutes()
@@ -123,7 +117,7 @@ class ServiceProvider extends IlluminateServiceProvider
         $routesDirectory = base_path('project/Routes/Api/');
 
         // Make sure our directory exists
-        if (!file_exists($routesDirectory)) {
+        if (! file_exists($routesDirectory)) {
             return;
         }
 
