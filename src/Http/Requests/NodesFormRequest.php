@@ -22,7 +22,6 @@ class NodesFormRequest extends FormRequest
      * Retrieve errorCodes.
      *
      * @author Pedro Coutinho <peco@nodesagency.com>
-     * @access public
      * @return array
      */
     public function getErrorCodes()
@@ -34,7 +33,6 @@ class NodesFormRequest extends FormRequest
      * Set errorCodes.
      *
      * @author Pedro Coutinho <peco@nodesagency.com>
-     * @access public
      *
      * @param  array $errorCodes
      *
@@ -51,7 +49,6 @@ class NodesFormRequest extends FormRequest
      * failedValidation.
      *
      * @author Pedro Coutinho <peco@nodesagency.com>
-     * @access protected
      *
      * @param \Illuminate\Contracts\Validation\Validator $validator
      *
@@ -71,7 +68,6 @@ class NodesFormRequest extends FormRequest
      * Get the proper failed validation response for the request.
      *
      * @author Pedro Coutinho <peco@nodesagency.com>
-     * @access public
      *
      * @param array $errors
      *
