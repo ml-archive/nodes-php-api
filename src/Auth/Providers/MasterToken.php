@@ -79,9 +79,9 @@ class MasterToken implements DingoAuthContract
 
         // Fields used to retrieve user associated with master token
         $this->tokenColumns = config('nodes.auth.masterToken.user', [
-            'column'   => 'master',
+            'column' => 'master',
             'operator' => '=',
-            'value'    => 1,
+            'value' => 1,
         ]);
 
         return $this;

@@ -81,8 +81,8 @@ class UserToken implements DingoAuthContract
         // Set token columns used in condition
         $columns = config('nodes.api.auth.userToken.columns', [
             'user_id' => 'user_id',
-            'token'   => 'token',
-            'expire'  => 'expire',
+            'token' => 'token',
+            'expire' => 'expire',
         ]);
 
         // Prepend token table name to token columns
