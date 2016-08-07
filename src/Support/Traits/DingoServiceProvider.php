@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Support\Traits;
 
 use RuntimeException;
@@ -71,15 +72,15 @@ trait DingoServiceProvider
     protected function registerConfig()
     {
         // Merge project config and default package config
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/auth.php'), 'nodes.api.auth');
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/errors.php'), 'nodes.api.errors');
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/middleware.php'), 'nodes.api.middleware');
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/response.php'), 'nodes.api.response');
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/settings.php'), 'nodes.api.settings');
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/throttling.php'), 'nodes.api.throttling');
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../../config/transformer.php'), 'nodes.api.transformer');
+        $this->mergeConfigFrom(realpath(__DIR__.'/../../../config/auth.php'), 'nodes.api.auth');
+        $this->mergeConfigFrom(realpath(__DIR__.'/../../../config/errors.php'), 'nodes.api.errors');
+        $this->mergeConfigFrom(realpath(__DIR__.'/../../../config/middleware.php'), 'nodes.api.middleware');
+        $this->mergeConfigFrom(realpath(__DIR__.'/../../../config/response.php'), 'nodes.api.response');
+        $this->mergeConfigFrom(realpath(__DIR__.'/../../../config/settings.php'), 'nodes.api.settings');
+        $this->mergeConfigFrom(realpath(__DIR__.'/../../../config/throttling.php'), 'nodes.api.throttling');
+        $this->mergeConfigFrom(realpath(__DIR__.'/../../../config/transformer.php'), 'nodes.api.transformer');
 
-        if (!$this->app->runningInConsole() && empty(config('nodes.api.settings.prefix')) && empty(config('nodes.api.settings.domain'))) {
+        if (! $this->app->runningInConsole() && empty(config('nodes.api.settings.prefix')) && empty(config('nodes.api.settings.domain'))) {
             throw new RuntimeException(sprintf('Unable to boot [%s], configure an API domain or prefix.', 'Nodes\Api\ServiceProvider'));
         }
     }
@@ -93,18 +94,18 @@ trait DingoServiceProvider
     {
         $aliases = [
             DingoHttpRequest::class => DingoContractHttpRequest::class,
-            'api.dispatcher'        => DingoDispatcher::class,
-            'api.http.validator'    => DingoHttpRequestValidator::class,
-            'api.http.response'     => DingoHttpResponseFactory::class,
-            'api.router'            => DingoRoutingRouter::class,
-            'api.router.adapter'    => DingoContractRoutingAdapter::class,
-            'api.auth'              => DingoAuth::class,
-            'api.limiting'          => DingoRateLimitHandler::class,
-            'api.transformer'       => DingoTransformerFactory::class,
-            'api.url'               => DingoRoutingUrlGenerator::class,
-            'api.exception'         => [
+            'api.dispatcher' => DingoDispatcher::class,
+            'api.http.validator' => DingoHttpRequestValidator::class,
+            'api.http.response' => DingoHttpResponseFactory::class,
+            'api.router' => DingoRoutingRouter::class,
+            'api.router.adapter' => DingoContractRoutingAdapter::class,
+            'api.auth' => DingoAuth::class,
+            'api.limiting' => DingoRateLimitHandler::class,
+            'api.transformer' => DingoTransformerFactory::class,
+            'api.url' => DingoRoutingUrlGenerator::class,
+            'api.exception' => [
                 DingoExceptionHandler::class,
-                DingoContractDebugExceptionHandler::class
+                DingoContractDebugExceptionHandler::class,
             ],
         ];
 
@@ -116,11 +117,10 @@ trait DingoServiceProvider
     }
 
     /**
-     * Register the exception handler
+     * Register the exception handler.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerExceptionHandler()
@@ -135,11 +135,10 @@ trait DingoServiceProvider
     }
 
     /**
-     * Register the internal dispatcher
+     * Register the internal dispatcher.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return void
      */
     public function registerDispatcher()
@@ -152,16 +151,16 @@ trait DingoServiceProvider
             $dispatcher->setDefaultVersion(config('nodes.api.settings.version'));
             $dispatcher->setDefaultDomain(config('nodes.api.settings.domain'));
             $dispatcher->setDefaultFormat(config('nodes.api.response.defaultFormat'));
+
             return $dispatcher;
         });
     }
 
     /**
-     * Register the authenticator
+     * Register the authenticator.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerAuth()
@@ -172,11 +171,10 @@ trait DingoServiceProvider
     }
 
     /**
-     * Register the transformation layer
+     * Register the transformation layer.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerTransformer()
@@ -187,11 +185,10 @@ trait DingoServiceProvider
     }
 
     /**
-     * Register the documentation command
+     * Register the documentation command.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @return void
      */
     protected function registerDocsCommand()

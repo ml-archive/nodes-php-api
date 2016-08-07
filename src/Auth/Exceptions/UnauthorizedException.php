@@ -1,25 +1,23 @@
 <?php
+
 namespace Nodes\Api\Auth\Exceptions;
 
 use Nodes\Exceptions\Exception as NodesException;
 
 /**
- * Class UnauthorizedException
- *
- * @package Nodes\Api\Auth\Exceptions
+ * Class UnauthorizedException.
  */
 class UnauthorizedException extends NodesException
 {
     /**
-     * TokenExpiredException constructor
+     * TokenExpiredException constructor.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string   $message
-     * @param  integer  $code
+     * @param  int  $code
      * @param  array    $headers
-     * @param  boolean  $report
+     * @param  bool  $report
      * @param  string   $severity
      */
     public function __construct($message, $code = 401, array $headers = [], $report = false, $severity = 'error')

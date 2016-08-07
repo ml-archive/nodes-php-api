@@ -1,9 +1,10 @@
 <?php
-if (!function_exists('api_version')) {
+
+if (! function_exists('api_version')) {
     /**
      * An alias for calling the group method, allows a more fluent API
      * for registering a new API version group with optional
-     * attributes and a required callback
+     * attributes and a required callback.
      *
      * This method can be called without the third parameter, however,
      * the callback should always be the last paramter
@@ -24,9 +25,9 @@ if (!function_exists('api_version')) {
     }
 }
 
-if (!function_exists('api_group')) {
+if (! function_exists('api_group')) {
     /**
-     * Create a new route group
+     * Create a new route group.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -40,9 +41,9 @@ if (!function_exists('api_group')) {
     }
 }
 
-if (!function_exists('api_get')) {
+if (! function_exists('api_get')) {
     /**
-     * Create a new GET route
+     * Create a new GET route.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -56,9 +57,9 @@ if (!function_exists('api_get')) {
     }
 }
 
-if (!function_exists('api_post')) {
+if (! function_exists('api_post')) {
     /**
-     * Create a new POST route
+     * Create a new POST route.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -72,9 +73,9 @@ if (!function_exists('api_post')) {
     }
 }
 
-if (!function_exists('api_put')) {
+if (! function_exists('api_put')) {
     /**
-     * Create a new PUT route
+     * Create a new PUT route.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -88,9 +89,9 @@ if (!function_exists('api_put')) {
     }
 }
 
-if (!function_exists('api_patch')) {
+if (! function_exists('api_patch')) {
     /**
-     * Create a new PATCH route
+     * Create a new PATCH route.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -104,9 +105,9 @@ if (!function_exists('api_patch')) {
     }
 }
 
-if (!function_exists('api_delete')) {
+if (! function_exists('api_delete')) {
     /**
-     * Create a new DELETE route
+     * Create a new DELETE route.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -120,9 +121,9 @@ if (!function_exists('api_delete')) {
     }
 }
 
-if (!function_exists('api_options')) {
+if (! function_exists('api_options')) {
     /**
-     * Create a new OPTIONS route
+     * Create a new OPTIONS route.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -136,9 +137,9 @@ if (!function_exists('api_options')) {
     }
 }
 
-if (!function_exists('api_any')) {
+if (! function_exists('api_any')) {
     /**
-     * Create a new route that responding to all verbs
+     * Create a new route that responding to all verbs.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -152,9 +153,9 @@ if (!function_exists('api_any')) {
     }
 }
 
-if (!function_exists('api_match')) {
+if (! function_exists('api_match')) {
     /**
-     * Create a new route with the given verbs
+     * Create a new route with the given verbs.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -169,9 +170,9 @@ if (!function_exists('api_match')) {
     }
 }
 
-if (!function_exists('api_resources')) {
+if (! function_exists('api_resources')) {
     /**
-     * Register an array of resources
+     * Register an array of resources.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -184,9 +185,9 @@ if (!function_exists('api_resources')) {
     }
 }
 
-if (!function_exists('api_resource')) {
+if (! function_exists('api_resource')) {
     /**
-     * Register a resource controller
+     * Register a resource controller.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -201,9 +202,9 @@ if (!function_exists('api_resource')) {
     }
 }
 
-if (!function_exists('api_controllers')) {
+if (! function_exists('api_controllers')) {
     /**
-     * Register an array of controllers
+     * Register an array of controllers.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -216,9 +217,9 @@ if (!function_exists('api_controllers')) {
     }
 }
 
-if (!function_exists('api_controller')) {
+if (! function_exists('api_controller')) {
     /**
-     * Register a controller
+     * Register a controller.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
@@ -233,7 +234,7 @@ if (!function_exists('api_controller')) {
     }
 }
 
-if (!function_exists('api_current_route')) {
+if (! function_exists('api_current_route')) {
     /**
      * Get the currently dispatched route instance.
      *

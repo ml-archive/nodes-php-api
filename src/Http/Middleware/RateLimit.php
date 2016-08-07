@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Http\Middleware;
 
 use Dingo\Api\Http\Middleware\RateLimit as DingoHttpMiddlewareRateLimit;
@@ -6,18 +7,15 @@ use Dingo\Api\Http\RateLimit\Handler as DingoRateLimitHandler;
 use Nodes\Api\Routing\Router;
 
 /**
- * Class Ratelimit
- *
- * @package Nodes\Api\Http\Middleware
+ * Class Ratelimit.
  */
-class Ratelimit extends DingoHttpMiddlewareRateLimit
+class RateLimit extends DingoHttpMiddlewareRateLimit
 {
     /**
-     * Create a new rate limit middleware instance
+     * Create a new rate limit middleware instance.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param \Nodes\Api\Routing\Router         $router
      * @param \Dingo\Api\Http\RateLimit\Handler $handler
      */

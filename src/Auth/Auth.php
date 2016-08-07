@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Auth;
 
 use Dingo\Api\Auth\Auth as DingoAuth;
@@ -8,18 +9,15 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
- * Class Auth
- *
- * @package Nodes\Api\Auth
+ * Class Auth.
  */
 class Auth extends DingoAuth
 {
     /**
-     * Authenticate request
+     * Authenticate request.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  array $providers
      * @return \Illuminate\Database\Eloquent\Model
      * @throws \Nodes\Exceptions\Exception
@@ -58,11 +56,10 @@ class Auth extends DingoAuth
     }
 
     /**
-     * Throw the first exception from the exception stack
+     * Throw the first exception from the exception stack.
      *
      * @author Morten Rugaard <moru@nods.dk>
      *
-     * @access protected
      * @param  array $exceptionStack
      * @return void
      * @throws \Nodes\Api\Auth\Exceptions\UnauthorizedException
@@ -79,11 +76,10 @@ class Auth extends DingoAuth
     }
 
     /**
-     * Extend the authentication layer with a custom provider
+     * Extend the authentication layer with a custom provider.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string          $key
      * @param  object|callable $provider
      * @return \Nodes\Api\Auth
@@ -91,6 +87,7 @@ class Auth extends DingoAuth
     public function extend($key, $provider)
     {
         parent::extend($key, $provider);
+
         return $this;
     }
 }

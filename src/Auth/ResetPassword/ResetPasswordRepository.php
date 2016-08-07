@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Auth\ResetPassword;
 
 use Carbon\Carbon;
@@ -8,27 +9,23 @@ use Nodes\Api\Auth\Exceptions\ResetPasswordNoUserException;
 use Nodes\Database\Eloquent\Repository as NodesRepository;
 use Nodes\Api\Auth\Exceptions\MissingUserModelException;
 
-
 /**
- * Class ResetPasswordRepository
- *
- * @package Nodes\Api\Auth\ResetPassword
+ * Class ResetPasswordRepository.
  */
 class ResetPasswordRepository extends NodesRepository
 {
     /**
-     * API auth model
+     * API auth model.
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
     protected $authModel;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  \Nodes\Api\Auth\ResetPassword\ResetPasswordModel $model
      * @throws \Nodes\Api\Auth\Exceptions\MissingUserModelException
      */
@@ -47,11 +44,10 @@ class ResetPasswordRepository extends NodesRepository
     }
 
     /**
-     * Retrieve by token
+     * Retrieve by token.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string $token
      * @return \Nodes\Api\Auth\ResetPassword\Model
      */
@@ -62,11 +58,10 @@ class ResetPasswordRepository extends NodesRepository
     }
 
     /**
-     * Retrieve by unexpired token
+     * Retrieve by unexpired token.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string $token
      * @return \Nodes\Api\Auth\ResetPassword\ResetPasswordModel
      */
@@ -78,13 +73,12 @@ class ResetPasswordRepository extends NodesRepository
     }
 
     /**
-     * Generate and send a email with reset password instructions
+     * Generate and send a email with reset password instructions.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  array $conditions WHERE conditions to locate user. Format: ['column' => 'value']
-     * @return boolean
+     * @return bool
      * @throws \Nodes\Api\Auth\Exceptions\ResetPasswordNoUserException
      */
     public function sendResetPasswordEmail(array $conditions)
@@ -114,14 +108,14 @@ class ResetPasswordRepository extends NodesRepository
         // Send e-mail with instructions on how to reset password
         $status = (bool) Mail::send([
             'html' => config('nodes.api.reset-password.views.html', 'nodes.api::reset-password.emails.html'),
-            'text' => config('nodes.api.reset-password.views.text', 'nodes.api::reset-password.emails.text')
+            'text' => config('nodes.api.reset-password.views.text', 'nodes.api::reset-password.emails.text'),
         ], [
             'user' => $user,
             'domain' => $domain,
             'token' => $token,
             'expire' => config('nodes.api.reset-password.expire'),
-            'senderName' => (config('nodes.api.reset-password.from.name') != 'Nodes') ? config('nodes.api.reset-password.from.name') : config('nodes.project.name')
-        ], function($message) use ($user) {
+            'senderName' => (config('nodes.api.reset-password.from.name') != 'Nodes') ? config('nodes.api.reset-password.from.name') : config('nodes.project.name'),
+        ], function ($message) use ($user) {
             $message->to($user->email)
                     ->from(config('nodes.api.reset-password.from.email', 'no-reply@nodes.dk'), config('nodes.api.reset-password.from.name', 'Nodes'))
                     ->subject(config('nodes.api.reset-password.subject', 'Reset password request'));
@@ -131,11 +125,10 @@ class ResetPasswordRepository extends NodesRepository
     }
 
     /**
-     * Generate reset token
+     * Generate reset token.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @param  \Illuminate\Database\Eloquent\Model $user
      * @return string
      */
@@ -151,7 +144,7 @@ class ResetPasswordRepository extends NodesRepository
         // we should just update the token of the previous entry
         // instead of creating a new one
         $resetToken = $this->where('email', '=', $user->email)->first();
-        if (!empty($resetToken)) {
+        if (! empty($resetToken)) {
             $resetToken->update(['token' => $token, 'used' => 0, 'expire_at' => $expire->format('Y-m-d H:i:s')]);
         } else {
             $this->insert(['email' => $user->email, 'token' => $token, 'expire_at' => $expire->format('Y-m-d H:i:s')]);
@@ -161,14 +154,13 @@ class ResetPasswordRepository extends NodesRepository
     }
 
     /**
-     * Update user's password by e-mail
+     * Update user's password by e-mail.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access public
      * @param  string $email
      * @param  string $password
-     * @return boolean
+     * @return bool
      */
     public function updatePasswordByEmail($email, $password)
     {
@@ -180,7 +172,7 @@ class ResetPasswordRepository extends NodesRepository
 
         // Update user with new password
         return (bool) $user->update([
-            'password' => $password
+            'password' => $password,
         ]);
     }
 }

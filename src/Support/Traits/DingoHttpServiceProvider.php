@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodes\Api\Support\Traits;
 
 use Dingo\Api\Http\Parser\Accept as DingoHttpAcceptParser;
@@ -11,7 +12,6 @@ use Nodes\Api\Http\Middleware\Auth as NodesHttpMiddlewareAuth;
 use Nodes\Api\Http\Middleware\PrepareController as NodesHttpMiddlewarePrepareController;
 use Nodes\Api\Http\Middleware\Ratelimit as NodesHttpMiddlewareRateLimit;
 use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
-use Nodes\Api\Http\Response as NodesHttpResponse;
 use Nodes\Api\Http\Response\Factory as NodesHttpResponseFactory;
 
 trait DingoHttpServiceProvider
@@ -31,11 +31,10 @@ trait DingoHttpServiceProvider
     }
 
     /**
-     * Register the rate limiting
+     * Register the rate limiting.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerRateLimiting()
@@ -46,11 +45,10 @@ trait DingoHttpServiceProvider
     }
 
     /**
-     * Register the HTTP validation
+     * Register the HTTP validation.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerHttpValidation()
@@ -93,11 +91,10 @@ trait DingoHttpServiceProvider
     }
 
     /**
-     * Register the response factory
+     * Register the response factory.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerResponseFactory()
@@ -108,11 +105,10 @@ trait DingoHttpServiceProvider
     }
 
     /**
-     * Register the middleware
+     * Register the middleware.
      *
      * @author Morten Rugaard <moru@nodes.dk>
      *
-     * @access protected
      * @return void
      */
     protected function registerMiddleware()
@@ -126,6 +122,7 @@ trait DingoHttpServiceProvider
                 $app['events']
             );
             $middleware->setMiddlewares(config('nodes.api.middleware', []));
+
             return $middleware;
         });
 
