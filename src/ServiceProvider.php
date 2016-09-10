@@ -25,8 +25,6 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function boot()
     {
-        parent::boot();
-
         // Set response static instances
         $this->setResponseStaticInstances();
 
