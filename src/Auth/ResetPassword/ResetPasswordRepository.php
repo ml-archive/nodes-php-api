@@ -78,14 +78,13 @@ class ResetPasswordRepository extends NodesRepository
      * @author Morten Rugaard <moru@nodes.dk>
      *
      * @param  array $conditions WHERE conditions to locate user. Format: ['column' => 'value']
-     * @return bool
      * @throws \Nodes\Api\Auth\Exceptions\ResetPasswordNoUserException
      */
     public function sendResetPasswordEmail(array $conditions)
     {
         // Validate conditions
         if (empty($conditions)) {
-            return false;
+            throw new ResetPasswordNoUserException('Conditions can\'t be empty');
         }
 
         // Add conditions to query builder
@@ -106,7 +105,7 @@ class ResetPasswordRepository extends NodesRepository
         $domain = env('NODES_ENV', false) ? sprintf('https://%s.%s', env('APP_NAME'), env('APP_DOMAIN')) : config('app.url');
 
         // Send e-mail with instructions on how to reset password
-        $status = (bool) Mail::send([
+        Mail::send([
             'html' => config('nodes.api.reset-password.views.html', 'nodes.api::reset-password.emails.html'),
             'text' => config('nodes.api.reset-password.views.text', 'nodes.api::reset-password.emails.text'),
         ], [
@@ -120,8 +119,6 @@ class ResetPasswordRepository extends NodesRepository
                     ->from(config('nodes.api.reset-password.from.email', 'no-reply@nodes.dk'), config('nodes.api.reset-password.from.name', 'Nodes'))
                     ->subject(config('nodes.api.reset-password.subject', 'Reset password request'));
         });
-
-        return $status;
     }
 
     /**
