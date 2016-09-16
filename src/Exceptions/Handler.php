@@ -4,6 +4,7 @@ namespace Nodes\Api\Exceptions;
 
 use App;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Nodes\Api\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Dingo\Api\Contract\Debug\MessageBagErrors;
@@ -64,6 +65,11 @@ class Handler extends DingoExceptionHandler
      */
     public function handle(Exception $exception)
     {
+        // ModelNotFoundException is thrown when model bind to route does not exist
+        if ($exception instanceof ModelNotFoundException) {
+            abort(404);
+        }
+
         // If we are in configured environments, just throw the exception. Useful for unit testing
         if (in_array(app()->environment(), config('nodes.api.errors.throwOnEnvironment', []))) {
             throw $exception;
