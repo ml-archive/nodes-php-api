@@ -144,7 +144,7 @@ class Handler extends DingoExceptionHandler
         // Base replacements
         $replacements = [
             ':message' => $message,
-            ':code'    => $exception->getCode(),
+            ':code' => $exception->getCode(),
         ];
 
         // If exception contains a message bag of errors
@@ -159,8 +159,8 @@ class Handler extends DingoExceptionHandler
         if ($this->runningInDebugMode()) {
             $replacements[':debug'] = [
                 'class' => get_class($exception),
-                'file'  => $exception->getFile(),
-                'line'  => $exception->getLine(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
                 'trace' => explode("\n", $exception->getTraceAsString()),
             ];
         }
