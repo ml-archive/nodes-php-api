@@ -149,10 +149,7 @@ class ResetPasswordController extends IlluminateController
         }
 
         // Generate token and send e-mail
-        $status = $this->resetPasswordRepository->sendResetPasswordEmail(['email' => $email]);
-        if (empty($status)) {
-            throw new Exception('Could not send reset password e-mail', 500);
-        }
+        $this->resetPasswordRepository->sendResetPasswordEmail(['email' => $email]);
 
         return $this->response->content([
             'email' => 'sent',

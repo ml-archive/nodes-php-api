@@ -25,8 +25,6 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function boot()
     {
-        parent::boot();
-
         // Set response static instances
         $this->setResponseStaticInstances();
 
@@ -92,15 +90,15 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         // Config files
         $this->publishes([
-            __DIR__.'/../config/auth.php'                 => config_path('nodes/api/auth.php'),
-            __DIR__.'/../config/email-verification.php'   => config_path('nodes/api/email-verification.php'),
-            __DIR__.'/../config/errors.php'               => config_path('nodes/api/errors.php'),
-            __DIR__.'/../config/middleware.php'           => config_path('nodes/api/middleware.php'),
-            __DIR__.'/../config/reset-password.php'       => config_path('nodes/api/reset-password.php'),
-            __DIR__.'/../config/response.php'             => config_path('nodes/api/response.php'),
-            __DIR__.'/../config/settings.php'             => config_path('nodes/api/settings.php'),
-            __DIR__.'/../config/throttling.php'           => config_path('nodes/api/throttling.php'),
-            __DIR__.'/../config/transformer.php'          => config_path('nodes/api/transformer.php'),
+            __DIR__.'/../config/auth.php' => config_path('nodes/api/auth.php'),
+            __DIR__.'/../config/email-verification.php' => config_path('nodes/api/email-verification.php'),
+            __DIR__.'/../config/errors.php' => config_path('nodes/api/errors.php'),
+            __DIR__.'/../config/middleware.php' => config_path('nodes/api/middleware.php'),
+            __DIR__.'/../config/reset-password.php' => config_path('nodes/api/reset-password.php'),
+            __DIR__.'/../config/response.php' => config_path('nodes/api/response.php'),
+            __DIR__.'/../config/settings.php' => config_path('nodes/api/settings.php'),
+            __DIR__.'/../config/throttling.php' => config_path('nodes/api/throttling.php'),
+            __DIR__.'/../config/transformer.php' => config_path('nodes/api/transformer.php'),
         ], 'config');
     }
 

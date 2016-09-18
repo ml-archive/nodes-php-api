@@ -4,9 +4,11 @@ namespace Nodes\Api\Exceptions;
 
 use App;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Nodes\Api\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Dingo\Api\Contract\Debug\MessageBagErrors;
+use Nodes\Database\Exceptions\EntityNotFoundException;
 use Nodes\Exceptions\Exception as NodesException;
 use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -64,6 +66,11 @@ class Handler extends DingoExceptionHandler
      */
     public function handle(Exception $exception)
     {
+        // ModelNotFoundException is thrown when model bind to route does not exist
+        if ($exception instanceof ModelNotFoundException) {
+            throw new EntityNotFoundException($exception->getMessage());
+        }
+
         // If we are in configured environments, just throw the exception. Useful for unit testing
         if (in_array(app()->environment(), config('nodes.api.errors.throwOnEnvironment', []))) {
             throw $exception;
@@ -138,7 +145,7 @@ class Handler extends DingoExceptionHandler
         // Base replacements
         $replacements = [
             ':message' => $message,
-            ':code'    => $exception->getCode(),
+            ':code' => $exception->getCode(),
         ];
 
         // If exception contains a message bag of errors
@@ -153,8 +160,8 @@ class Handler extends DingoExceptionHandler
         if ($this->runningInDebugMode()) {
             $replacements[':debug'] = [
                 'class' => get_class($exception),
-                'file'  => $exception->getFile(),
-                'line'  => $exception->getLine(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
                 'trace' => explode("\n", $exception->getTraceAsString()),
             ];
         }
