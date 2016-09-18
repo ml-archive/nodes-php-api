@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Nodes\Api\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Dingo\Api\Contract\Debug\MessageBagErrors;
+use Nodes\Database\Exceptions\EntityNotFoundException;
 use Nodes\Exceptions\Exception as NodesException;
 use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -67,7 +68,7 @@ class Handler extends DingoExceptionHandler
     {
         // ModelNotFoundException is thrown when model bind to route does not exist
         if ($exception instanceof ModelNotFoundException) {
-            abort(404);
+            throw new EntityNotFoundException($exception->getMessage());
         }
 
         // If we are in configured environments, just throw the exception. Useful for unit testing
