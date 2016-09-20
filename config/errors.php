@@ -41,8 +41,6 @@ return [
     | exception as json
     |
     */
-    'throwOnEnvironment' => [
-        'testing',
-    ],
+    'throwOnEnvironment' => [],
 
 ];
