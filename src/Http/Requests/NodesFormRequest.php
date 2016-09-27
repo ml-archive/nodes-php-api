@@ -10,6 +10,7 @@ use Nodes\Validation\Exceptions\ValidationException;
 
 /**
  * Class NodesApiRequest.
+ * @deprecated - Use the new FormRequest in Core package
  */
 class NodesFormRequest extends FormRequest
 {
