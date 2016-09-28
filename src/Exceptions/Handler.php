@@ -2,7 +2,6 @@
 
 namespace Nodes\Api\Exceptions;
 
-use App;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Nodes\Api\Http\Response;
@@ -16,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 /**
  * Class Handler.
  *
- * @see Dingo\Api\Exception\Handler
+ * @see \Dingo\Api\Exception\Handler
  */
 class Handler extends DingoExceptionHandler
 {
@@ -68,7 +67,7 @@ class Handler extends DingoExceptionHandler
     {
         // ModelNotFoundException is thrown when model bind to route does not exist
         if ($exception instanceof ModelNotFoundException) {
-            throw new EntityNotFoundException($exception->getMessage());
+            throw new EntityNotFoundException(null);
         }
 
         // If we are in configured environments, just throw the exception. Useful for unit testing
@@ -140,7 +139,7 @@ class Handler extends DingoExceptionHandler
         // we'll fallback to a message of the status code and status message.
         if (! $message = $exception->getMessage()) {
             // Response::$statusTexts does not contain custom codes - default to empty
-            $text = isset(Response::$statusTexts[$statusCode]) ? Response::$statusTexts[$statusCode] : '';
+            $text = isset(Response::$statusTexts[$statusCode]) ? Response::$statusTexts[$statusCode] : 'No message was set in exception';
             $message = sprintf('%d: %s', $statusCode, $text);
         }
 
@@ -179,7 +178,7 @@ class Handler extends DingoExceptionHandler
      *
      * @param  \Exception $exception
      * @param  int    $defaultStatusCode
-     * @return int
+     * @return int|array
      */
     protected function getExceptionStatusCode(Exception $exception, $defaultStatusCode = 500)
     {
