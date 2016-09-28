@@ -67,7 +67,7 @@ class Handler extends DingoExceptionHandler
     {
         // ModelNotFoundException is thrown when model bind to route does not exist
         if ($exception instanceof ModelNotFoundException) {
-            throw new EntityNotFoundException(null);
+            throw new EntityNotFoundException($exception->getMessage());
         }
 
         // If we are in configured environments, just throw the exception. Useful for unit testing
