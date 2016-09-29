@@ -8,5 +8,5 @@
 |
 */
 return [
-
+    \Nodes\Api\Http\Middleware\SSL::class
 ];
