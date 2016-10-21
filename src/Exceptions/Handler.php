@@ -11,8 +11,6 @@ use Nodes\Database\Exceptions\EntityNotFoundException;
 use Nodes\Exceptions\Exception as NodesException;
 use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Nodes\Bugsnag\ServiceProvider;
-use Bugsnag\Report;
 
 /**
  * Class Handler.
