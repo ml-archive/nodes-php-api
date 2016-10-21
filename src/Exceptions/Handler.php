@@ -11,6 +11,8 @@ use Nodes\Database\Exceptions\EntityNotFoundException;
 use Nodes\Exceptions\Exception as NodesException;
 use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Nodes\Bugsnag\ServiceProvider;
+use Bugsnag\Report;
 
 /**
  * Class Handler.
@@ -34,6 +36,7 @@ class Handler extends DingoExceptionHandler
      * Report and log an exception.
      *
      * @author Morten Rugaard <moru@nodes.dk>
+     * @author Rasmus Ebbesen <re@nodes.dk>
      *
      * @param  Exception $e
      * @throws Exception
@@ -41,12 +44,27 @@ class Handler extends DingoExceptionHandler
     public function report(Exception $e)
     {
         try {
-            if ($e instanceof NodesException && $e->getReport()) {
-                app('nodes.bugsnag')->notifyException($e, $e->getMeta(), $e->getSeverity());
-            } elseif (! $e instanceof NodesException) {
-                app('nodes.bugsnag')->notifyException($e, null, 'error');
+            if (class_exists('\Nodes\Bugsnag\ServiceProvider')) {
+                if (\Nodes\Bugsnag\ServiceProvider::VERSION == '1.0') {
+                    if ($e instanceof NodesException && $e->getReport()) {
+                        app('nodes.bugsnag')->notifyException($e, $e->getMeta(), $e->getSeverity());
+                    } elseif (!$e instanceof NodesException) {
+                        app('nodes.bugsnag')->notifyException($e, null, 'error');
+                    }
+                } elseif (\Nodes\Bugsnag\ServiceProvider::VERSION == '2.0') {
+                    if ($e instanceof NodesException && $e->getReport()) {
+                        app('nodes.bugsnag')->notifyException($e, function(\Bugsnag\Report $report) use ($e) {
+                            $report->setMetaData($e->getMeta(), true);
+                            $report->setSeverity($e->getSeverity());
+                        });
+                    } elseif (!$e instanceof NodesException) {
+                        app('nodes.bugsnag')->notifyException($e, function(\Bugsnag\Report $report) {
+                            $report->setSeverity('error');
+                        });
+                    }
+                }
             }
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             // Do nothing
         }
 
