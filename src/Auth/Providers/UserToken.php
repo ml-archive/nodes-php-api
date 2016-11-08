@@ -23,6 +23,13 @@ class UserToken implements DingoAuthContract
     protected $userModel;
 
     /**
+     * primaryKey
+     *
+     * @var string
+     */
+    protected $primaryKey;
+
+    /**
      * Token from "Authorization" header.
      *
      * @var string
@@ -59,6 +66,9 @@ class UserToken implements DingoAuthContract
     {
         // Set user model
         $this->userModel = prepare_config_instance(config('nodes.api.auth.model', null));
+
+        // Set user model primary key
+        $this->primaryKey = config('nodes.api.auth.primaryKey', 'id');
 
         // Set token table
         $this->setTokenSettings();
@@ -199,7 +209,7 @@ class UserToken implements DingoAuthContract
                     ->select([
                         $this->getUserTable().'.*',
                     ])
-                    ->join($this->getTokenTable(), $this->getTokenColumn('user_id'), '=', $this->getUserTable().'.id')
+                    ->join($this->getTokenTable(), $this->getTokenColumn('user_id'), '=', $this->getUserTable().'.'.$this->primaryKey)
                     ->where($this->getTokenColumn('token'), '=', $this->getToken());
     }
 
