@@ -14,11 +14,16 @@
             "name": "Morten Rugaard",
             "email": "moru@nodes.dk",
             "role": "Developer"
+        },
+        {
+            "name": "Casper Rasmussen",
+            "email": "cr@nodes.dk",
+            "role": "CTO"
         }
     ],
     "require": {
         "nodes/dingo": "~1.0",
-        "nodes/core": "~1.0",
+        "nodes/core": "~1.1",
         "nodes/cache": "~1.0",
         "nodes/database": "~1.0"
     },
