@@ -2,15 +2,16 @@
 
 namespace Nodes\Api\Support\Traits;
 
-use ReflectionClass;
 use Dingo\Api\Routing\Adapter\Laravel as DingoRoutingLaravelAdapter;
 use Illuminate\Contracts\Http\Kernel as IlluminateContractKernel;
 use Illuminate\Routing\ControllerDispatcher as IlluminateControllerDispatcher;
 use Nodes\Api\Http\Middleware\Auth as NodesHttpMiddlewareAuth;
+use Nodes\Api\Http\Middleware\Meta as NodesHttpMiddleware;
 use Nodes\Api\Http\Middleware\PrepareController as NodesHttpMiddlewarePrepareController;
-use Nodes\Api\Http\Middleware\Ratelimit as NodesHttpMiddlewareRateLimit;
+use Nodes\Api\Http\Middleware\RateLimit as NodesHttpMiddlewareRateLimit;
 use Nodes\Api\Http\Middleware\Request as NodesHttpMiddlewareRequest;
 use Nodes\Api\Http\Middleware\UserAgent as NodesHttpMiddlewareUserAgent;
+use ReflectionClass;
 
 /**
  * Class DingoLaravelServiceProvider.
@@ -23,7 +24,6 @@ trait DingoLaravelServiceProvider
      * Register Dingo's Laravel service provider.
      *
      * @author Morten Rugaard <moru@nodes.dk>
-     *
      * @return void
      */
     protected function registerLaravelServiceProvider()
@@ -39,7 +39,7 @@ trait DingoLaravelServiceProvider
      */
     protected function replaceRouteDispatcher()
     {
-        $this->app->singleton('illuminate.route.dispatcher', function ($app) {
+        $this->app->singleton('illuminate.route.dispatcher', function($app) {
             return new IlluminateControllerDispatcher($app['api.router.adapter']->getRouter(), $app);
         });
     }
@@ -77,7 +77,7 @@ trait DingoLaravelServiceProvider
      */
     protected function registerRouterAdapter()
     {
-        $this->app->singleton('api.router.adapter', function ($app) {
+        $this->app->singleton('api.router.adapter', function($app) {
             return new DingoRoutingLaravelAdapter($this->cloneLaravelRouter(), $app['router']->getRoutes());
         });
     }
@@ -94,6 +94,7 @@ trait DingoLaravelServiceProvider
         $router->middleware('api.controllers', NodesHttpMiddlewarePrepareController::class);
         $router->middleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
         $router->middleware('api.useragent', NodesHttpMiddlewareUserAgent::class);
+        $router->middleware('api.meta', NodesHttpMiddleware::class);
 
         return $router;
     }
@@ -104,11 +105,13 @@ trait DingoLaravelServiceProvider
      * @author Morten Rugaard <moru@nodes.dk>
      *
      * @param  \Illuminate\Contracts\Http\Kernel $kernel
+     *
      * @return void
      */
     protected function addRequestMiddlewareToBeginning(IlluminateContractKernel $kernel)
     {
         $kernel->prependMiddleware(NodesHttpMiddlewareRequest::class);
+
     }
 
     /**
@@ -118,6 +121,7 @@ trait DingoLaravelServiceProvider
      * @author Morten Rugaard <moru@nodes.dk>
      *
      * @param  \Illuminate\Contracts\Http\Kernel $kernel
+     *
      * @return array
      */
     protected function gatherAppMiddleware(IlluminateContractKernel $kernel)

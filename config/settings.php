@@ -102,4 +102,15 @@ return [
     |
     */
     'strict' => env('API_STRICT', true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Strict Mode for Nodes meta header
+    |--------------------------------------------------------------------------
+    |
+    | Enabling strict mode will require clients to send a valid N-Meta header
+    | with every request. On local this will be ignored
+    |
+    */
+    'strictNodesMetaHeader' => env('API_N_META_STRICT', true)
 ];
