@@ -27,9 +27,12 @@ class Meta
      */
     public function handle($request, Closure $next)
     {
-        // Only accept requests with nodes meta
-        if (!app()->isLocal() && config('nodes.api.settings.strictNodesMetaHeader', false) && ! nodes_meta()) {
-            throw (new InvalidUserAgent(sprintf('Missing [%s] header', Parser::NODES_META_HEADER), 400))->setStatusCode(400);
+        // See if env require N-meta header
+        if (in_array(env('APP_ENV'), NodesMeta::getMetaEnvironments())) {
+            // Only accept requests with nodes meta
+            if (config('nodes.api.settings.strictNodesMetaHeader', false) && ! nodes_meta()) {
+                throw (new InvalidUserAgent(sprintf('Missing [%s] header', Parser::NODES_META_HEADER), 400))->setStatusCode(400);
+            }
         }
 
         return $next($request);
