@@ -5,6 +5,7 @@ namespace Nodes\Api\Http\Middleware;
 use Closure;
 use Nodes\Api\Exceptions\InvalidUserAgent;
 use Nodes\Support\UserAgent\Parser;
+use Nodes\Support\UserAgent\Agents\Meta as NodesMeta;
 
 /**
  * Class Meta
