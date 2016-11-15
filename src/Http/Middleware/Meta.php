@@ -28,6 +28,10 @@ class Meta
      */
     public function handle($request, Closure $next)
     {
+        if ($request->method() == 'OPTIONS') {
+            return $next($request);
+        }
+
         // See if env require N-meta header
         if (in_array(env('APP_ENV'), NodesMeta::getMetaEnvironments())) {
             // Only accept requests with nodes meta
