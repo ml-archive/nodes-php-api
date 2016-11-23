@@ -163,13 +163,14 @@ class ResetPasswordRepository extends NodesRepository
     {
         // Retrieve user by e-mail
         $user = $this->authModel->where('email', '=', $email)->first();
+
         if (empty($user)) {
             return false;
         }
 
+        $user->password = $password;
+
         // Update user with new password
-        return (bool) $user->update([
-            'password' => $password,
-        ]);
+        return (bool) $user->update();
     }
 }
