@@ -90,11 +90,11 @@ trait DingoLaravelServiceProvider
     protected function cloneLaravelRouter()
     {
         $router = clone $this->app['router'];
-        $router->middleware('api.auth', NodesHttpMiddlewareAuth::class);
-        $router->middleware('api.controllers', NodesHttpMiddlewarePrepareController::class);
-        $router->middleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
-        $router->middleware('api.useragent', NodesHttpMiddlewareUserAgent::class);
-        $router->middleware('api.meta', NodesHttpMiddleware::class);
+        $router->aliasMiddleware('api.auth', NodesHttpMiddlewareAuth::class);
+        $router->aliasMiddleware('api.controllers', NodesHttpMiddlewarePrepareController::class);
+        $router->aliasMiddleware('api.throttle', NodesHttpMiddlewareRateLimit::class);
+        $router->aliasMiddleware('api.useragent', NodesHttpMiddlewareUserAgent::class);
+        $router->aliasMiddleware('api.meta', NodesHttpMiddleware::class);
 
         return $router;
     }
