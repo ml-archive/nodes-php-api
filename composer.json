@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "nodes/dingo": "~1.0",
+        "nodes/dingo": "~2.0",
         "nodes/core": "~1.1",
         "nodes/cache": "~1.0",
         "nodes/database": "~1.0"
