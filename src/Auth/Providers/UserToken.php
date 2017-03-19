@@ -192,8 +192,8 @@ class UserToken implements DingoAuthContract
      */
     protected function updateTokenExpiry()
     {
-        return (bool) $this->generateQuery()->update([
-            $this->getTokenColumn('expire') => Carbon::parse('now '.$this->getTokenLifetime()),
+        \DB::table($this->tokenTable)->where('token', $this->getToken())->update([
+            $this->getTokenColumn('expire') => Carbon::parse('now '. $this->getTokenLifetime()),
         ]);
     }
 
