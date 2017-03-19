@@ -135,7 +135,7 @@ class UserToken implements DingoAuthContract
         // we need to validate and maybe update it as well
         if ($this->hasTokenLifetime()) {
             // Validate tokens expiry date
-            if (strtotime($user->token->expire) < time()) {
+            if (!$user->token || strtotime($user->token->expire) < time()) {
                 throw new TokenExpiredException('Token has expired');
             }
 
@@ -208,7 +208,7 @@ class UserToken implements DingoAuthContract
     {
         return $this->getUserModel()
                     ->select([
-                        $this->getUserTable().'.*',
+                        $this->getUserTable().'.*'
                     ])
                     ->join($this->getTokenTable(), $this->getTokenColumn('user_id'), '=', $this->getUserTable().'.'.$this->primaryKey)
                     ->where($this->getTokenColumn('token'), '=', $this->getToken());
