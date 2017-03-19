@@ -2,6 +2,7 @@
 
 namespace Nodes\Api\Auth\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Dingo\Api\Routing\Route;
 use Dingo\Api\Contract\Auth\Provider as DingoAuthContract;
