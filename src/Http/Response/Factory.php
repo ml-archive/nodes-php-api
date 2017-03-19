@@ -126,7 +126,7 @@ class Factory extends DingoHttpResponseFactory
      * @param  \Closure                                   $after
      * @return \Nodes\Api\Http\Response
      */
-    public function paginator(Paginator $paginator, $transformer, $parameters = [], Closure $after = null)
+    public function paginator(Paginator $paginator, $transformer, array $parameters = [], Closure $after = null)
     {
         if ($paginator->isEmpty()) {
             $class = get_class($paginator);
