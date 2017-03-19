@@ -82,7 +82,7 @@ class Factory extends DingoHttpResponseFactory
      * @param  \Closure                       $after
      * @return \Nodes\Api\Http\Response
      */
-    public function collection(Collection $collection, $transformer, array $parameters = [], Closure $after = null)
+    public function collection(Collection $collection, $transformer, $parameters = [], Closure $after = null)
     {
         if ($collection->isEmpty()) {
             $class = get_class($collection);
@@ -106,7 +106,7 @@ class Factory extends DingoHttpResponseFactory
      * @param  \Closure $after
      * @return \Nodes\Api\Http\Response
      */
-    public function item($item, $transformer, array $parameters = [], Closure $after = null)
+    public function item($item, $transformer, $parameters = [], Closure $after = null)
     {
         $class = get_class($item);
 
@@ -126,7 +126,7 @@ class Factory extends DingoHttpResponseFactory
      * @param  \Closure                                   $after
      * @return \Nodes\Api\Http\Response
      */
-    public function paginator(Paginator $paginator, $transformer, array $parameters = [], Closure $after = null)
+    public function paginator(Paginator $paginator, $transformer, $parameters = [], Closure $after = null)
     {
         if ($paginator->isEmpty()) {
             $class = get_class($paginator);
