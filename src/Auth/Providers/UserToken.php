@@ -2,6 +2,7 @@
 
 namespace Nodes\Api\Auth\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Dingo\Api\Routing\Route;
 use Dingo\Api\Contract\Auth\Provider as DingoAuthContract;
@@ -134,7 +135,7 @@ class UserToken implements DingoAuthContract
         // we need to validate and maybe update it as well
         if ($this->hasTokenLifetime()) {
             // Validate tokens expiry date
-            if (strtotime($user->token->expire) < time()) {
+            if (!$user->token || strtotime($user->token->expire) < time()) {
                 throw new TokenExpiredException('Token has expired');
             }
 
@@ -191,8 +192,8 @@ class UserToken implements DingoAuthContract
      */
     protected function updateTokenExpiry()
     {
-        return (bool) $this->generateQuery()->update([
-            $this->getTokenColumn('expire') => Carbon::parse('now '.$this->getTokenLifetime()),
+        \DB::table($this->tokenTable)->where('token', $this->getToken())->update([
+            $this->getTokenColumn('expire') => Carbon::parse('now '. $this->getTokenLifetime()),
         ]);
     }
 
@@ -207,7 +208,7 @@ class UserToken implements DingoAuthContract
     {
         return $this->getUserModel()
                     ->select([
-                        $this->getUserTable().'.*',
+                        $this->getUserTable().'.*'
                     ])
                     ->join($this->getTokenTable(), $this->getTokenColumn('user_id'), '=', $this->getUserTable().'.'.$this->primaryKey)
                     ->where($this->getTokenColumn('token'), '=', $this->getToken());
