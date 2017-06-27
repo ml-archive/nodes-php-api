@@ -129,7 +129,7 @@ class ResetPasswordRepository extends NodesRepository
      * @param  \Illuminate\Database\Eloquent\Model $user
      * @return string
      */
-    protected function generateResetPasswordToken(IlluminateModel $user)
+    public function generateResetPasswordToken(IlluminateModel $user)
     {
         // Generate new token using Laravel's encryption key
         $token = hash_hmac('sha256', str_random(40), config('app.key'));
