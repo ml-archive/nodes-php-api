@@ -25,6 +25,9 @@ trait TestHelperTrait
      */
     protected $authMock;
 
+    /** @var  \Illuminate\Http\Response|null */
+    protected $response;
+
     /**
      * Act as provided user.
      *
@@ -59,11 +62,14 @@ trait TestHelperTrait
      */
     public function callApi($method, $uri, array $data = [], array $headers = [])
     {
-        return $this->json($method, $uri, $data,
+        $this->response =  $this->json($method, $uri, $data,
             array_merge([
                 'Accept' => 'application/vnd.nodes.v'.$this->getApiVersion().'+json',
                 'N-Meta' => 'testing;testing;1.0.0;1.0;unitTest'
             ], $headers));
+
+
+        return $this->response;
     }
 
     /**
@@ -87,9 +93,24 @@ trait TestHelperTrait
     }
 
     /**
+     * assertResponseStatus
+     *
+     * @author Casper Rasmussen <cr@nodes.dk>
+     *
+     * @access
+     * @param $code
+     * @return void
+     */
+    protected function assertResponseStatus($code)
+    {
+        $this->assertEquals($code, $this->response->getStatusCode());
+    }
+
+    /**
      * Get api version that is tested.
      *
      * @return mixed
      */
     abstract protected function getApiVersion();
 }
+
