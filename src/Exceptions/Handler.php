@@ -172,6 +172,11 @@ class Handler extends DingoExceptionHandler
             $replacements[':errors'] = $exception->getErrors();
         }
 
+        // If exception contains local message
+        if ($exception instanceof NodesException && $exception->getLocaleMessage()){
+            $replacements[':locale_message'] = $exception->getLocaleMessage();
+        }
+
         // If we're running in debug mode,
         // we'll add much more detailed information
         // extracted from the exception.
