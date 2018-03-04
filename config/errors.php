@@ -27,6 +27,7 @@ return [
     */
     'errorFormat' => [
         'message' => ':message',
+        'locale_message' => ':locale_message',
         'code' => ':code',
         'errors' => ':errors',
         'debug' => ':debug',
