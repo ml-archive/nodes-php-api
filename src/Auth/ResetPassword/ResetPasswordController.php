@@ -136,7 +136,7 @@ class ResetPasswordController extends IlluminateController
     public function generateResetToken()
     {
         // Retrieve data
-        $email = urldecode(Input::get('email'));
+        $email = $email = Input::get('email');
 
         // Validate that an API user model has been specified
         if (empty(config('nodes.api.auth.model'))) {
