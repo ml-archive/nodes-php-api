@@ -1,5 +1,11 @@
 ## API
 
+⚠️**This package is deprecated**⚠️
+
+Laravel support for REST apis are just fine now. [Dingo API](https://github.com/dingo/api) is not in beta anymore.
+
+We suggest just using Laravel + `spatie/laravel-fractal` 
+
 A "mobile friendly" API package made on-top of the popular [Dingo API](https://github.com/dingo/api) package.
 
 [![Total downloads](https://img.shields.io/packagist/dt/nodes/api.svg)](https://packagist.org/packages/nodes/api)
